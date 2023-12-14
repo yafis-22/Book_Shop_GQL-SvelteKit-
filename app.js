@@ -1,4 +1,7 @@
-const express = require('express');
+import express from 'express';
+import adminRoutes from './routes/admin.js';
+import userRoutes from './routes/user.js';
+
 const app = express();
 const PORT = process.env.PORT || 3002;
 
@@ -6,9 +9,6 @@ const PORT = process.env.PORT || 3002;
 app.use(express.json());
 
 // Routes
-const adminRoutes = require('./routes/admin');
-const userRoutes = require('./routes/user');
-
 app.use('/admin', adminRoutes);
 app.use('/user', userRoutes);
 

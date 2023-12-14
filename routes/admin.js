@@ -1,12 +1,28 @@
-const express = require('express');
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import express from 'express';
+import fs from 'fs/promises';
+import path from 'path';
+
 const router = express.Router();
 
-// Dummy admin data
-const adminData = require('../admin/adminData.json');
+// Get the directory name using import.meta.url
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Admin data file path
+const adminDataPath = path.join(__dirname, '../admin/adminData.json');
 
 // Admin routes
-router.get('/', (req, res) => {
-  res.json(adminData);
+router.get('/', async (req, res) => {
+  try {
+    // Read admin data from adminData.json
+    const adminData = await fs.readFile(adminDataPath, 'utf8');
+    res.json(JSON.parse(adminData));
+  } catch (err) {
+    console.error('Error reading admin data:', err);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
-module.exports = router;
+export default router;
