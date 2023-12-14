@@ -13,6 +13,9 @@ const __dirname = dirname(__filename);
 // Admin data file path
 const adminDataPath = path.join(__dirname, '../admin/adminData.json');
 
+// Books data file path
+const booksDataPath = path.join(__dirname, '../admin/booksData.json');
+
 // Admin routes
 router.get('/', async (req, res) => {
   try {
@@ -24,5 +27,6 @@ router.get('/', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 export default router;

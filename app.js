@@ -1,6 +1,7 @@
 import express from 'express';
 import adminRoutes from './routes/admin.js';
 import userRoutes from './routes/user.js';
+import booksRoutes from './routes/books.js';
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -11,6 +12,7 @@ app.use(express.json());
 // Routes
 app.use('/admin', adminRoutes);
 app.use('/user', userRoutes);
+app.use('/books', booksRoutes);
 
 
 // Server to listen at port 3002
