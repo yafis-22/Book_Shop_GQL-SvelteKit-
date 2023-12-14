@@ -22,5 +22,11 @@
     "username": "Jibbu",
     "password": "Jibby@123",
     "email": "jibbu123@gmail.com"
+  },
+  {
+    "id": 5,
+    "username": "MYK",
+    "password": "$2b$10$7ba/LrP.u4LvrZiIRWss4uDaciUiWabreFLcyQXlaZ6rg9vxc1ZkO",
+    "email": "myk123@gmail.com"
   }
 ]

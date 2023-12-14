@@ -3,6 +3,7 @@ import { dirname } from 'path';
 import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
+import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
@@ -45,11 +46,13 @@ router.post('/register', async (req, res) => {
       return res.status(400).send('Email is already taken');
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     // Create a new user object
     const newUser = {
       id: users.length + 1,
       username,
-      password,
+      password: hashedPassword,
       email,
     };
 
