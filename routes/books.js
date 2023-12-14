@@ -3,6 +3,8 @@ import { dirname } from 'path';
 import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
+import isAdmin from '../middlewares/authMiddleware.js';
+
 
 const router = express.Router();
 
@@ -48,4 +50,35 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-export default router;
+// Route to add a new book (only accessible by admin)
+router.post('/add', isAdmin, async (req, res) => {
+    try {
+      const booksData = await fs.readFile(booksDataPath, 'utf8');
+      const books = JSON.parse(booksData);
+  
+      // Get book details from the request body
+      const { title, description, lendingPrice, quantity } = req.body;
+  
+      // Create a new book object
+      const newBook = {
+        id: books.length + 1,
+        title,
+        description,
+        lendingPrice,
+        quantity,
+      };
+  
+      // Add the new book to the array
+      books.push(newBook);
+  
+      // Write the updated book data back to booksData.json
+      await fs.writeFile(booksDataPath, JSON.stringify(books, null, 2));
+  
+      res.json(newBook);
+    } catch (err) {
+      console.error('Error adding new book:', err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+  
+  export default router;
