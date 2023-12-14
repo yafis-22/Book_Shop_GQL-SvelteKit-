@@ -25,4 +25,26 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Route to get a user by ID
+router.get('/:id', async (req, res) => {
+  const userId = parseInt(req.params.id);
+
+  try {
+    const userData = await fs.readFile(userDataPath, 'utf8');
+    const users = JSON.parse(userData);
+
+    // Find the user by ID
+    const user = users.find((user) => user.id === userId);
+
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).send('User not found');
+    }
+  } catch (err) {
+    console.error('Error reading user data:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 export default router;
