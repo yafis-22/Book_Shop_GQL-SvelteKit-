@@ -1,13 +1,26 @@
 [
-    {
-      "id": 1,
-      "username": "user1",
-      "password": "user123"
-    },
-    {
-      "id": 2,
-      "username": "user2",
-      "password": "user456"
-    }
-  ]
-  
+  {
+    "id": 1,
+    "email": "user1@gmail.com",
+    "username": "user1",
+    "password": "user123"
+  },
+  {
+    "id": 2,
+    "email": "user2@gmail.com",
+    "username": "user2",
+    "password": "user456"
+  },
+  {
+    "id": 3,
+    "username": "Khan2",
+    "password": "khan@123",
+    "email": "khan123@gmail.com"
+  },
+  {
+    "id": 4,
+    "username": "Jibbu",
+    "password": "Jibby@123",
+    "email": "jibbu123@gmail.com"
+  }
+]
