@@ -3,8 +3,8 @@ import { dirname } from 'path';
 import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
-import isAdmin from '../middlewares/authMiddleware.js';
-
+import { isAdmin } from '../middlewares/authMiddleware.js';
+import { authenticateUser } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ const __dirname = dirname(__filename);
 const booksDataPath = path.join(__dirname, '../admin/booksData.json');
 
 // Get all books
-router.get('/:category?', async (req, res) => {
+router.get('/:category?', authenticateUser, async (req, res) => {
   const categoryParam = req.params.category;
 
   try {

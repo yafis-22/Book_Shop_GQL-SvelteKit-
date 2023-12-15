@@ -34,17 +34,13 @@ router.post('/register', async (req, res) => {
 
     const { username, password, email } = req.body;
 
-    // Check if the username is already taken
+    // Check if the username or email is already taken
     const isUsernameTaken = users.some((user) => user.username === username);
-    if (isUsernameTaken) {
-      return res.status(400).send('Username is already taken');
+    const isEmailTaken = users.some((user) => user.email === email);
+    if (isUsernameTaken || isEmailTaken) {
+      return res.status(400).json({ message: 'Username or email is already taken' });
     }
 
-    // Check if the email is already taken
-    const isEmailTaken = users.some((user) => user.email === email);
-    if (isEmailTaken) {
-      return res.status(400).send('Email is already taken');
-    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 

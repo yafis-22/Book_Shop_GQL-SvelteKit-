@@ -3,6 +3,7 @@ import { dirname } from 'path';
 import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
+import { isAdmin } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ const adminDataPath = path.join(__dirname, '../admin/adminData.json');
 const booksDataPath = path.join(__dirname, '../admin/booksData.json');
 
 // Admin routes
-router.get('/', async (req, res) => {
+router.get('/', isAdmin, async (req, res) => {
   try {
     // Read admin data from adminData.json
     const adminData = await fs.readFile(adminDataPath, 'utf8');

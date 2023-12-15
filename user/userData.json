@@ -28,5 +28,16 @@
     "username": "MYK",
     "password": "$2b$10$7ba/LrP.u4LvrZiIRWss4uDaciUiWabreFLcyQXlaZ6rg9vxc1ZkO",
     "email": "myk123@gmail.com"
+  },
+  {
+    "id": 6,
+    "username": "MY",
+    "password": "$2b$10$VLAJQYHWL6NIJPWR95Tj1OHXFIBYbwBKz8yo4TNV9TP.gyXTOHmru"
+  },
+  {
+    "id": 7,
+    "username": "Furk",
+    "password": "$2b$10$rMyCDyLV9DBTS1BuNXbTQeQHOhYRjtkb03OO8Q/2mTQkqQGWkD1di",
+    "email": "furk123@gmail.com"
   }
 ]
