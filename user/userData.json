@@ -26,18 +26,13 @@
   {
     "id": 5,
     "username": "MYK",
-    "password": "$2b$10$7ba/LrP.u4LvrZiIRWss4uDaciUiWabreFLcyQXlaZ6rg9vxc1ZkO",
+    "password": "$2b$10$9RJBsD9hqQ9xAB6zOox8J.TIK76.m66Mdz8W1BtuZtWv602ByPc1e",
     "email": "myk123@gmail.com"
   },
   {
     "id": 6,
-    "username": "MY",
-    "password": "$2b$10$VLAJQYHWL6NIJPWR95Tj1OHXFIBYbwBKz8yo4TNV9TP.gyXTOHmru"
-  },
-  {
-    "id": 7,
-    "username": "Furk",
-    "password": "$2b$10$rMyCDyLV9DBTS1BuNXbTQeQHOhYRjtkb03OO8Q/2mTQkqQGWkD1di",
-    "email": "furk123@gmail.com"
+    "username": "Jibran",
+    "password": "$2b$10$IDSIFSKAv1f3q.xHmiYpfeJJ6J70uW1tB2A99EcNKVXDHCi9sP5mu",
+    "email": "jibran123@gmail.com"
   }
 ]

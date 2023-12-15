@@ -3,8 +3,10 @@ import { dirname } from 'path';
 import fs from 'fs/promises';
 import path from 'path';
 import jwt from 'jsonwebtoken';
-import secretKey  from '../routes/auth.js';
+import  secretKey  from '../routes/auth.js';
 
+
+import "dotenv/config"
 // Get the directory name using import.meta.url
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,20 +33,27 @@ export const isAdmin = async (req, res, next) => {
   }
 };
 
-export const authenticateUser = (req, res, next) => {
-  const token = req.headers.authorization;
+export const authenticateUser = async (req, res, next) => {
+  let token = req.headers.authorization;
 
   if (!token) {
     return res.status(401).json({ message: 'Authentication token is missing' });
   }
 
-  try {
-    const decoded = jwt.verify(token, secretKey);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    console.error('Error verifying authentication token:', err);
-    res.status(401).json({ message: 'Invalid authentication token' });
-  }
+  token = token.split(" ")[1]
+  
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, login) => {
+      if (err) {
+        console.log(err)
+        return res.sendStatus(403);
+      } else {
+        req.login = login;
+        next();
+      }
+    });
+
+
+ 
+  
 };
 
