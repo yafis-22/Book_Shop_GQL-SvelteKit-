@@ -3,36 +3,42 @@
     "id": 1,
     "email": "user1@gmail.com",
     "username": "user1",
-    "password": "user123"
+    "password": "user123",
+    "lentBooks": []
   },
   {
     "id": 2,
     "email": "user2@gmail.com",
     "username": "user2",
-    "password": "user456"
+    "password": "user456",
+    "lentBooks": []
   },
   {
     "id": 3,
     "username": "Khan2",
     "password": "khan@123",
-    "email": "khan123@gmail.com"
+    "email": "khan123@gmail.com",
+    "lentBooks": []
   },
   {
     "id": 4,
     "username": "Jibbu",
     "password": "Jibby@123",
-    "email": "jibbu123@gmail.com"
+    "email": "jibbu123@gmail.com",
+    "lentBooks": []
   },
   {
     "id": 5,
     "username": "MYK",
     "password": "$2b$10$9RJBsD9hqQ9xAB6zOox8J.TIK76.m66Mdz8W1BtuZtWv602ByPc1e",
-    "email": "myk123@gmail.com"
-  },
-  {
-    "id": 6,
-    "username": "Jibran",
-    "password": "$2b$10$IDSIFSKAv1f3q.xHmiYpfeJJ6J70uW1tB2A99EcNKVXDHCi9sP5mu",
-    "email": "jibran123@gmail.com"
+    "email": "myk123@gmail.com",
+    "lentBooks": [
+      {
+        "bookId": 1,
+        "days": 2,
+        "totalCharge": 10,
+        "timestamp": "2023-12-15T17:32:33.754Z"
+      }
+    ]
   }
 ]
