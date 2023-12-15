@@ -4,34 +4,39 @@
     "title": "The Catcher in the Rye",
     "description": "A classic novel by J.D. Salinger.",
     "lendingPrice": 5,
-    "quantity": 10
+    "quantity": 10,
+    "category": "Literature"
   },
   {
     "id": 2,
     "title": "To Kill a Mockingbird",
     "description": "Harper Lee's Pulitzer Prize-winning novel.",
     "lendingPrice": 7,
-    "quantity": 15
+    "quantity": 15,
+    "category": "Literature"
   },
   {
     "id": 3,
     "title": "1984",
     "description": "George Orwell's dystopian masterpiece.",
     "lendingPrice": 6,
-    "quantity": 12
+    "quantity": 12,
+    "category": "History"
   },
   {
     "id": 4,
     "title": "90 rules of love",
     "description": "This book teaches you how to be a perfect lover",
     "lendingPrice": 22,
-    "quantity": 5
+    "quantity": 5,
+    "category": "Romance"
   },
   {
     "id": 5,
     "title": "Leader Mind",
     "description": "This book is about the great Entrepreneur",
     "lendingPrice": 22,
-    "quantity": 7
+    "quantity": 7,
+    "category": "Literature"
   }
 ]

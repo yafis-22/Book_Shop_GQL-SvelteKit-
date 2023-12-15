@@ -16,13 +16,24 @@ const __dirname = dirname(__filename);
 const booksDataPath = path.join(__dirname, '../admin/booksData.json');
 
 // Get all books
-router.get('/', async (req, res) => {
+router.get('/:category?', async (req, res) => {
+  const categoryParam = req.params.category;
+
   try {
+    // Read books data from booksData.json
     const booksData = await fs.readFile(booksDataPath, 'utf8');
-    res.json(JSON.parse(booksData));
+    let books = JSON.parse(booksData);
+
+    // If a category is specified, filter books by that category
+    if (categoryParam) {
+      const categoryBooks = books.filter((book) => book.category === categoryParam);
+      res.json({ message: `Books in the category "${categoryParam}" retrieved successfully`, data: categoryBooks });
+    } else {
+      res.json({ message: 'All books retrieved successfully', data: books });
+    }
   } catch (err) {
     console.error('Error reading books data:', err);
-    res.status(500).send('Internal Server Error');
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
@@ -54,7 +65,7 @@ router.post('/add', isAdmin, async (req, res) => {
       const books = JSON.parse(booksData);
   
       // Get book details from the request body
-      const { title, description, lendingPrice, quantity } = req.body;
+      const { title, description, lendingPrice, quantity, category } = req.body;
   
       // Create a new book object
       const newBook = {
@@ -63,6 +74,7 @@ router.post('/add', isAdmin, async (req, res) => {
         description,
         lendingPrice,
         quantity,
+        category
       };
   
       books.push(newBook);
@@ -90,7 +102,7 @@ router.put('/:id', isAdmin, async (req, res) => {
 
     if (bookIndex !== -1) {
       // Update the book details from the request body
-      const { title, description, lendingPrice, quantity } = req.body;
+      const { title, description, lendingPrice, quantity, category } = req.body;
 
       // Update the book object
       books[bookIndex] = {
@@ -99,6 +111,7 @@ router.put('/:id', isAdmin, async (req, res) => {
         description,
         lendingPrice,
         quantity,
+        category
       };
 
       // Write the updated book data back to booksData.json
