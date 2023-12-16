@@ -19,9 +19,21 @@ const userDataPath = path.join(__dirname, '../data/userData.json');
 // User routes
 router.get('/all', isAdmin, async (req, res) => {
   try {
+    const { username } = req.query;
+
     // Read user data from userData.json
     const userData = await fs.readFile(userDataPath, 'utf8');
-    res.json(JSON.parse(userData));
+    let allUsers = JSON.parse(userData);
+
+    if (username) {
+      allUsers = allUsers.filter((user) =>
+        user.username.toLowerCase().includes(username.toLowerCase())
+      );
+    }
+    res.json({
+      message: 'All users retrieved successfully',
+      users: allUsers,
+    });
   } catch (err) {
     console.error('Error reading user data:', err);
     res.status(500).send('Internal Server Error');

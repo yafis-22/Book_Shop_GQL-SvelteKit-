@@ -19,10 +19,28 @@ const userDataPath = path.join(__dirname, '../data/userData.json');
 // Get all books
 router.get('/', async (req, res) => {
   try {
+    const { title, category, author } = req.query;
+
     // Read user data from bookData.json
     const booksData = await fs.readFile(booksDataPath, 'utf8');
-    const allBooks = JSON.parse(booksData);
+    let allBooks = JSON.parse(booksData);
 
+    if (title) {
+      allBooks = allBooks.filter((book) =>
+        book.title.toLowerCase().includes(title.toLowerCase())
+      );
+    }
+    if (category) {
+      allBooks = allBooks.filter((book) =>
+        book.category.toLowerCase() === category.toLowerCase()
+      );
+    }
+
+    if (author) {
+      allBooks = allBooks.filter((book) =>
+        book.author.toLowerCase().includes(author.toLowerCase())
+      );
+    }
     res.json({
       message: 'All books retrieved successfully',
       books: allBooks,
