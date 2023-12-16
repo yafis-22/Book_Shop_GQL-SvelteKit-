@@ -65,6 +65,12 @@
         "days": 2,
         "totalCharge": 22,
         "timestamp": "2023-12-16T11:53:43.384Z"
+      },
+      {
+        "bookId": 4,
+        "days": 15,
+        "totalCharge": 52,
+        "timestamp": "2023-12-16T12:00:48.186Z"
       }
     ]
   }
