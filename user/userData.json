@@ -25,7 +25,14 @@
     "username": "Jibbu",
     "password": "Jibby@123",
     "email": "jibbu123@gmail.com",
-    "lentBooks": []
+    "lentBooks": [
+      {
+        "bookId": 2,
+        "days": 11,
+        "totalCharge": 17,
+        "timestamp": "2023-12-16T07:15:35.272Z"
+      }
+    ]
   },
   {
     "id": 5,
@@ -34,10 +41,16 @@
     "email": "myk123@gmail.com",
     "lentBooks": [
       {
+        "bookId": 2,
+        "days": 11,
+        "totalCharge": 17,
+        "timestamp": "2023-12-16T07:57:56.856Z"
+      },
+      {
         "bookId": 1,
-        "days": 2,
-        "totalCharge": 10,
-        "timestamp": "2023-12-15T17:32:33.754Z"
+        "days": 15,
+        "totalCharge": 35,
+        "timestamp": "2023-12-16T07:58:34.326Z"
       }
     ]
   }

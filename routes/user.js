@@ -4,8 +4,7 @@ import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import secretKey from '../routes/auth.js';
+import { authenticateUser } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -90,9 +89,12 @@ router.get('/:id', async (req, res) => {
 });
 
 // Lend a book
-router.post('/lend', async (req, res) => {
+router.post('/lend', authenticateUser, async (req, res) => {
   try {
-    const { userId, bookId, days } = req.body;
+    const { bookId, days } = req.body;
+
+    // Fetch user ID from the authenticated user's token
+    const userId = req.login.id;
 
     // Read user data from userData.json
     const userData = await fs.readFile(userDataPath, 'utf8');
@@ -123,11 +125,11 @@ router.post('/lend', async (req, res) => {
 
     // Calculate charges
     const lendingPrice = book.lendingPrice;
-    const initialCharge = lendingPrice * days;
-    const additionalCharge = days > 10 ? 5 * (days - 10) : 0;
+    const initialCharge = lendingPrice;
+    const additionalCharge = days > 9 ? 5 * (days - 9) : 0;
     const totalCharge = initialCharge + additionalCharge;
 
-    // Update user data (assuming you have a field like "lentBooks" in the user schema)
+    // Update user data
     user.lentBooks.push({
       bookId,
       days,
