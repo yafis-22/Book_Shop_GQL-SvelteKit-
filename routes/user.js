@@ -4,7 +4,7 @@ import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcrypt';
-import { authenticateUser } from '../middlewares/authMiddleware.js';
+import { authenticateUser, isAdmin } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ const userDataPath = path.join(__dirname, '../user/userData.json');
 const booksDataPath = path.join(__dirname, '../admin/booksData.json');
 
 // User routes
-router.get('/', async (req, res) => {
+router.get('/all', isAdmin, async (req, res) => {
   try {
     // Read user data from userData.json
     const userData = await fs.readFile(userDataPath, 'utf8');
@@ -67,7 +67,7 @@ router.post('/register', async (req, res) => {
 });
 
 // Get a user by ID
-router.get('/:id', async (req, res) => {
+router.get('/all/:id', isAdmin, async (req, res) => {
   const userId = parseInt(req.params.id);
 
   try {
@@ -84,6 +84,36 @@ router.get('/:id', async (req, res) => {
     }
   } catch (err) {
     console.error('Error reading user data:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// Fetch user details (only particular user who sign in)
+router.get('/', authenticateUser, async (req, res) => {
+  try {
+    // Fetch user ID from the authenticated user's token
+    const userId = req.login.id; 
+
+    // Read user data
+    const userData = await fs.readFile(userDataPath, 'utf8');
+    const users = JSON.parse(userData);
+
+    // Find the user by ID
+    const user = users.find((user) => user.id === userId);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // Send only the user's details
+    res.json({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      lentBooks: user.lentBooks
+    });
+  } catch (err) {
+    console.error('Error fetching user details:', err);
     res.status(500).send('Internal Server Error');
   }
 });
