@@ -4,7 +4,6 @@ import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
 import { isAdmin } from '../middlewares/authMiddleware.js';
-import { authenticateUser } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -16,7 +15,23 @@ const __dirname = dirname(__filename);
 const booksDataPath = path.join(__dirname, '../data/booksData.json');
 
 // Get all books
-router.get('/:category?', authenticateUser, async (req, res) => {
+router.get('/', async (req, res) => {
+  try {
+    // Read user data from bookData.json
+    const booksData = await fs.readFile(booksDataPath, 'utf8');
+    const allBooks = JSON.parse(booksData);
+
+    res.json({
+      message: 'All books retrieved successfully',
+      books: allBooks,
+    });
+  } catch (err) {
+    console.error('Error reading user data:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+router.get('/:category?', async (req, res) => {
   const categoryParam = req.params.category;
 
   try {
@@ -27,7 +42,7 @@ router.get('/:category?', authenticateUser, async (req, res) => {
     // If a category is specified, filter books by that category
     if (categoryParam) {
       const categoryBooks = books.filter((book) => book.category === categoryParam);
-      res.json({ message: `Books in the category "${categoryParam}" retrieved successfully`, data: categoryBooks });
+      res.json({ message: `Books in the category ${categoryParam} retrieved successfully`, data: categoryBooks });
     } else {
       res.json({ message: 'All books retrieved successfully', data: books });
     }

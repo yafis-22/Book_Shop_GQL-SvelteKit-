@@ -53,5 +53,11 @@
         "timestamp": "2023-12-16T07:58:34.326Z"
       }
     ]
+  },
+  {
+    "id": 6,
+    "username": "furk",
+    "password": "$2b$10$1M0f0fwaTlPTSFoAcCT8z.IHkXu7DIvRr/MiJ7H.SIrMteASZjuVW",
+    "email": "furk123@gmail.com"
   }
 ]
