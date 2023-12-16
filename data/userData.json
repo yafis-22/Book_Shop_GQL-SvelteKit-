@@ -57,7 +57,15 @@
   {
     "id": 6,
     "username": "furk",
-    "password": "$2b$10$1M0f0fwaTlPTSFoAcCT8z.IHkXu7DIvRr/MiJ7H.SIrMteASZjuVW",
-    "email": "furk123@gmail.com"
+    "password": "$2b$10$L7eMxDhX5lD.y3YkzjRkDufv0WmJcJXHJpNmpPlKkKLdh1yPSqdr2",
+    "email": "furk123@gmail.com",
+    "lentBooks": [
+      {
+        "bookId": 5,
+        "days": 2,
+        "totalCharge": 22,
+        "timestamp": "2023-12-16T11:53:43.384Z"
+      }
+    ]
   }
 ]

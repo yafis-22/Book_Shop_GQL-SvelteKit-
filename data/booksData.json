@@ -20,7 +20,7 @@
     "title": "1984",
     "description": "George Orwell's dystopian masterpiece.",
     "lendingPrice": 6,
-    "quantity": 12,
+    "quantity": 11,
     "category": "History"
   },
   {
@@ -36,7 +36,7 @@
     "title": "Leader Mind",
     "description": "This book is about the great Entrepreneur",
     "lendingPrice": 22,
-    "quantity": 7,
+    "quantity": 6,
     "category": "Literature"
   }
 ]

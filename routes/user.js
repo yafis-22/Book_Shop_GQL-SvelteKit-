@@ -53,6 +53,7 @@ router.post('/register', async (req, res) => {
       username,
       password: hashedPassword,
       email,
+      lentBooks: []
     };
 
     users.push(newUser);
