@@ -115,5 +115,12 @@
         "timestamp": "2023-12-16T13:41:01.170Z"
       }
     ]
+  },
+  {
+    "id": 7,
+    "username": "Yafis",
+    "password": "$2b$10$x2Aj2Qf.k6AfkwWxX7cme.ugy5LNSIVgPLcQZiJNW4h4.f4X4YWeu",
+    "email": "yafis123@gmail.com",
+    "lentBooks": []
   }
 ]
