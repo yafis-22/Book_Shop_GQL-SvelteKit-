@@ -11,10 +11,10 @@ const PORT = process.env.PORT || 3002;
 app.use(express.json());
 
 // Routes
-app.use('/admin', adminRoutes);
-app.use('/user', userRoutes);
-app.use('/books', booksRoutes);
-app.use('/auth', authRoutes);
+app.use(`/api/${process.env.API_VERSION}/admin`, adminRoutes);
+app.use(`/api/${process.env.API_VERSION}/user`, userRoutes);
+app.use(`/api/${process.env.API_VERSION}/books`, booksRoutes);
+app.use(`/api/${process.env.API_VERSION}/auth`, authRoutes);
 
 
 // Server to listen at port 3002

@@ -3,10 +3,8 @@ import { dirname } from 'path';
 import fs from 'fs/promises';
 import path from 'path';
 import jwt from 'jsonwebtoken';
-import  secretKey  from '../routes/auth.js';
-
-
 import "dotenv/config"
+
 // Get the directory name using import.meta.url
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
