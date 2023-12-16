@@ -1,14 +1,20 @@
-1 . Go the src directory.
 
-  cd path_to_movies/src
-2 . Install dependencies
+## Installation
 
+1 . Install dependencies
+```bash
   npm i
-3 .Specify the following environment variables:
+```
+2 .Specify the following environment variables:
 
-SALT_ROUNDS=10
-ACCESS_TOKEN_SECRET=pinkfloyd
-API_VERSION=v1
-4 . Run the project using the following command:
+  ```bash
+  PORT = 3002
+  API_VERSION = v1
+  JWT_SECRET_KEY = 'mysecretkey'
 
-  npm start
+  ```
+3 . Run the project using the following command:
+```bash
+  npm run dev
+```
+      
