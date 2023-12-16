@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Books data file path
-const booksDataPath = path.join(__dirname, '../admin/booksData.json');
+const booksDataPath = path.join(__dirname, '../data/booksData.json');
 
 // Get all books
 router.get('/:category?', authenticateUser, async (req, res) => {

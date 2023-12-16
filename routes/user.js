@@ -13,9 +13,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // User data file path
-const userDataPath = path.join(__dirname, '../user/userData.json');
+const userDataPath = path.join(__dirname, '../data/userData.json');
 // Books data file path
-const booksDataPath = path.join(__dirname, '../admin/booksData.json');
+const booksDataPath = path.join(__dirname, '../data/booksData.json');
 
 // User routes
 router.get('/all', isAdmin, async (req, res) => {

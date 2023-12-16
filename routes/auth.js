@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // User data file path
-const userDataPath = path.join(__dirname, '../user/userData.json');
+const userDataPath = path.join(__dirname, '../data/userData.json');
 const secretKey = process.env.JWT_SECRET_KEY; 
 
 // Route to authenticate user (login)

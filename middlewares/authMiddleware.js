@@ -9,7 +9,7 @@ import "dotenv/config"
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const adminDataPath = path.join(__dirname, '../admin/adminData.json');
+const adminDataPath = path.join(__dirname, '../data/adminData.json');
 
 export const isAdmin = async (req, res, next) => {
   try {
