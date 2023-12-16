@@ -4,7 +4,7 @@
     "title": "The Catcher in the Rye",
     "description": "A classic novel by J.D. Salinger.",
     "lendingPrice": 5,
-    "quantity": 8,
+    "quantity": 5,
     "category": "Literature"
   },
   {
@@ -12,7 +12,7 @@
     "title": "To Kill a Mockingbird",
     "description": "Harper Lee's Pulitzer Prize-winning novel.",
     "lendingPrice": 7,
-    "quantity": 11,
+    "quantity": 9,
     "category": "Literature"
   },
   {
@@ -20,7 +20,7 @@
     "title": "1984",
     "description": "George Orwell's dystopian masterpiece.",
     "lendingPrice": 6,
-    "quantity": 11,
+    "quantity": 9,
     "category": "History"
   },
   {
@@ -38,5 +38,14 @@
     "lendingPrice": 22,
     "quantity": 6,
     "category": "Literature"
+  },
+  {
+    "id": 6,
+    "title": "What I see in You",
+    "description": "This book is about the great Entrepreneur",
+    "lendingPrice": 11,
+    "quantity": 22,
+    "author": "MYK",
+    "category": "Romance"
   }
 ]
