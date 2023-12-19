@@ -3,6 +3,7 @@ import { dirname } from 'path';
 import fs from 'fs/promises';
 import path from 'path';
 import bcrypt from 'bcrypt';
+import validator from 'validator';
 
 // Get the directory name using import.meta.url
 const __filename = fileURLToPath(import.meta.url);
@@ -15,6 +16,27 @@ export const registerUser = async (req, res) => {
     const users = JSON.parse(userData);
 
     const { username, password, email } = req.body;
+
+    if (!username || !password || !email) {
+      return res.status(400).json({ message: 'Please enter your username, password, and email' });
+    }
+
+    // Validate username
+    if (!validator.isAlphanumeric(username) || validator.isEmpty(username) || !validator.isLength(username, { min: 5 })) {
+      return res.status(400).json({ message: 'Invalid username. It should be alphanumeric and at least 5 characters long' });
+    }
+
+    // Validate email
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ message: 'Invalid email address' });
+    }
+
+    // Validate password
+    if (!validator.isLength(password, { min: 6 }) || !validator.matches(password, /(?=.*[0-9])(?=.*[!@#$%^&*])/)) {
+      return res.status(400).json({
+        message: 'Invalid password. Password must be at least 6 characters long and contain at least 1 number and 1 special character',
+      });
+    }
 
     // Check if the username or email is already taken
     const isUsernameTaken = users.some((user) => user.username === username);
