@@ -2,7 +2,6 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs from 'fs/promises';
 import path from 'path';
-import { lendBook } from './lendBook.js';
 
 // Get the directory name using import.meta.url
 const __filename = fileURLToPath(import.meta.url);
