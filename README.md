@@ -15,6 +15,6 @@
   ```
 3 . Run the project using the following command:
 ```bash
-  npm run dev
+  npm start
 ```
       
