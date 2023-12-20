@@ -6,6 +6,8 @@ import path from 'path';
 import { authenticateUser, isAdmin } from '../middlewares/authMiddleware.js';
 import { registerUser } from '../controllers/registerUser.js';
 import { userDetails } from '../controllers/userDetails.js';
+import { deleteUser } from '../controllers/deleteUser.js';
+
 
 const router = express.Router();
 
@@ -21,6 +23,9 @@ router.post('/register', registerUser);
 
 // Fetch user details (only particular user who sign in)
 router.get('/', authenticateUser, userDetails);
+
+// Delete user (only particular user who sign in)
+router.delete('/delete', authenticateUser, deleteUser);
 
 // User routes (only accessible by Admin)
 router.get('/all', isAdmin, async (req, res) => {
