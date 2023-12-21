@@ -16,6 +16,13 @@ export const addBook = async (req, res) => {
     // Get book details from the request body
     const { title, description, lendingPrice, quantity, author, category } = req.body;
 
+    // Check if a book with the same title already exists
+    const existingBook = books.find(book => book.title === title);
+
+    if (existingBook) {
+      return res.status(400).json({ message: 'Book with the same title already exists'});
+    }
+
     // Create a new book object
     const newBook = {
       id: books.length + 1,
