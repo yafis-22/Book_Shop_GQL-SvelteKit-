@@ -9,11 +9,15 @@ const __dirname = dirname(__filename);
 
 export const deleteBook = async (req, res) => {
   try {
+    const { bookId }  = req.body;
+
+    if (!bookId || isNaN(bookId)) {
+      return res.status(400).json({ error: 'Invalid book ID in the request body' });
+    }
+
     const booksDataPath = path.join(__dirname, '../../data/booksData.json');
     const booksData = await fs.readFile(booksDataPath, 'utf8');
     let books = JSON.parse(booksData);
-
-    const bookId = parseInt(req.params.id);
 
     // Find the index of the book by ID
     const bookIndex = books.findIndex((book) => book.id === bookId);

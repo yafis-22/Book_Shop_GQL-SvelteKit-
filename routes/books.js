@@ -22,7 +22,7 @@ router.post('/return', authenticateUser, returnBook);
 router.put('/:id', isAdmin, updateBook);
 
 // Delete a book (only accessible by admin)
-router.delete('/:id', isAdmin, deleteBook);
+router.delete('/', isAdmin, deleteBook);
 
 // Get all books
 router.get('/', getBooks);
