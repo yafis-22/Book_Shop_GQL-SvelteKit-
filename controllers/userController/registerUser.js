@@ -11,7 +11,7 @@ const __dirname = dirname(__filename);
 
 export const registerUser = async (req, res) => {
   try {
-    const userDataPath = path.join(__dirname, '../data/userData.json');
+    const userDataPath = path.join(__dirname, '../../data/userData.json');
     const userData = await fs.readFile(userDataPath, 'utf8');
     const users = JSON.parse(userData);
 
@@ -22,7 +22,7 @@ export const registerUser = async (req, res) => {
     }
 
     // Validate username
-    if (!validator.isAlphanumeric(username) || validator.isEmpty(username) || !validator.isLength(username, { min: 5 })) {
+    if (!validator.isAlphanumeric(username) || validator.isEmpty(username) || !validator.isLength(username, { min: 3 })) {
       return res.status(400).json({ message: 'Invalid username. It should be alphanumeric and at least 5 characters long' });
     }
 

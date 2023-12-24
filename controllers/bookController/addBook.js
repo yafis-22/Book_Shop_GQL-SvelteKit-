@@ -9,7 +9,7 @@ const __dirname = dirname(__filename);
 
 export const addBook = async (req, res) => {
   try {
-    const booksDataPath = path.join(__dirname, '../data/booksData.json');
+    const booksDataPath = path.join(__dirname, '../../data/booksData.json');
     const booksData = await fs.readFile(booksDataPath, 'utf8');
     const books = JSON.parse(booksData);
 

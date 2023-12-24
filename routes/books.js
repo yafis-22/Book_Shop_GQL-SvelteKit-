@@ -1,11 +1,11 @@
 import express from 'express';
 import { isAdmin, authenticateUser } from '../middlewares/authMiddleware.js';
-import { lendBook } from '../controllers/lendBook.js';
-import { addBook } from '../controllers/addBook.js';
-import { updateBook } from '../controllers/updateBook.js'; 
-import { deleteBook } from '../controllers/deleteBook.js';
-import { returnBook } from '../controllers/returnBook.js';
-import { getBooks, getBooksByCategory } from '../controllers/getBook.js';
+import { lendBook } from '../controllers/bookController/lendBook.js';
+import { addBook } from '../controllers/bookController/addBook.js';
+import { updateBook } from '../controllers/bookController/updateBook.js'; 
+import { deleteBook } from '../controllers/bookController/deleteBook.js';
+import { returnBook } from '../controllers/bookController/returnBook.js';
+import { getBooks, getBooksByCategory } from '../controllers/bookController/getBook.js';
 
 const router = express.Router();
 

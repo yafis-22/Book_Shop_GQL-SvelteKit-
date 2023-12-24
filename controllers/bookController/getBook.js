@@ -7,7 +7,7 @@ import path from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const booksDataPath = path.join(__dirname, '../data/booksData.json');
+const booksDataPath = path.join(__dirname, '../../data/booksData.json');
 const booksData = await fs.readFile(booksDataPath, 'utf8');
 
 export const getBooks = async (req, res) => {

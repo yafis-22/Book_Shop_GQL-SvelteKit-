@@ -15,7 +15,7 @@ export const returnBook = async (req, res) => {
     const userId = req.login.id;
 
     // Read user data from userData.json
-    const userDataPath = path.join(__dirname, '../data/userData.json');
+    const userDataPath = path.join(__dirname, '../../data/userData.json');
     const userData = await fs.readFile(userDataPath, 'utf8');
     const users = JSON.parse(userData);
 
@@ -37,7 +37,7 @@ export const returnBook = async (req, res) => {
     const lentBook = user.lentBooks[lentBookIndex];
 
     // Read books data from booksData.json
-    const booksDataPath = path.join(__dirname, '../data/booksData.json');
+    const booksDataPath = path.join(__dirname, '../../data/booksData.json');
     const booksData = await fs.readFile(booksDataPath, 'utf8');
     const books = JSON.parse(booksData);
 

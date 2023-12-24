@@ -13,7 +13,7 @@ export const deleteUser = async (req, res) => {
       const requestingUserId = req.login.id;
   
       // Read user data from userData.json
-      const userDataPath = path.join(__dirname, '../data/userData.json');
+      const userDataPath = path.join(__dirname, '../../data/userData.json');
       const userData = await fs.readFile(userDataPath, 'utf8');
       let users = JSON.parse(userData);
   

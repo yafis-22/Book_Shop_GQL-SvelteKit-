@@ -9,7 +9,7 @@ const __dirname = dirname(__filename);
 
 export const userDetails = async (req, res) => {
   try {
-    const userDataPath = path.join(__dirname, '../data/userData.json');
+    const userDataPath = path.join(__dirname, '../../data/userData.json');
 
     // Fetch user ID from the authenticated user's token
     const userId = req.login.id;
