@@ -3,6 +3,7 @@ import { dirname } from 'path';
 import fs from 'fs/promises';
 import path from 'path';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import "dotenv/config"
 
 // Get the directory name using import.meta.url
@@ -16,12 +17,21 @@ export const isAdmin = async (req, res, next) => {
     const adminData = await fs.readFile(adminDataPath, 'utf8');
     const admins = JSON.parse(adminData);
 
+    const username = req.headers['username'];
+    const password = req.headers['password'];
+
+    if (!username || !password) {
+      return res.status(400).send('Both Admin username and password are required in the headers.');
+    }
+
     // Check if the user making the request is an admin
-    const isAdminUser = admins.some((admin) => admin.username === req.headers['username']);
+    const isAdminUser = admins.find((admin) => admin.username === username);
     
-    if (isAdminUser) {
-      // If the user is an admin, proceed to the next middleware or route
-      next();
+    const isPasswordMatch = await bcrypt.compare(password, isAdminUser.password);
+
+      if (isPasswordMatch) {
+        // If the password matches, proceed to the next middleware or route
+        next();
     } else {
       res.status(403).send('Unauthorized. Only admin can perform this action.');
     }
