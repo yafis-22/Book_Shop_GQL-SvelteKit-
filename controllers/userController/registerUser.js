@@ -1,19 +1,10 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import fs from 'fs/promises';
-import path from 'path';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
-
-// Get the directory name using import.meta.url
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import * as userModel from '../../models/userModal.js';
 
 export const registerUser = async (req, res) => {
   try {
-    const userDataPath = path.join(__dirname, '../../data/userData.json');
-    const userData = await fs.readFile(userDataPath, 'utf8');
-    const users = JSON.parse(userData);
+    const users = await userModel.getUsers();
 
     const { username, password, email } = req.body;
 
@@ -58,8 +49,8 @@ export const registerUser = async (req, res) => {
 
     users.push(newUser);
 
-    // Write the updated user data back to userData.json
-    await fs.writeFile(userDataPath, JSON.stringify(users, null, 2));
+    // Write the updated user data back to userData.json using the model
+    await userModel.saveUsers(users);
     res.json({ message: 'New user is registered', user: newUser });
   } catch (err) {
     console.error('Error registering user:', err);

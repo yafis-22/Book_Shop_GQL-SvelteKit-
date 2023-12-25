@@ -1,25 +1,12 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import fs from 'fs/promises';
-import path from 'path';
-
-// Get the directory name using import.meta.url
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import * as userModel from '../../models/userModal.js';
 
 export const userDetails = async (req, res) => {
   try {
-    const userDataPath = path.join(__dirname, '../../data/userData.json');
-
     // Fetch user ID from the authenticated user's token
     const userId = req.login.id;
 
-    // Read user data
-    const userData = await fs.readFile(userDataPath, 'utf8');
-    const users = JSON.parse(userData);
-
-    // Find the user by ID
-    const user = users.find((user) => user.id === userId);
+    // Get user details using the model
+    const user = await userModel.getUserById(userId);
 
     if (!user) {
       return res.status(404).send('User not found');

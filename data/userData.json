@@ -30,12 +30,5 @@
     "password": "$2b$10$KeziCCty4xy94LJzGowxg.9FPlDuEb6prthixMPNTFWhCBg61WudO",
     "email": "khan123@gmail.com",
     "lentBooks": []
-  },
-  {
-    "id": 4,
-    "username": "jibbu",
-    "password": "$2b$10$7R5.fO1ipixDcKnAo8Xw4erTir2gcObDI.cq0EPKoOIvaArXa5P62",
-    "email": "jibbu123@gmail.com",
-    "lentBooks": []
   }
 ]
