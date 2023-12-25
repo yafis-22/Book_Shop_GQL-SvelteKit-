@@ -1,11 +1,4 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import fs from 'fs/promises';
-import path from 'path';
-
-// Get the directory name using import.meta.url
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import * as bookModel from '../../models/bookModal.js';
 
 export const deleteBook = async (req, res) => {
   try {
@@ -14,21 +7,10 @@ export const deleteBook = async (req, res) => {
     if (!bookId || isNaN(bookId)) {
       return res.status(400).json({ error: 'Invalid book ID in the request body' });
     }
+     // Delete the book by ID using the model
+    const deletedBook = await bookModel.deleteBookById(bookId);
 
-    const booksDataPath = path.join(__dirname, '../../data/booksData.json');
-    const booksData = await fs.readFile(booksDataPath, 'utf8');
-    let books = JSON.parse(booksData);
-
-    // Find the index of the book by ID
-    const bookIndex = books.findIndex((book) => book.id === bookId);
-
-    if (bookIndex !== -1) {
-      // Remove the book from the array
-      const deletedBook = books.splice(bookIndex, 1)[0];
-
-      // Write the updated book data back to booksData.json
-      await fs.writeFile(booksDataPath, JSON.stringify(books, null, 2));
-
+    if (deletedBook) {
       res.json({ message: 'Book deleted successfully', data: deletedBook });
     } else {
       res.status(404).send('Book not found');

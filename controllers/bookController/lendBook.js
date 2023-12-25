@@ -1,11 +1,5 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import fs from 'fs/promises';
-import path from 'path';
-
-// Get the directory name using import.meta.url
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import * as userModel from '../../models/userModal.js';
+import * as bookModel from '../../models/bookModal.js';
 
 export const lendBook = async (req, res) => {
     
@@ -15,10 +9,9 @@ export const lendBook = async (req, res) => {
     // Fetch user ID from the authenticated user's token
     const userId = req.login.id;
 
-    // Read user data from userData.json
-    const userDataPath = path.join(__dirname, '../../data/userData.json');
-    const userData = await fs.readFile(userDataPath, 'utf8');
-    const users = JSON.parse(userData);
+    // Get user and book details using models
+    const users = await userModel.getUsers();
+    const books = await bookModel.getBooks();
 
     // Find the user by ID
     const user = users.find((user) => user.id === userId);
@@ -26,11 +19,6 @@ export const lendBook = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
-    // Read books data from booksData.json
-    const booksDataPath = path.join(__dirname, '../../data/booksData.json');
-    const booksData = await fs.readFile(booksDataPath, 'utf8');
-    const books = JSON.parse(booksData);
 
     // Find the book by ID
     const book = books.find((book) => book.id === bookId);
@@ -58,9 +46,9 @@ export const lendBook = async (req, res) => {
     // Update book data
     book.quantity--;
 
-    // Write the updated data back to userData.json and booksData.json
-    await fs.writeFile(userDataPath, JSON.stringify(users, null, 2));
-    await fs.writeFile(booksDataPath, JSON.stringify(books, null, 2));
+    // Write the updated data back using models
+    await userModel.saveUsers(users);
+    await bookModel.saveBooks(books);
 
     res.json({
       message: 'Book lent successfully',

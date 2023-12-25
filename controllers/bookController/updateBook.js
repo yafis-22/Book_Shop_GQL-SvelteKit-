@@ -1,17 +1,8 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import fs from 'fs/promises';
-import path from 'path';
-
-// Get the directory name using import.meta.url
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import * as bookModel from '../../models/bookModal.js';
 
 export const updateBook = async (req, res) => {
   try {
-    const booksDataPath = path.join(__dirname, '../../data/booksData.json');
-    const booksData = await fs.readFile(booksDataPath, 'utf8');
-    let books = JSON.parse(booksData);
+    let books = await bookModel.getBooks();
 
     const bookId = parseInt(req.params.id);
 
@@ -33,8 +24,8 @@ export const updateBook = async (req, res) => {
         category
       };
 
-      // Write the updated book data back to booksData.json
-      await fs.writeFile(booksDataPath, JSON.stringify(books, null, 2));
+      // Write the updated book data back to booksData.json using the model
+      await bookModel.saveBooks(books);
 
       res.json({ message: 'Book updated successfully', data: books[bookIndex] });
     } else {
