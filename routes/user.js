@@ -8,18 +8,18 @@ import { getAllUsers, getUserById } from '../controllers/userController/getUser.
 const router = express.Router();
 
 // Register a new user
-router.post('/register', registerUser);
+router.post('/', registerUser);
 
 // Fetch user details (only particular user who sign in)
-router.get('/', authenticateUser, userDetails);
+router.get('/me', authenticateUser, userDetails);
 
 // Delete user (only particular user who sign in)
-router.delete('/delete', authenticateUser, deleteUser);
+router.delete('/', authenticateUser, deleteUser);
 
 // User routes (only by Admin)
-router.get('/all', isAdmin, getAllUsers);
+router.get('/', isAdmin, getAllUsers);
 
 // Get a user by ID (only By Admin)
-router.get('/all/:id', isAdmin, getUserById);
+router.get('/:id', isAdmin, getUserById);
 
 export default router;

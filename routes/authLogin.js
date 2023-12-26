@@ -9,7 +9,7 @@ const router = express.Router();
 const secretKey = process.env.JWT_SECRET_KEY; 
 
 // Route to authenticate user (login)
-router.post('/login', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const users = await userModel.getUsers();
 
