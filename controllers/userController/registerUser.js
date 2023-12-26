@@ -14,7 +14,7 @@ export const registerUser = async (req, res) => {
 
     // Validate username
     if (!validator.isAlphanumeric(username) || validator.isEmpty(username) || !validator.isLength(username, { min: 3 })) {
-      return res.status(400).json({ message: 'Invalid username. It should be alphanumeric and at least 5 characters long' });
+      return res.status(400).json({ message: 'Invalid username. It should be alphanumeric and at least 3 characters long' });
     }
 
     // Validate email
