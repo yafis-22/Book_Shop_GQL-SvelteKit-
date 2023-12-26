@@ -4,7 +4,7 @@
     "username": "MYK",
     "password": "$2b$10$WRekG10uOD12aueN64ZSNeAJ9f5F0XUO9zpaX2b7OeRsn5Nq93nx.",
     "email": "myk12@gmail.com",
-    "phoneNumber": "+919898787867",
+    "phoneNumber": "9898787867",
     "address": "Hinjewadi, Wakad, Pune",
     "lentBooks": [
       {
@@ -13,14 +13,5 @@
         "timestamp": "2023-12-26T09:00:12.410Z"
       }
     ]
-  },
-  {
-    "id": 2,
-    "username": "yafis",
-    "password": "$2b$10$KLCXmd603wQ7cXmaceFM1umQyRpxeFg8xG7fKO/GS939TFuujxGFW",
-    "email": "yafis@gmail.com",
-    "phoneNumber": "+919898787860",
-    "address": "Wakad, Pune",
-    "lentBooks": []
   }
 ]

@@ -1,5 +1,8 @@
-import validator from 'validator';
 import * as userModel from '../../models/userModal.js';
+
+const isAlphanumeric = (str) => /^[a-zA-Z0-9]+$/.test(str);
+const isEmail = (str) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str);
+const isMobilePhone = (str) => /^[0-9]{10}$/.test(str);
 
 export const updateUser = async (req, res) => {
   try {
@@ -14,21 +17,21 @@ export const updateUser = async (req, res) => {
 
     // Validate input data
     if (username) {
-      if (!validator.isAlphanumeric(username) || validator.isEmpty(username) || !validator.isLength(username, { min: 3 })) {
+      if (!isAlphanumeric(username) || username.length < 3) {
         return res.status(400).json({ message: 'Invalid username' });
       }
       userToUpdate.username = username;
     }
 
     if (email) {
-      if (!validator.isEmail(email)) {
+      if (!isEmail(email)) {
         return res.status(400).json({ message: 'Invalid email address' });
       }
       userToUpdate.email = email;
     }
 
     if (phoneNumber) {
-      if (!validator.isMobilePhone(phoneNumber, 'any', { strictMode: false})) {
+      if (!isMobilePhone(phoneNumber)) {
         return res.status(400).json({ message: 'Invalid phone number' });
       }
       userToUpdate.phoneNumber = phoneNumber;
