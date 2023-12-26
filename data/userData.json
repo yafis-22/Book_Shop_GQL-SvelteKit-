@@ -13,5 +13,14 @@
         "timestamp": "2023-12-26T09:00:12.410Z"
       }
     ]
+  },
+  {
+    "id": 2,
+    "username": "jibbu",
+    "password": "$2b$10$18SmN1JdIktLoD1s.nBRG.dMyHNMPe03lNZJH7bD3KLsc1yM54dw6",
+    "email": "jibbu12@gmail.com",
+    "phoneNumber": "9898787862",
+    "address": "Wakad, Pune",
+    "lentBooks": []
   }
 ]

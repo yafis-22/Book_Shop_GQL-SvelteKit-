@@ -6,14 +6,15 @@ const isMobilePhone = (str) => /^[0-9]{10}$/.test(str);
 
 export const updateUser = async (req, res) => {
   try {
-    const  userId  = req.login.id
+    const userId  = req.login.id
     const { username, email, phoneNumber, address } = req.body;
 
-    const userToUpdate = await userModel.getUserById(userId);
+    const users = await userModel.getUsers();
 
-    if (!userToUpdate) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+    const userIndex = users.findIndex((user) => user.id === userId);
+
+    if (userIndex !== -1) {
+      const userToUpdate = { ...users[userIndex] };
 
     // Validate input data
     if (username) {
@@ -42,9 +43,13 @@ export const updateUser = async (req, res) => {
     }
 
     // Update the user data
-    await userModel.saveUsers(userToUpdate);
+    users[userIndex] = { ...userToUpdate };
+    await userModel.saveUsers(users);
 
-    res.json({ message: 'User details updated successfully', user: userToUpdate });
+    res.json({ message: 'User details updated successfully', user: users[userIndex] });
+  } else {
+    res.status(404).json({ message: 'User not found' });
+  }
   } catch (err) {
     console.error('Error updating user details:', err);
     res.status(500).send('Internal Server Error');
