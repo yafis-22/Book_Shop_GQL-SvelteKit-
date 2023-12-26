@@ -10,7 +10,7 @@ import { getBooks, getBooksByCategory } from '../controllers/bookController/getB
 const router = express.Router();
 
 // Add a new book (only accessible by admin)
-router.post('/add', isAdmin, addBook); 
+router.post('/', isAdmin, addBook); 
 
 // Lend a book
 router.post('/lend', authenticateUser, lendBook);
@@ -23,6 +23,9 @@ router.put('/:id', isAdmin, updateBook);
 
 // Delete a book (only accessible by admin)
 router.delete('/', isAdmin, deleteBook);
+
+// Delete a book by Id (only accessible by admin)
+router.delete('/:id', isAdmin, deleteBook);
 
 // Get all books
 router.get('/', getBooks);
