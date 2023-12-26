@@ -1,27 +1,17 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import fs from 'fs/promises';
-import path from 'path';
 import bcrypt from 'bcrypt';
+import * as userModel from '../models/userModal.js';
 import 'dotenv/config';
 
 const router = express.Router();
 
-// Get the directory name using import.meta.url
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// User data file path
-const userDataPath = path.join(__dirname, '../data/userData.json');
 const secretKey = process.env.JWT_SECRET_KEY; 
 
 // Route to authenticate user (login)
 router.post('/login', async (req, res) => {
   try {
-    const userData = await fs.readFile(userDataPath, 'utf8');
-    const users = JSON.parse(userData);
+    const users = await userModel.getUsers();
 
     // Get user details from the request body
     const { username, password } = req.body;
