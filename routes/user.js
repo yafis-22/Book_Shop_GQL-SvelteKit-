@@ -4,6 +4,7 @@ import { registerUser } from '../controllers/userController/registerUser.js';
 import { userDetails } from '../controllers/userController/userDetails.js';
 import { deleteUser } from '../controllers/userController/deleteUser.js';
 import { getAllUsers, getUserById } from '../controllers/userController/getUser.js';
+import { updateUser } from '../controllers/userController/updateUser.js';
 
 const router = express.Router();
 
@@ -21,5 +22,7 @@ router.get('/', isAdmin, getAllUsers);
 
 // Get a user by ID (only By Admin)
 router.get('/:id', isAdmin, getUserById);
+
+router.put('/me', authenticateUser, updateUser);
 
 export default router;

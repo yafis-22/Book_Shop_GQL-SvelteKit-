@@ -13,5 +13,14 @@
         "timestamp": "2023-12-26T09:00:12.410Z"
       }
     ]
+  },
+  {
+    "id": 2,
+    "username": "yafis",
+    "password": "$2b$10$oeWtCVz7qXF09qJ6hlVjMu8mdqkOWC1h6PlURXODt2JVow2twzCyK",
+    "email": "yafis@gmail.com",
+    "phoneNumber": "+919898787860",
+    "address": "Wakad, Pune",
+    "lentBooks": []
   }
 ]

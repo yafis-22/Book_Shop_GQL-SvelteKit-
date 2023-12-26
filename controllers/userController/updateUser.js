@@ -3,12 +3,10 @@ import * as userModel from '../../models/userModal.js';
 
 export const updateUser = async (req, res) => {
   try {
-    const { userId } = parseInt(req.params); // Assuming userId is part of the request URL
-    const { username, password, email, phoneNumber, address } = req.body;
+    const  userId  = req.login.id
+    const { username, email, phoneNumber, address } = req.body;
 
-    // Check if the user exists
-    const users = await userModel.getUsers();
-    const userToUpdate = users.find((user) => user.id === userId);
+    const userToUpdate = await userModel.getUserById(userId);
 
     if (!userToUpdate) {
       return res.status(404).json({ message: 'User not found' });
@@ -30,7 +28,7 @@ export const updateUser = async (req, res) => {
     }
 
     if (phoneNumber) {
-      if (!validator.isMobilePhone(phoneNumber, 'any', { strictMode: true, locale: 'en-IN' })) {
+      if (!validator.isMobilePhone(phoneNumber, 'any', { strictMode: false})) {
         return res.status(400).json({ message: 'Invalid phone number' });
       }
       userToUpdate.phoneNumber = phoneNumber;
@@ -41,7 +39,7 @@ export const updateUser = async (req, res) => {
     }
 
     // Update the user data
-    await userModel.saveUsers(users);
+    await userModel.saveUsers(userToUpdate);
 
     res.json({ message: 'User details updated successfully', user: userToUpdate });
   } catch (err) {
