@@ -15,7 +15,7 @@ router.post('/', registerUser);
 router.get('/me', authenticateUser, userDetails);
 
 // Delete user (only particular user who sign in)
-router.delete('/', authenticateUser, deleteUser);
+router.delete('/me', authenticateUser, deleteUser);
 
 // User routes (only by Admin)
 router.get('/', isAdmin, getAllUsers);
