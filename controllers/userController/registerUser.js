@@ -6,10 +6,10 @@ export const registerUser = async (req, res) => {
   try {
     const users = await userModel.getUsers();
 
-    const { username, password, email } = req.body;
+    const { username, password, email, phoneNumber, address } = req.body;
 
-    if (!username || !password || !email) {
-      return res.status(400).json({ message: 'Please enter your username, password, and email' });
+    if (!username || !password || !email || !phoneNumber || !address) {
+      return res.status(400).json({ message: 'Please enter all fields i.e username, password, email, phoneNumber, address.' });
     }
 
     // Validate username
@@ -29,6 +29,11 @@ export const registerUser = async (req, res) => {
       });
     }
 
+    // Validate phone number
+    if (!validator.isMobilePhone(phoneNumber, 'any', { strictMode: false })) {
+      return res.status(400).json({ message: 'Invalid phone number' });
+    }
+
     // Check if the username or email is already taken
     const isUsernameTaken = users.some((user) => user.username === username);
     const isEmailTaken = users.some((user) => user.email === email);
@@ -44,6 +49,8 @@ export const registerUser = async (req, res) => {
       username,
       password: hashedPassword,
       email,
+      phoneNumber,
+      address,
       lentBooks: []
     };
 

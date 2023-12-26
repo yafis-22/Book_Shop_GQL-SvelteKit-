@@ -2,40 +2,16 @@
   {
     "id": 1,
     "username": "MYK",
-    "password": "$2b$10$RpTRtQEnWk6dQNeEmK3fsuQc1ahkhVb4UyPSAW5wEcQ3RwhuUhYe.",
-    "email": "MYK123@gmail.com",
+    "password": "$2b$10$WRekG10uOD12aueN64ZSNeAJ9f5F0XUO9zpaX2b7OeRsn5Nq93nx.",
+    "email": "MYk123@gmail.com",
+    "phoneNumber": "+919898787867",
+    "address": "Hinjewadi, Wakad, Pune",
     "lentBooks": [
       {
         "bookId": 5,
         "initialCharge": 22,
-        "timestamp": "2023-12-16T17:38:33.485Z"
-      },
-      {
-        "bookId": 3,
-        "initialCharge": 6,
-        "timestamp": "2023-12-22T05:08:07.773Z"
+        "timestamp": "2023-12-26T09:00:12.410Z"
       }
     ]
-  },
-  {
-    "id": 2,
-    "username": "yafis",
-    "password": "$2b$10$aC.nvKEK8eSplBsqZAxcR.ecab/uUJf2GWm5XJK2gJ8mb0mZ.cKSS",
-    "email": "yafis123@gmail.com",
-    "lentBooks": []
-  },
-  {
-    "id": 3,
-    "username": "khan22",
-    "password": "$2b$10$KeziCCty4xy94LJzGowxg.9FPlDuEb6prthixMPNTFWhCBg61WudO",
-    "email": "khan123@gmail.com",
-    "lentBooks": []
-  },
-  {
-    "id": 4,
-    "username": "jibbu",
-    "password": "$2b$10$7CRKpoXtLHeS1yetIn1rkuWwLMDwCGNyIT/eXVf2UrdEJS7L7r0Fy",
-    "email": "jibbu123@gmail.com",
-    "lentBooks": []
   }
 ]
