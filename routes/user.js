@@ -5,6 +5,7 @@ import { userDetails } from '../controllers/userController/userDetails.js';
 import { deleteUser } from '../controllers/userController/deleteUser.js';
 import { getAllUsers, getUserById } from '../controllers/userController/getUser.js';
 import { updateUser } from '../controllers/userController/updateUser.js';
+import { activateUser } from '../controllers/userController/activateUser.js';
 
 const router = express.Router();
 
@@ -25,4 +26,5 @@ router.get('/:id', isAdmin, getUserById);
 
 router.put('/me', authenticateUser, updateUser);
 
+router.put('/:id/activate', isAdmin, activateUser);
 export default router;
