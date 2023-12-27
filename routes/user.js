@@ -24,7 +24,9 @@ router.get('/', isAdmin, getAllUsers);
 // Get a user by ID (only By Admin)
 router.get('/:id', isAdmin, getUserById);
 
+// Update user
 router.put('/me', authenticateUser, updateUser);
 
+// Activate user
 router.put('/:id/activate', isAdmin, activateUser);
 export default router;
