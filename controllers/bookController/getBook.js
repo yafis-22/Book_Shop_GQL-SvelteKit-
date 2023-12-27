@@ -39,10 +39,16 @@ export const getBooksByCategory = async (req, res) => {
     try {
       const categoryBooks = await bookModel.getBooksByCategory(categoryParam);
   
+      if (categoryBooks.length > 0) {
         res.json({
           message: `Books in the category ${categoryParam} retrieved successfully`,
           data: categoryBooks,
-        }); 
+        });
+      } else {
+        res.status(404).json({
+          message: `No books found for the category ${categoryParam}. Please enter a correct category name.`,
+        });
+      }
     } catch (err) {
       console.error('Error reading books data:', err);
       res.status(500).json({ message: 'Internal Server Error' });

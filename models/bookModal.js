@@ -24,9 +24,10 @@ export const getBooksByCategory = async (categoryParam) => {
   
       // If a category is specified, filter books by that category
       if (categoryParam) {
-        return books.filter((book) => book.category === categoryParam);
+        const lowercaseCategoryParam = categoryParam.toLowerCase();
+        return books.filter((book) => book.category.toLowerCase() === lowercaseCategoryParam);
       } else {
-        return books;
+        return null;
       }
     } catch (error) {
       throw error;
