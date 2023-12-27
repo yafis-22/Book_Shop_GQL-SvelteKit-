@@ -1,37 +1,47 @@
 import * as bookModel from '../../models/bookModal.js';
 
 export const getBooks = async (req, res) => {
-    try {
-      const { title, category, author } = req.query;
-  
+  try {
+      const { title, category, author, page = 1, pageSize = 10 } = req.query;
+
       let allBooks = await bookModel.getBooks();
-  
+
       if (title) {
-        allBooks = allBooks.filter((book) =>
-          book.title.toLowerCase().includes(title.toLowerCase())
-        );
+          allBooks = allBooks.filter((book) =>
+              book.title.toLowerCase().includes(title.toLowerCase())
+          );
       }
       if (category) {
-        allBooks = allBooks.filter((book) =>
-          book.category.toLowerCase() === category.toLowerCase()
-        );
+          allBooks = allBooks.filter((book) =>
+              book.category.toLowerCase() === category.toLowerCase()
+          );
       }
-  
+
       if (author) {
-        allBooks = allBooks.filter((book) =>
-          book.author.toLowerCase().includes(author.toLowerCase())
-        );
+          allBooks = allBooks.filter((book) =>
+              book.author.toLowerCase().includes(author.toLowerCase())
+          );
       }
-  
+
+      // Calculate start and end index for pagination
+      const startIndex = (page - 1) * pageSize;
+      const endIndex = page * pageSize;
+
+      // Get the books for the current page
+      const paginatedBooks = allBooks.slice(startIndex, endIndex);
+
       res.json({
-        message: 'All books retrieved successfully',
-        books: allBooks,
+          message: 'Books retrieved successfully',
+          books: paginatedBooks,
+          currentPage: page,
+          totalPages: Math.ceil(allBooks.length / pageSize),
       });
-    } catch (err) {
+  } catch (err) {
       console.error('Error reading books data:', err);
       res.status(500).send('Internal Server Error');
-    }
-  };
+  }
+};
+
 
 export const getBooksByCategory = async (req, res) => {
     const categoryParam = req.params.category;
