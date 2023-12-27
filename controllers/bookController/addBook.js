@@ -22,7 +22,8 @@ export const addBook = async (req, res) => {
       lendingPrice,
       quantity,
       author,
-      category
+      category,
+      deleted: false
     };
 
     books.push(newBook);

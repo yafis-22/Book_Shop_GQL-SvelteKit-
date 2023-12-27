@@ -5,7 +5,8 @@
     "description": "A classic novel by J.D. Salinger.",
     "lendingPrice": 5,
     "quantity": 5,
-    "category": "Literature"
+    "category": "Literature",
+    "deleted": false
   },
   {
     "id": 2,
@@ -13,7 +14,8 @@
     "description": "Harper Lee's Pulitzer Prize-winning novel.",
     "lendingPrice": 7,
     "quantity": 9,
-    "category": "Literature"
+    "category": "Literature",
+    "deleted": false
   },
   {
     "id": 3,
@@ -21,7 +23,8 @@
     "description": "George Orwell's dystopian masterpiece.",
     "lendingPrice": 6,
     "quantity": 8,
-    "category": "History"
+    "category": "History",
+    "deleted": false
   },
   {
     "id": 4,
@@ -29,24 +32,27 @@
     "description": "This book teaches you how to be a perfect lover",
     "lendingPrice": 22,
     "quantity": 4,
-    "category": "Romance"
+    "category": "Romance",
+    "deleted": false
   },
   {
     "id": 5,
     "title": "Leader Mind",
     "description": "This book is about the great Entrepreneur",
     "lendingPrice": 22,
-    "quantity": 6,
+    "quantity": 7,
     "author": "Yafis",
-    "category": "History"
+    "category": "History",
+    "deleted": false
   },
   {
     "id": 6,
     "title": "What I see in You",
     "description": "This book is about the great Entrepreneur",
     "lendingPrice": 11,
-    "quantity": 21,
+    "quantity": 18,
     "author": "MYK",
-    "category": "Romance"
+    "category": "Romance",
+    "deleted": true
   }
 ]

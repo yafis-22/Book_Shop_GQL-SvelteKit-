@@ -41,24 +41,24 @@ export const saveBooks = async (books) => {
     }
   };
 
-export const deleteBookById = async (bookId) => {
+export const softDeleteBook = async (bookId) => {
     try {
       let books = await getBooks();
   
       // Find the index of the book by ID
       const bookIndex = books.findIndex((book) => book.id === bookId);
   
-      if (bookIndex !== -1) {
-        // Remove the book from the array
-        const deletedBook = books.splice(bookIndex, 1)[0];
-  
-        // Write the updated book data back to booksData.json
-        await saveBooks(books);
-  
-        return deletedBook;
-      } else {
+      if (bookIndex === -1 || books[bookIndex].deleted) {
         return null; 
       }
+  
+      // Mark the book as deleted
+      books[bookIndex].deleted = true;
+
+        // Write the updated book data back to booksData.json
+      await saveBooks(books);
+  
+      return books[bookIndex];
     } catch (error) {
       throw error;
     }

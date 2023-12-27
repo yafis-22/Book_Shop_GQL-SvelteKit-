@@ -28,7 +28,7 @@ export const lendBook = async (req, res) => {
     }
 
     // Check if the book is available
-    if (book.quantity <= 0) {
+    if (book.quantity <= 0 || book.deleted) {
       return res.status(400).json({ message: 'Book not available for lending' });
     }
 

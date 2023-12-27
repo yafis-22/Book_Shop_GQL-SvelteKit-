@@ -16,7 +16,7 @@ export const deleteBook = async (req, res) => {
       return res.status(400).json({ error: 'Invalid book ID' });
     }
      // Delete the book by ID using the model
-    const deletedBook = await bookModel.deleteBookById(bookId);
+    const deletedBook = await bookModel.softDeleteBook(bookId);
 
     if (deletedBook) {
       res.json({ message: 'Book deleted successfully', data: deletedBook });

@@ -30,6 +30,6 @@ router.delete('/:id', isAdmin, deleteBook);
 // Get all books
 router.get('/', getBooks);
 
-router.get('/:category?', getBooksByCategory);
+router.get('/:category', getBooksByCategory);
   
 export default router;
