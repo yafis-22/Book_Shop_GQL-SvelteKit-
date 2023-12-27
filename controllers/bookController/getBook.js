@@ -33,7 +33,7 @@ export const getBooks = async (req, res) => {
     }
   };
 
-  export const getBooksByCategory = async (req, res) => {
+export const getBooksByCategory = async (req, res) => {
     const categoryParam = req.params.category;
   
     try {
@@ -46,5 +46,22 @@ export const getBooks = async (req, res) => {
     } catch (err) {
       console.error('Error reading books data:', err);
       res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
+
+export const getBookById = async (req, res) => {
+    const bookId = parseInt(req.params.id);
+  
+    try {
+      const book = await bookModel.getBookById(bookId);
+  
+      if (book) {
+        res.json(book);
+      } else {
+        res.status(404).send('Book not found');
+      }
+    } catch (err) {
+      console.error('Error reading book data:', err);
+      res.status(500).send('Internal Server Error');
     }
   };

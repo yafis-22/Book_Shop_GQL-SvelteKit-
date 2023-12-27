@@ -5,7 +5,7 @@ import { addBook } from '../controllers/bookController/addBook.js';
 import { updateBook } from '../controllers/bookController/updateBook.js'; 
 import { deleteBook } from '../controllers/bookController/deleteBook.js';
 import { returnBook } from '../controllers/bookController/returnBook.js';
-import { getBooks, getBooksByCategory } from '../controllers/bookController/getBook.js';
+import { getBooks, getBooksByCategory, getBookById } from '../controllers/bookController/getBook.js';
 import { bookAvailable } from '../controllers/bookController/bookAvailable.js';
 
 const router = express.Router();
@@ -31,8 +31,13 @@ router.delete('/:id', isAdmin, deleteBook);
 // Get all books
 router.get('/', getBooks);
 
-router.get('/:category', getBooksByCategory);
+// Get all books by id
+router.get('/:id', getBookById);
 
+// Get all books by category
+router.get('/category/:category', getBooksByCategory);
+
+// Make book available
 router.patch('/:id/add', isAdmin, bookAvailable )
   
 export default router;

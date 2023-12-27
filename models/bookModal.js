@@ -33,6 +33,15 @@ export const getBooksByCategory = async (categoryParam) => {
     }
   };
 
+export const getBookById = async (bookId) => {
+    try {
+      const books = await getBooks();
+      return books.find((book) => book.id === bookId);
+    } catch (error) {
+      throw error;
+    }
+  };
+
 export const saveBooks = async (books) => {
     try {
       await fs.writeFile(booksDataPath, JSON.stringify(books, null, 2));
