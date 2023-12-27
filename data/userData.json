@@ -32,7 +32,13 @@
     "email": "yafis123@gmail.com",
     "phoneNumber": "9898787822",
     "address": "Wakad, Pune",
-    "lentBooks": [],
+    "lentBooks": [
+      {
+        "bookId": 6,
+        "initialCharge": 11,
+        "timestamp": "2023-12-27T09:35:13.600Z"
+      }
+    ],
     "deleted": false
   }
 ]

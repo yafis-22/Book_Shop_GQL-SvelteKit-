@@ -6,6 +6,7 @@ import { updateBook } from '../controllers/bookController/updateBook.js';
 import { deleteBook } from '../controllers/bookController/deleteBook.js';
 import { returnBook } from '../controllers/bookController/returnBook.js';
 import { getBooks, getBooksByCategory } from '../controllers/bookController/getBook.js';
+import { bookAvailable } from '../controllers/bookController/bookAvailable.js';
 
 const router = express.Router();
 
@@ -31,5 +32,7 @@ router.delete('/:id', isAdmin, deleteBook);
 router.get('/', getBooks);
 
 router.get('/:category', getBooksByCategory);
+
+router.patch('/:id/add', isAdmin, bookAvailable )
   
 export default router;
