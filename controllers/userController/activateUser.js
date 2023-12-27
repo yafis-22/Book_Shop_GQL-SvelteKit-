@@ -8,6 +8,10 @@ export const activateUser = async (req, res) => {
       const userIndex = users.findIndex(user => user.id === userId);
   
       if (userIndex !== -1) {
+        if (!users[userIndex].deleted) {
+            return res.json({ message: 'User is already activated.' });
+          }
+          
         users[userIndex].deleted = false; // Activate the user
         await userModel.saveUsers(users);
         res.json({ message: 'User activated successfully.' });
