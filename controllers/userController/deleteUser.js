@@ -6,7 +6,7 @@ export const deleteUser = async (req, res) => {
       const requestingUserId = req.login.id;
   
       // Remove the user from the array
-      const deletedUser = await userModel.deleteUserById(requestingUserId);
+      const deletedUser = await userModel.softDeleteUser(requestingUserId);
       
       if (!deletedUser) {
         return res.status(404).json({ message: 'User not found' });

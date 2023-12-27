@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
     // Find the user by username
     const user = users.find((user) => user.username === username);
 
-    if (user && await bcrypt.compare(password, user.password)) {
+    if (user && !user.deleted && await bcrypt.compare(password, user.password)) {
       // Generate a JWT token
       const token = jwt.sign({ id: user.id, username: user.username }, secretKey, { expiresIn: '1h' });
 

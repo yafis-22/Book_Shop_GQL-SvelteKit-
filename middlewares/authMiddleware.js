@@ -5,6 +5,7 @@ import path from 'path';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import "dotenv/config"
+import * as userModel from '../models/userModal.js';
 
 // Get the directory name using import.meta.url
 const __filename = fileURLToPath(import.meta.url);
@@ -50,11 +51,18 @@ export const authenticateUser = async (req, res, next) => {
 
   token = token.split(" ")[1]
   
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, login) => {
+    jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, login) => {
       if (err) {
         console.log(err)
         return res.sendStatus(403);
       } else {
+        // Check if the user is soft-deleted
+        const user = await userModel.getUserById(login.id);
+  
+        if (!user || user.deleted) {
+          return res.status(401).json({ message: 'User is deleted or does not exist' });
+        }
+  
         req.login = login;
         next();
       }

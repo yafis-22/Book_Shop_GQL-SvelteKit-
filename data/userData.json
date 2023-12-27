@@ -12,7 +12,8 @@
         "initialCharge": 22,
         "timestamp": "2023-12-26T09:00:12.410Z"
       }
-    ]
+    ],
+    "deleted": false
   },
   {
     "id": 2,
@@ -21,6 +22,17 @@
     "email": "jibbu12@gmail.com",
     "phoneNumber": "9898787862",
     "address": "Wakad, Pune",
-    "lentBooks": []
+    "lentBooks": [],
+    "deleted": false
+  },
+  {
+    "id": 3,
+    "username": "yafis",
+    "password": "$2b$10$qh.ccB4mOcXasFVBCMl9.uNsYzqcqp2eoqnjLcfHR6EfBxiZoZll6",
+    "email": "yafis123@gmail.com",
+    "phoneNumber": "9898787822",
+    "address": "Wakad, Pune",
+    "lentBooks": [],
+    "deleted": true
   }
 ]

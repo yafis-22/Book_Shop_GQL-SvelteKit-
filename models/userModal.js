@@ -35,24 +35,24 @@ export const saveUsers = async (users) => {
   }
 };
 
-export const deleteUserById = async (userId) => {
+export const softDeleteUser = async (userId) => {
     try {
       let users = await getUsers();
     
       // Find the user by ID
       const userIndex = users.findIndex((user) => user.id === userId);
   
-      if (userIndex === -1) {
+      if (userIndex === -1 || users[userIndex].deleted) {
         return null; 
       }
   
-      // Remove the user from the array
-      const deletedUser = users.splice(userIndex, 1)[0];
-  
-      // Write the updated user data back to userData.json
-      await saveUsers(users);
-  
-      return deletedUser;
+      // Mark the user as deleted
+    users[userIndex].deleted = true;
+
+    // Write the updated user data back to userData.json
+    await saveUsers(users);
+
+    return users[userIndex];
     } catch (error) {
       throw error;
     }

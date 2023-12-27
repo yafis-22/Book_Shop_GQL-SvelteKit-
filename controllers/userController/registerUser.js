@@ -55,7 +55,8 @@ export const registerUser = async (req, res) => {
       email,
       phoneNumber,
       address,
-      lentBooks: []
+      lentBooks: [],
+      deleted: false
     };
 
     users.push(newUser);
