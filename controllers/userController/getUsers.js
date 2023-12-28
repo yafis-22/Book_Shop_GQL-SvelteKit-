@@ -20,6 +20,8 @@ export const getAllUsers = async (req, res) => {
       const paginatedUsers = allUsers.slice(startIndex, endIndex);
       res.json({
         message: 'Users retrieved successfully',
+        totalUsers: allUsers.length,
+        usersFetched: paginatedUsers.length,
         users: paginatedUsers,
         currentPage: page,
         totalPages: Math.ceil(allUsers.length / pageSize),

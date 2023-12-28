@@ -32,6 +32,8 @@ export const getBooks = async (req, res) => {
 
       res.json({
           message: 'Books retrieved successfully',
+          totalBooks: allBooks.length,
+          booksFetched: paginatedBooks.length,
           books: paginatedBooks,
           currentPage: page,
           totalPages: Math.ceil(allBooks.length / pageSize),
