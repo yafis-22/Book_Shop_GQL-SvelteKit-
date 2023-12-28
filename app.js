@@ -1,6 +1,6 @@
 import express from 'express';
 import adminRoutes from './routes/admin.js';
-import userRoutes from './routes/user.js';
+import userRoutes from './routes/users.js';
 import booksRoutes from './routes/books.js';
 import authRoutes from './routes/authLogin.js';
 

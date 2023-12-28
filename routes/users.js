@@ -3,7 +3,7 @@ import { authenticateUser, isAdmin } from '../middlewares/authMiddleware.js';
 import { registerUser } from '../controllers/userController/registerUser.js';
 import { userDetails } from '../controllers/userController/userDetails.js';
 import { deleteUser } from '../controllers/userController/deleteUser.js';
-import { getAllUsers, getUserById } from '../controllers/userController/getUser.js';
+import { getAllUsers, getUserById } from '../controllers/userController/getUsers.js';
 import { updateUser } from '../controllers/userController/updateUser.js';
 import { activateUser } from '../controllers/userController/activateUser.js';
 
