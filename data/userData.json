@@ -15,17 +15,7 @@
       {
         "bookId": 6,
         "initialCharge": 11,
-        "timestamp": "2023-12-28T16:00:25.800Z"
-      },
-      {
-        "bookId": 6,
-        "initialCharge": 11,
-        "timestamp": "2023-12-28T16:01:00.868Z"
-      },
-      {
-        "bookId": 6,
-        "initialCharge": 11,
-        "timestamp": "2023-12-28T16:01:32.803Z"
+        "timestamp": "2023-12-28T16:14:36.296Z"
       }
     ],
     "deleted": false
@@ -37,13 +27,7 @@
     "email": "jibbu12@gmail.com",
     "phoneNumber": "9898787862",
     "address": "Wakad, Pune",
-    "lentBooks": [
-      {
-        "bookId": 6,
-        "initialCharge": 11,
-        "timestamp": "2023-12-28T15:58:18.801Z"
-      }
-    ],
+    "lentBooks": [],
     "deleted": false
   },
   {

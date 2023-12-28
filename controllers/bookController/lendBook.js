@@ -61,6 +61,7 @@ export const lendBook = async (req, res) => {
     res.json({
       message: 'Book lent successfully',
       chargeDetails: {
+        data: book,
         initialCharge,
       },
     });
