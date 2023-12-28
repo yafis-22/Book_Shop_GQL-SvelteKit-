@@ -14,7 +14,7 @@ export const bookAvailable = async (req, res) => {
           
         books[bookIndex].deleted = false; // Make the book available
         await bookModel.saveBooks(books);
-        res.json({ message: 'Book is now available.' });
+        res.json({ message: 'Book is now available.', data:books[bookIndex] });
     } else {
       res.status(404).json({ message: 'Book not found.' });
     }

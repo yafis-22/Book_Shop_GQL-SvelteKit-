@@ -28,5 +28,5 @@ router.get('/:id', isAdmin, getUserById);
 router.put('/me', authenticateUser, updateUser);
 
 // Activate user
-router.patch('/:id/activate', isAdmin, activateUser);
+router.patch('/:id', isAdmin, activateUser);
 export default router;

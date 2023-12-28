@@ -14,7 +14,7 @@ export const activateUser = async (req, res) => {
           
         users[userIndex].deleted = false; // Activate the user
         await userModel.saveUsers(users);
-        res.json({ message: 'User activated successfully.' });
+        res.json({ message: 'User activated successfully.', data:users[userIndex] });
     } else {
       res.status(404).json({ message: 'User not found.' });
     }
