@@ -15,27 +15,27 @@ const adminDataPath = path.join(__dirname, '../data/adminData.json');
 
 export const isAdmin = async (req, res, next) => {
   try {
-    const adminData = await fs.readFile(adminDataPath, 'utf8');
-    const admins = JSON.parse(adminData);
+    let token = req.headers.authorization;
 
-    const username = req.headers['username'];
-    const password = req.headers['password'];
-
-    if (!username || !password) {
-      return res.status(400).send('Both Admin username and password are required in the headers.');
+    if (!token) {
+      return res.status(401).json({ message: 'Authentication token is missing' });
     }
 
-    // Check if the user making the request is an admin
-    const isAdminUser = admins.find((admin) => admin.username === username);
+    token = token.split(" ")[1]
     
-    const isPasswordMatch = await bcrypt.compare(password, isAdminUser.password);
+    jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decodedToken) => {
+      if (err) {
+        console.log(err);
+        return res.status(403).json({ message: 'Invalid token or token expired. Please login again. Or you may not be admin' });
+      }
 
-      if (isPasswordMatch) {
-        // If the password matches, proceed to the next middleware or route
+      if (decodedToken.role === 'admin') {
+        // If the role is admin, proceed to the next middleware or route
         next();
-    } else {
-      res.status(403).send('Unauthorized. Only admin can perform this action.');
-    }
+      } else {
+        res.status(403).send('Unauthorized. Only admin can perform this action.');
+      }
+    });
   } catch (err) {
     console.error('Error checking admin status:', err);
     res.status(500).send('Internal Server Error');

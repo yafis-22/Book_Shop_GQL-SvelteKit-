@@ -11,6 +11,21 @@
         "bookId": 5,
         "initialCharge": 22,
         "timestamp": "2023-12-26T09:00:12.410Z"
+      },
+      {
+        "bookId": 6,
+        "initialCharge": 11,
+        "timestamp": "2023-12-28T16:00:25.800Z"
+      },
+      {
+        "bookId": 6,
+        "initialCharge": 11,
+        "timestamp": "2023-12-28T16:01:00.868Z"
+      },
+      {
+        "bookId": 6,
+        "initialCharge": 11,
+        "timestamp": "2023-12-28T16:01:32.803Z"
       }
     ],
     "deleted": false
@@ -22,7 +37,13 @@
     "email": "jibbu12@gmail.com",
     "phoneNumber": "9898787862",
     "address": "Wakad, Pune",
-    "lentBooks": [],
+    "lentBooks": [
+      {
+        "bookId": 6,
+        "initialCharge": 11,
+        "timestamp": "2023-12-28T15:58:18.801Z"
+      }
+    ],
     "deleted": false
   },
   {
@@ -53,6 +74,28 @@
     "email": "khan123@gmail.com",
     "phoneNumber": "9898787822",
     "address": "Wakad, Pune",
+    "lentBooks": [],
+    "deleted": false
+  },
+  {
+    "id": 5,
+    "username": "furk",
+    "password": "$2b$10$1YOBQdSmxFzr03dlyyS/M.1ynqNWMazD3eDj8WUCq6BXYNY8f3yXC",
+    "email": "furk123@gmail.com",
+    "phoneNumber": "9898787822",
+    "address": "Wakad, Pune",
+    "role": "user",
+    "lentBooks": [],
+    "deleted": false
+  },
+  {
+    "id": 6,
+    "username": "furk1",
+    "password": "$2b$10$UiYDlwLBIBeU2.WVWoxDF.hqgpmzFJfrcQ0XtypwTAUL07rbuP5Dy",
+    "email": "furk121@gmail.com",
+    "phoneNumber": "9898787822",
+    "address": "Wakad, Pune",
+    "role": "user",
     "lentBooks": [],
     "deleted": false
   }

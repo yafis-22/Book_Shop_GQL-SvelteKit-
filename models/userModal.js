@@ -8,6 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const userDataPath = path.join(__dirname, '../data/userData.json');
+const adminDataPath = path.join(__dirname, '../data/adminData.json');
 
 export const getUsers = async () => {
   try {
@@ -57,3 +58,20 @@ export const softDeleteUser = async (userId) => {
       throw error;
     }
   };
+
+export const getAdmins = async () => {
+  try {
+    const adminData = await fs.readFile(adminDataPath, 'utf8');
+    return JSON.parse(adminData);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const saveAdmins = async (adminUsers) => {
+  try {
+    await fs.writeFile(adminDataPath, JSON.stringify(adminUsers, null, 2));
+  } catch (error) {
+    throw error;
+  }
+};

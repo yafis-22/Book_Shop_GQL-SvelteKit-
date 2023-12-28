@@ -41,7 +41,7 @@
   },
   {
     "id": 5,
-    "title": "Leader Mind",
+    "title": "Leader Mind.",
     "description": "This book is about the great Entrepreneur",
     "lendingPrice": 22,
     "quantity": 7,
@@ -54,9 +54,19 @@
     "title": "What I see in Youuu.",
     "description": "This book is about the great Entrepreneur",
     "lendingPrice": 11,
-    "quantity": 18,
+    "quantity": 17,
     "author": "MYK",
     "category": "Romance",
     "deleted": false
+  },
+  {
+    "id": 7,
+    "title": "Here Your Go",
+    "description": "This book is about the great Entrepreneur",
+    "lendingPrice": 9,
+    "quantity": 15,
+    "author": "MYK",
+    "category": "Romance",
+    "deleted": true
   }
 ]
