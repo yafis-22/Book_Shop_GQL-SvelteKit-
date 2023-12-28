@@ -27,6 +27,9 @@ router.get('/:id', isAdmin, getUserById);
 // Update user
 router.put('/me', authenticateUser, updateUser);
 
+// Update user
+router.patch('/me', authenticateUser, updateUser);
+
 // Activate user
 router.patch('/:id', isAdmin, activateUser);
 export default router;
