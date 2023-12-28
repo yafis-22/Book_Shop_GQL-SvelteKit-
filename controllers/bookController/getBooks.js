@@ -2,45 +2,37 @@ import * as bookModel from '../../models/bookModal.js';
 
 export const getBooks = async (req, res) => {
   try {
-      const { title, category, author, page = 1, pageSize = 10 } = req.query;
+    const { search, page = 1, pageSize = 10 } = req.query;
 
-      let allBooks = await bookModel.getBooks();
+    let allBooks = await bookModel.getBooks();
 
-      if (title) {
-          allBooks = allBooks.filter((book) =>
-              book.title.toLowerCase().includes(title.toLowerCase())
-          );
-      }
-      if (category) {
-          allBooks = allBooks.filter((book) =>
-              book.category.toLowerCase() === category.toLowerCase()
-          );
-      }
+    if (search) {
+      // Case-insensitive search across various fields
+      allBooks = allBooks.filter((book) =>
+        Object.values(book).some((field) =>
+          field.toString().toLowerCase().includes(search.toLowerCase())
+        )
+      );
+    }
 
-      if (author) {
-          allBooks = allBooks.filter((book) =>
-              book.author.toLowerCase().includes(author.toLowerCase())
-          );
-      }
+    // Calculate start and end index for pagination
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = page * pageSize;
 
-      // Calculate start and end index for pagination
-      const startIndex = (page - 1) * pageSize;
-      const endIndex = page * pageSize;
+    // Get the books for the current page
+    const paginatedBooks = allBooks.slice(startIndex, endIndex);
 
-      // Get the books for the current page
-      const paginatedBooks = allBooks.slice(startIndex, endIndex);
-
-      res.json({
-          message: 'Books retrieved successfully',
-          totalBooks: allBooks.length,
-          booksFetched: paginatedBooks.length,
-          books: paginatedBooks,
-          currentPage: page,
-          totalPages: Math.ceil(allBooks.length / pageSize),
-      });
+    res.json({
+      message: 'Books retrieved successfully',
+      totalBooks: allBooks.length,
+      booksFetched: paginatedBooks.length,
+      books: paginatedBooks,
+      currentPage: page,
+      totalPages: Math.ceil(allBooks.length / pageSize),
+    });
   } catch (err) {
-      console.error('Error reading books data:', err);
-      res.status(500).send('Internal Server Error');
+    console.error('Error reading books data:', err);
+    res.status(500).send('Internal Server Error');
   }
 };
 
