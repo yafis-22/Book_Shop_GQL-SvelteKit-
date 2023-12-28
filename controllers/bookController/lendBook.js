@@ -4,6 +4,13 @@ import * as bookModel from '../../models/bookModal.js';
 export const lendBook = async (req, res) => {
     
   try {
+    // Check the role of the user making the request
+    const { role } = req.login;
+
+    // If the user is an admin, disallow lending books
+    if (role === 'admin') {
+      return res.status(403).json({ message: 'Admins are not allowed to lend books.' });
+    }
     let bookId;
 
     if (req.params.id) {
