@@ -54,7 +54,7 @@ export const authenticateUser = async (req, res, next) => {
     jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, login) => {
       if (err) {
         console.log(err)
-        return res.sendStatus(403);
+        return res.status(403).json({ message: 'Invalid token or token expired. Please login again' });
       } else {
         // Check if the user is soft-deleted
         const user = await userModel.getUserById(login.id);
