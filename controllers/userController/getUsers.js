@@ -2,7 +2,7 @@ import * as userModel from '../../models/userModal.js';
 
 export const getAllUsers = async (req, res) => {
     try {
-      const { username } = req.query;
+      const { username, page = 1, pageSize = 10 } = req.query;
   
       let allUsers = await userModel.getUsers();
   
@@ -11,9 +11,18 @@ export const getAllUsers = async (req, res) => {
           user.username.toLowerCase().includes(username.toLowerCase())
         );
       }
+
+      // Calculate start and end index for pagination
+      const startIndex = (page - 1) * pageSize;
+      const endIndex = page * pageSize;
+
+      // Get the books for the current page
+      const paginatedUsers = allUsers.slice(startIndex, endIndex);
       res.json({
-        message: 'All users retrieved successfully',
-        users: allUsers,
+        message: 'Users retrieved successfully',
+        users: paginatedUsers,
+        currentPage: page,
+        totalPages: Math.ceil(allUsers.length / pageSize),
       });
     } catch (err) {
       console.error('Error reading user data:', err);
