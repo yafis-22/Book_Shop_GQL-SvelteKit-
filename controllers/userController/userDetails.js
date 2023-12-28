@@ -13,12 +13,7 @@ export const userDetails = async (req, res) => {
     }
 
     // Send only the user's details
-    res.json({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      lentBooks: user.lentBooks
-    });
+    res.json({ message: 'User details', data:user });
   } catch (err) {
     console.error('Error fetching user details:', err);
     res.status(500).send('Internal Server Error');

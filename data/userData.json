@@ -45,5 +45,15 @@
       }
     ],
     "deleted": false
+  },
+  {
+    "id": 4,
+    "username": "khan22",
+    "password": "$2b$10$vMJo1SfStkLiZpqJsCFRLuhZUyzjrIRhvqAfEFM8YbF3JNJCuN77y",
+    "email": "khan123@gmail.com",
+    "phoneNumber": "9898787822",
+    "address": "Wakad, Pune",
+    "lentBooks": [],
+    "deleted": false
   }
 ]

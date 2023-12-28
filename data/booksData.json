@@ -5,6 +5,7 @@
     "description": "A classic novel by J.D. Salinger.",
     "lendingPrice": 5,
     "quantity": 5,
+    "author": "Khan",
     "category": "Literature",
     "deleted": false
   },
@@ -14,6 +15,7 @@
     "description": "Harper Lee's Pulitzer Prize-winning novel.",
     "lendingPrice": 7,
     "quantity": 9,
+    "author": "James",
     "category": "Literature",
     "deleted": false
   },
@@ -23,6 +25,7 @@
     "description": "George Orwell's dystopian masterpiece.",
     "lendingPrice": 6,
     "quantity": 8,
+    "author": "Yafis",
     "category": "History",
     "deleted": false
   },
@@ -32,6 +35,7 @@
     "description": "This book teaches you how to be a perfect lover",
     "lendingPrice": 22,
     "quantity": 2,
+    "author": "Khan",
     "category": "Romance",
     "deleted": false
   },
@@ -40,7 +44,7 @@
     "title": "Leader Mind",
     "description": "This book is about the great Entrepreneur",
     "lendingPrice": 22,
-    "quantity": 6,
+    "quantity": 7,
     "author": "Yafis",
     "category": "History",
     "deleted": false

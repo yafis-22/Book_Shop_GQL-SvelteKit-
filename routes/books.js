@@ -35,6 +35,6 @@ router.get('/:id', getBookById);
 router.get('/category/:category', getBooksByCategory);
 
 // Make book available
-router.patch('/:id/add', isAdmin, bookAvailable )
+router.patch('/:id', isAdmin, bookAvailable )
   
 export default router;
