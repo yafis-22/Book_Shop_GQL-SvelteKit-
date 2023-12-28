@@ -2,13 +2,16 @@ import * as userModel from '../../models/userModal.js';
 
 export const getAllUsers = async (req, res) => {
     try {
-      const { username, page = 1, pageSize = 10 } = req.query;
+      const { search, page = 1, pageSize = 10 } = req.query;
   
       let allUsers = await userModel.getUsers();
   
-      if (username) {
+      if (search) {
+        // Case-insensitive search across various fields
         allUsers = allUsers.filter((user) =>
-          user.username.toLowerCase().includes(username.toLowerCase())
+          Object.values(user).some((field) =>
+            field.toString().toLowerCase().includes(search.toLowerCase())
+          )
         );
       }
 
