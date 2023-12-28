@@ -31,7 +31,7 @@
     "title": "90 rules of love",
     "description": "This book teaches you how to be a perfect lover",
     "lendingPrice": 22,
-    "quantity": 4,
+    "quantity": 2,
     "category": "Romance",
     "deleted": false
   },
@@ -40,7 +40,7 @@
     "title": "Leader Mind",
     "description": "This book is about the great Entrepreneur",
     "lendingPrice": 22,
-    "quantity": 7,
+    "quantity": 6,
     "author": "Yafis",
     "category": "History",
     "deleted": false
@@ -50,7 +50,7 @@
     "title": "What I see in You",
     "description": "This book is about the great Entrepreneur",
     "lendingPrice": 11,
-    "quantity": 17,
+    "quantity": 18,
     "author": "MYK",
     "category": "Romance",
     "deleted": false

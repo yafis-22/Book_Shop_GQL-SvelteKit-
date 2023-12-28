@@ -34,9 +34,14 @@
     "address": "Wakad, Pune",
     "lentBooks": [
       {
-        "bookId": 6,
-        "initialCharge": 11,
-        "timestamp": "2023-12-27T09:35:13.600Z"
+        "bookId": 4,
+        "initialCharge": 22,
+        "timestamp": "2023-12-28T06:40:59.227Z"
+      },
+      {
+        "bookId": 5,
+        "initialCharge": 22,
+        "timestamp": "2023-12-28T06:46:12.489Z"
       }
     ],
     "deleted": false

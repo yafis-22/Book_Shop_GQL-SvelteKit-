@@ -14,19 +14,16 @@ const router = express.Router();
 router.post('/', isAdmin, addBook); 
 
 // Lend a book
-router.post('/lend', authenticateUser, lendBook);
+router.post('/lend/:id?', authenticateUser, lendBook);
 
 // Return a lent book
-router.post('/return', authenticateUser, returnBook);
+router.post('/return/:id?', authenticateUser, returnBook);
 
 // Update a book (only accessible by admin)
 router.put('/:id', isAdmin, updateBook);
 
 // Delete a book (only accessible by admin)
-router.delete('/', isAdmin, deleteBook);
-
-// Delete a book by Id (only accessible by admin)
-router.delete('/:id', isAdmin, deleteBook);
+router.delete('/:id?', isAdmin, deleteBook);
 
 // Get all books
 router.get('/', getBooks);

@@ -4,7 +4,15 @@ import * as bookModel from '../../models/bookModal.js';
 export const lendBook = async (req, res) => {
     
   try {
-    const { bookId } = req.body;
+    let bookId;
+
+    if (req.params.id) {
+      bookId = parseInt(req.params.id);    
+  } else if (req.body.bookId) {
+      bookId = req.body.bookId;
+  } else {
+      return res.status(400).json({ error: 'Book ID not provided in URL or request body' });
+    }
 
     // Fetch user ID from the authenticated user's token
     const userId = req.login.id;
