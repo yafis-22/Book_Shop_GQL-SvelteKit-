@@ -2,7 +2,7 @@ import * as bookModel from '../../models/bookModal.js';
 
 export const getBooks = async (req, res) => {
   try {
-    const { search, page = 1, pageSize = 10 } = req.query;
+    const { search, page = 1, pageSize = 10, sort } = req.query;
     const isAdmin = req.login && req.login.role === 'admin';
 
     let allBooks = await bookModel.getBooks();
@@ -18,7 +18,16 @@ export const getBooks = async (req, res) => {
         )
       );
     }
-
+    // Sorting logic
+    if (sort === 'title-asc') {
+      allBooks.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sort === 'title-desc') {
+      allBooks.sort((a, b) => b.title.localeCompare(a.title));
+    } else if (sort === 'price-asc') {
+      allBooks.sort((a, b) => a.lendingPrice - b.lendingPrice);
+    } else if (sort === 'price-desc') {
+      allBooks.sort((a, b) => b.lendingPrice - a.lendingPrice);
+    }
     // Calculate start and end index for pagination
     const startIndex = (page - 1) * pageSize;
     const endIndex = page * pageSize;
@@ -45,7 +54,7 @@ export const getBooksByCategory = async (req, res) => {
     const categoryParam = req.params.category;
   
     try {
-      const { page = 1, pageSize = 10 } = req.query;
+      const { page = 1, pageSize = 10, sort } = req.query;
       let categoryBooks = await bookModel.getBooksByCategory(categoryParam);
 
       const isAdmin = req.login && req.login.role === 'admin';
@@ -53,6 +62,16 @@ export const getBooksByCategory = async (req, res) => {
       if (!isAdmin) {
         // Filter books for regular users to show only non-deleted books
         categoryBooks = categoryBooks.filter((book) => !book.deleted);
+      }
+       // Sorting logic
+      if (sort === 'title-asc') {
+        allBooks.sort((a, b) => a.title.localeCompare(b.title));
+      } else if (sort === 'title-desc') {
+        allBooks.sort((a, b) => b.title.localeCompare(a.title));
+      } else if (sort === 'price-asc') {
+        allBooks.sort((a, b) => a.lendingPrice - b.lendingPrice);
+      } else if (sort === 'price-desc') {
+        allBooks.sort((a, b) => b.lendingPrice - a.lendingPrice);
       }
       // Calculate start and end index for pagination
       const startIndex = (page - 1) * pageSize;
