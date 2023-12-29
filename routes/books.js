@@ -37,10 +37,26 @@ router.get('/', (req, res, next) => {
   }, getBooks);
 
 // Get all books by id
-router.get('/:id', getBookById);
+router.get('/:id', (req, res, next) => {
+    if (req.headers.authorization) {
+      // If authentication token is present, apply the authenticateUser middleware
+      authenticateUser(req, res, next);
+    } else {
+      // If no authentication token is present, skip the authenticateUser middleware
+      next();
+    }
+  }, getBookById);
 
 // Get all books by category
-router.get('/category/:category', getBooksByCategory);
+router.get('/category/:category', (req, res, next) => {
+  if (req.headers.authorization) {
+    // If authentication token is present, apply the authenticateUser middleware
+    authenticateUser(req, res, next);
+  } else {
+    // If no authentication token is present, skip the authenticateUser middleware
+    next();
+  }
+}, getBooksByCategory);
 
 // Make book available
 router.patch('/:id', isAdmin, bookAvailable )
