@@ -25,8 +25,16 @@ router.put('/:id', isAdmin, updateBook);
 // Delete a book (only accessible by admin)
 router.delete('/:id?', isAdmin, deleteBook);
 
-// Get all books
-router.get('/', getBooks);
+// Get all books with optional authentication
+router.get('/', (req, res, next) => {
+    if (req.headers.authorization) {
+      // If authentication token is present, apply the authenticateUser middleware
+      authenticateUser(req, res, next);
+    } else {
+      // If no authentication token is present, skip the authenticateUser middleware
+      next();
+    }
+  }, getBooks);
 
 // Get all books by id
 router.get('/:id', getBookById);

@@ -3,9 +3,13 @@ import * as bookModel from '../../models/bookModal.js';
 export const getBooks = async (req, res) => {
   try {
     const { search, page = 1, pageSize = 10 } = req.query;
+    const isAdmin = req.login && req.login.role === 'admin';
 
     let allBooks = await bookModel.getBooks();
-
+    
+    if (!isAdmin) {
+      allBooks = allBooks.filter((book) => !book.deleted);
+    }
     if (search) {
       // Case-insensitive search across various fields
       allBooks = allBooks.filter((book) =>
