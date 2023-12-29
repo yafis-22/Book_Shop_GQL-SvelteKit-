@@ -2,7 +2,7 @@ import * as userModel from '../../models/userModal.js';
 
 export const getAllUsers = async (req, res) => {
     try {
-      const { search, page = 1, pageSize = 10 } = req.query;
+      const { search, page = 1, pageSize = 10, sort } = req.query;
   
       let allUsers = await userModel.getUsers();
   
@@ -14,7 +14,13 @@ export const getAllUsers = async (req, res) => {
           )
         );
       }
-
+      
+      // Sorting logic
+      if (sort === 'name-asc') {
+        allUsers.sort((a, b) => a.username.localeCompare(b.username));
+      } else if (sort === 'name-desc') {
+        allUsers.sort((a, b) => b.username.localeCompare(a.username));
+      }
       // Calculate start and end index for pagination
       const startIndex = (page - 1) * pageSize;
       const endIndex = page * pageSize;
