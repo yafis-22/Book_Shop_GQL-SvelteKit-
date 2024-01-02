@@ -8,7 +8,12 @@ const isStrongPassword = (str) => /^(?=.*[0-9])(?=.*[!@#$%^&*])/.test(str);
 
 export const updateUser = async (req, res) => {
   try {
-    const userId  = req.login.id
+    const userId  = req.login.id;
+    
+    // If the user is an admin, disallow
+    if (req.login.role === 'admin') {
+      return res.status(403).json({ message: 'Invalid User Token.' });
+    }
     const { username, email, phoneNumber, address, password } = req.body;
 
     const users = await userModel.getUsers();

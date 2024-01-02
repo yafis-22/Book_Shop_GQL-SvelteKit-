@@ -5,6 +5,11 @@ export const deleteUser = async (req, res) => {
       // Fetch user ID from the authenticated user's token
       const requestingUserId = req.login.id;
       
+      // If the user is an admin, disallow
+      if (req.login.role === 'admin') {
+        return res.status(403).json({ message: 'Invalid User Token.' });
+      }
+      
       // Fetch the user data
       const user = await userModel.getUserById(requestingUserId);
       if (!user) {
@@ -13,7 +18,7 @@ export const deleteUser = async (req, res) => {
 
       // Check if the user has any lent books
       if (user.lentBooks.length > 0) {
-          return res.status(400).json({ message: 'You need to return all books before deleting your account', data:user.lentBooks });
+          return res.status(400).json({ message: 'You need to return all books before deleting your account', data:user});
       }
 
       // Remove the user from the array

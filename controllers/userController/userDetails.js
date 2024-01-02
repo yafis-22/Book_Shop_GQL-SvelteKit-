@@ -5,6 +5,11 @@ export const userDetails = async (req, res) => {
     // Fetch user ID from the authenticated user's token
     const userId = req.login.id;
 
+    // If the user is an admin, disallow
+    if (req.login.role === 'admin') {
+      return res.status(403).json({ message: 'Invalid User Token.' });
+    }
+
     // Get user details using the model
     const user = await userModel.getUserById(userId);
 
