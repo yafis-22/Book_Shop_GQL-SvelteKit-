@@ -1,11 +1,6 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import express from 'express';
-import fs from 'fs/promises';
-import path from 'path';
 import { isAdmin } from '../middlewares/authMiddleware.js';
 import * as userModel from '../models/userModal.js';
-
 
 const router = express.Router();
 
