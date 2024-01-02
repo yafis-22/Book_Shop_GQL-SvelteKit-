@@ -4,22 +4,22 @@ import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
 import { isAdmin } from '../middlewares/authMiddleware.js';
+import * as userModel from '../models/userModal.js';
+
 
 const router = express.Router();
-
-// Get the directory name using import.meta.url
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Admin data file path
-const adminDataPath = path.join(__dirname, '../data/adminData.json');
 
 // Admin routes
 router.get('/', isAdmin, async (req, res) => {
   try {
     // Read admin data from adminData.json
-    const adminData = await fs.readFile(adminDataPath, 'utf8');
-    res.json(JSON.parse(adminData));
+    const adminData = await userModel.getAdmins();
+    if (adminData) {
+      res.json(adminData);
+    } else {
+      res.status(404).send('Admin data not found');
+    }
+    
   } catch (err) {
     console.error('Error reading admin data:', err);
     res.status(500).send('Internal Server Error');
