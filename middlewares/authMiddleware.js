@@ -1,6 +1,12 @@
 import jwt from 'jsonwebtoken';
-import "dotenv/config"
+import fs from 'fs';
 import * as userModel from '../models/userModal.js';
+
+// Read the configuration from JSON file
+const configFile = 'config.json';
+const config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
+
+const secretKey = config.JWT_SECRET_KEY;
 
 export const isAdmin = async (req, res, next) => {
   try {
@@ -12,7 +18,7 @@ export const isAdmin = async (req, res, next) => {
 
     adminToken = adminToken.split(" ")[1]
     
-    jwt.verify(adminToken, process.env.JWT_SECRET_KEY, async (err, decodedToken) => {
+    jwt.verify(adminToken, secretKey, async (err, decodedToken) => {
       if (err) {
         console.log(err);
         return res.status(403).json({ message: 'Invalid token or token expired. Please login again. Or you may not be admin' });
@@ -40,7 +46,7 @@ export const authenticateUser = async (req, res, next) => {
 
   userToken = userToken.split(" ")[1]
   
-    jwt.verify(userToken, process.env.JWT_SECRET_KEY, async (err, login) => {
+    jwt.verify(userToken, secretKey, async (err, login) => {
       if (err) {
         console.log(err)
         return res.status(403).json({ message: 'Invalid token or token expired. Please login again' });

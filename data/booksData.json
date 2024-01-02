@@ -448,5 +448,15 @@
     "author": "Evans",
     "category": "Literature",
     "deleted": false
+  },
+  {
+    "id": 46,
+    "title": "Here You Go Again",
+    "description": "This book is about the great Entrepreneur",
+    "lendingPrice": 9,
+    "quantity": 15,
+    "author": "MYK",
+    "category": "Romance",
+    "deleted": false
   }
 ]

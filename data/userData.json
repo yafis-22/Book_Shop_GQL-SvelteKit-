@@ -511,5 +511,16 @@
     "role": "user",
     "lentBooks": [],
     "deleted": false
+  },
+  {
+    "id": 46,
+    "username": "furk22",
+    "password": "$2b$10$zAlogjYHaaHPPf91OkyNcONGa.flPM/d2NBX3KEPEfJuL0KNIq8YG",
+    "email": "furk22@gmail.com",
+    "phoneNumber": "9898787822",
+    "address": "Wakad, Pune",
+    "role": "user",
+    "lentBooks": [],
+    "deleted": false
   }
 ]

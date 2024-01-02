@@ -2,11 +2,15 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import * as userModel from '../models/userModal.js';
-import 'dotenv/config';
+import fs from 'fs';
 
 const router = express.Router();
 
-const secretKey = process.env.JWT_SECRET_KEY;
+// Read the configuration from JSON file
+const configFile = 'config.json';
+const config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
+
+const secretKey = config.JWT_SECRET_KEY;
 
 // Route to authenticate user (login)
 router.post('/', async (req, res) => {
