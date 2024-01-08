@@ -4,10 +4,7 @@ export const getBooks = async (req, res) => {
   try {
     const { search, page = 1, pageSize = 10, sort } = req.query;
     const isAdmin = req.login && req.login.role === 'admin';
-    
-    if (page <= 0) {
-      return res.status(400).json({ message: 'Please enter a valid page number greater than 0.' });
-    }
+
     let allBooks = await bookModel.getBooks();
     
     if (!isAdmin) {
@@ -58,10 +55,6 @@ export const getBooksByCategory = async (req, res) => {
   
     try {
       const { page = 1, pageSize = 10, sort } = req.query;
-      
-      if (page <= 0) {
-        return res.status(400).json({ message: 'Please enter a valid page number greater than 0.' });
-      }
       let categoryBooks = await bookModel.getBooksByCategory(categoryParam);
 
       const isAdmin = req.login && req.login.role === 'admin';
