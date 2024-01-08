@@ -6,6 +6,7 @@
     "email": "myk12@gmail.com",
     "phoneNumber": "9898787867",
     "address": "Hinjewadi, Wakad, Pune",
+    "role": "user",
     "lentBooks": [
       {
         "bookId": 5,
@@ -27,6 +28,7 @@
     "email": "jibbu12@gmail.com",
     "phoneNumber": "9898787862",
     "address": "Wakad, Pune",
+    "role": "user",
     "lentBooks": [],
     "deleted": false
   },
@@ -37,6 +39,7 @@
     "email": "yafis123@gmail.com",
     "phoneNumber": "9898787822",
     "address": "Wakad, Pune",
+    "role": "user",
     "lentBooks": [
       {
         "bookId": 4,
@@ -58,6 +61,7 @@
     "email": "khan123@gmail.com",
     "phoneNumber": "9898787822",
     "address": "Wakad, Pune",
+    "role": "user",
     "lentBooks": [],
     "deleted": false
   },
