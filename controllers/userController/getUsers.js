@@ -3,7 +3,10 @@ import * as userModel from '../../models/userModal.js';
 export const getAllUsers = async (req, res) => {
     try {
       const { search, page = 1, pageSize = 10, sort } = req.query;
-  
+      
+      if (page <= 0) {
+        return res.status(400).json({ message: 'Please enter a valid page number greater than 0.' });
+      }
       let allUsers = await userModel.getUsers();
   
       if (search) {
