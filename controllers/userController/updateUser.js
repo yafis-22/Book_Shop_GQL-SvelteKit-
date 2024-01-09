@@ -1,7 +1,6 @@
 import * as userModel from '../../models/userModal.js';
 import bcrypt from 'bcrypt';
 
-const isAlphanumeric = (str) => /^[a-zA-Z0-9]+$/.test(str);
 const isEmail = (str) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str);
 const isMobilePhone = (str) => /^[0-9]{10}$/.test(str);
 const isStrongPassword = (str) => /^(?=.*[0-9])(?=.*[!@#$%^&*])/.test(str);

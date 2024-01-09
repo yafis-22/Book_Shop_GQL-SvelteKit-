@@ -37,7 +37,7 @@
     "quantity": 2,
     "author": "Khan",
     "category": "Romance",
-    "deleted": false
+    "deleted": true
   },
   {
     "id": 5,
