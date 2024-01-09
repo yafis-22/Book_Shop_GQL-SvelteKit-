@@ -34,6 +34,10 @@ export const lendBook = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+    // Check if the user has already lent a book with the same ID
+    if (user.lentBooks.some((lentBook) => lentBook.bookId === bookId)) {
+      return res.status(400).json({ message: 'User has already lent a book with the same ID' });
+    }
 
     // Find the book by ID
     const book = books.find((book) => book.id === bookId);
