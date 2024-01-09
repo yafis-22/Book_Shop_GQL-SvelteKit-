@@ -56,6 +56,7 @@ export const registerUser = async (req, res) => {
       phoneNumber,
       address,
       role,
+      timestamp: new Date().toISOString(),
     };
 
     if (role === 'admin') {

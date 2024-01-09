@@ -67,6 +67,7 @@ export const updateUser = async (req, res) => {
       userToUpdate.address = address;
     }
     
+    userToUpdate.timestamp = new Date().toISOString();
     // Update the user data
     users[userIndex] = { ...userToUpdate };
     await userModel.saveUsers(users);

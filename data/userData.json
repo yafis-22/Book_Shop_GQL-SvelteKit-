@@ -26,11 +26,12 @@
     "username": "jibbuu",
     "password": "$2b$10$tQJhsQ2p8PZmhLMG0OVoaOo.lLmGKfJEmp0wSNrRVso/JZu6f1sbu",
     "email": "jibbu12@gmail.com",
-    "phoneNumber": "9898787862",
+    "phoneNumber": "9898787823",
     "address": "Wakad, Pune",
     "role": "user",
     "lentBooks": [],
-    "deleted": false
+    "deleted": false,
+    "timestamp": "2024-01-09T10:40:54.437Z"
   },
   {
     "id": 3,

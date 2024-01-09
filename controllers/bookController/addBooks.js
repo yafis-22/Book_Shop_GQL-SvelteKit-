@@ -23,7 +23,8 @@ export const addBook = async (req, res) => {
       quantity,
       author,
       category,
-      deleted: false
+      deleted: false,
+      timestamp: new Date().toISOString(),
     };
 
     books.push(newBook);

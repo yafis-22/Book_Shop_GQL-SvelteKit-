@@ -21,7 +21,8 @@ export const updateBook = async (req, res) => {
         lendingPrice,
         quantity,
         author,
-        category
+        category,
+        timestamp: new Date().toISOString(),
       };
 
       // Write the updated book data back to booksData.json using the model
