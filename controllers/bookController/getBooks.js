@@ -42,7 +42,7 @@ export const getBooks = async (req, res) => {
       message: 'Books retrieved successfully',
       totalBooks: allBooks.length,
       booksFetched: paginatedBooks.length,
-      books: paginatedBooks,
+      data: paginatedBooks,
       currentPage: page,
       totalPages: Math.ceil(allBooks.length / pageSize),
     });
