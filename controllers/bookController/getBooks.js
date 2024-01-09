@@ -1,8 +1,24 @@
 import * as bookModel from '../../models/bookModal.js';
 
+const sortBooks = (books, sortField, sortOrder) => {
+  if (sortField && sortOrder) {
+    books.sort((a, b) => {
+      const aValue = a[sortField];
+      const bValue = b[sortField];
+
+      if (typeof aValue === 'string') {
+        return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      } else {
+        return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+    });
+  }
+  return books;
+};
+
 export const getBooks = async (req, res) => {
   try {
-    const { search, page = 1, pageSize = 10, sort } = req.query;
+    const { search, page = 1, pageSize = 10, sortField, sortOrder } = req.query;
     const isAdmin = req.login && req.login.role === 'admin';
     
     if (page <= 0) {
@@ -22,15 +38,8 @@ export const getBooks = async (req, res) => {
       );
     }
     // Sorting logic
-    if (sort === 'title-asc') {
-      allBooks.sort((a, b) => a.title.localeCompare(b.title));
-    } else if (sort === 'title-desc') {
-      allBooks.sort((a, b) => b.title.localeCompare(a.title));
-    } else if (sort === 'price-asc') {
-      allBooks.sort((a, b) => a.lendingPrice - b.lendingPrice);
-    } else if (sort === 'price-desc') {
-      allBooks.sort((a, b) => b.lendingPrice - a.lendingPrice);
-    }
+    sortBooks(allBooks, sortField, sortOrder);
+
     // Calculate start and end index for pagination
     const startIndex = (page - 1) * pageSize;
     const endIndex = page * pageSize;
@@ -57,7 +66,7 @@ export const getBooksByCategory = async (req, res) => {
     const categoryParam = req.params.category;
   
     try {
-      const { page = 1, pageSize = 10, sort } = req.query;
+      const { page = 1, pageSize = 10, sortField, sortOrder } = req.query;
       
       if (page <= 0) {
         return res.status(400).json({ message: 'Please enter a valid page number greater than 0.' });
@@ -70,16 +79,9 @@ export const getBooksByCategory = async (req, res) => {
         // Filter books for regular users to show only non-deleted books
         categoryBooks = categoryBooks.filter((book) => !book.deleted);
       }
-       // Sorting logic
-      if (sort === 'title-asc') {
-        allBooks.sort((a, b) => a.title.localeCompare(b.title));
-      } else if (sort === 'title-desc') {
-        allBooks.sort((a, b) => b.title.localeCompare(a.title));
-      } else if (sort === 'price-asc') {
-        allBooks.sort((a, b) => a.lendingPrice - b.lendingPrice);
-      } else if (sort === 'price-desc') {
-        allBooks.sort((a, b) => b.lendingPrice - a.lendingPrice);
-      }
+      // Sorting logic
+       sortBooks(categoryBooks, sortField, sortOrder);
+       
       // Calculate start and end index for pagination
       const startIndex = (page - 1) * pageSize;
       const endIndex = page * pageSize;

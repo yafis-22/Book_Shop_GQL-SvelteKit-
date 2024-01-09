@@ -1,8 +1,24 @@
 import * as userModel from '../../models/userModal.js';
 
+const sortUsers = (users, sortField, sortOrder) => {
+  if (sortField && sortOrder) {
+    users.sort((a, b) => {
+      const aValue = a[sortField];
+      const bValue = b[sortField];
+
+      if (typeof aValue === 'string') {
+        return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      } else {
+        return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+    });
+  }
+  return users;
+};
+
 export const getAllUsers = async (req, res) => {
     try {
-      const { search, page = 1, pageSize = 10, sort } = req.query;
+      const { search, page = 1, pageSize = 10, sortField, sortOrder } = req.query;
       
       if (page <= 0) {
         return res.status(400).json({ message: 'Please enter a valid page number greater than 0.' });
@@ -19,11 +35,8 @@ export const getAllUsers = async (req, res) => {
       }
       
       // Sorting logic
-      if (sort === 'name-asc') {
-        allUsers.sort((a, b) => a.username.localeCompare(b.username));
-      } else if (sort === 'name-desc') {
-        allUsers.sort((a, b) => b.username.localeCompare(a.username));
-      }
+      sortUsers(allUsers, sortField, sortOrder);
+
       // Calculate start and end index for pagination
       const startIndex = (page - 1) * pageSize;
       const endIndex = page * pageSize;
