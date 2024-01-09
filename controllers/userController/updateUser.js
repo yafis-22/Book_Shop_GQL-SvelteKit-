@@ -22,13 +22,27 @@ export const updateUser = async (req, res) => {
 
     if (userIndex !== -1) {
       const userToUpdate = { ...users[userIndex] };
+    
+    // Check if the provided username, email, or phoneNumber already exists
+    const duplicateUsername = users.some((user) => user.username === username && user.id !== userId);
+    const duplicateEmail = users.some((user) => user.email === email && user.id !== userId);
+    const duplicatePhoneNumber = users.some((user) => user.phoneNumber === phoneNumber && user.id !== userId);
 
+    if (duplicateUsername) {
+      return res.status(400).json({ message: 'Username already exists' });
+    }
+
+    if (duplicateEmail) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
+
+    if (duplicatePhoneNumber) {
+      return res.status(400).json({ message: 'Phone number already exists' });
+    }
+    
     // Validate input data
     if (username) {
-      if (!isAlphanumeric(username) || username.length < 3) {
-        return res.status(400).json({ message: 'Invalid username' });
-      }
-      userToUpdate.username = username;
+        return res.status(400).json({ message: 'Username cannot be changed.' });
     }
 
     if (password) {
