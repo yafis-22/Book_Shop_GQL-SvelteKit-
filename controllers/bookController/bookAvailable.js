@@ -23,7 +23,9 @@ export const bookAvailable = async (req, res) => {
             if (category) books[bookIndex].category = category;
 
             // Update deleted flag if provided in the request body
-            if (typeof deleted === 'boolean') {
+            if (typeof deleted !== 'boolean') {
+                return res.status(400).json({ message: 'Please provide the "deleted" property in the request body as a boolean.' });
+            }else{
                 books[bookIndex].deleted = deleted;
             }
 
@@ -36,6 +38,9 @@ export const bookAvailable = async (req, res) => {
             if (deleted === false) {
                 // Book is now available
                 return res.json({ message: 'Book is now available. Successfully updated', data: books[bookIndex] });
+            } else if (deleted === true) {
+                    // cannot delete
+                    return res.json({ message: 'Book cannot be delete from update route.'});
             } else {
                 // Book details updated
                 return res.json({ message: 'Book details updated.', data: books[bookIndex] });
