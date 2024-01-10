@@ -44,10 +44,11 @@
     "title": "Hello world.",
     "description": "This book is about the great Entrepreneur",
     "lendingPrice": 11,
-    "quantity": 16,
-    "author": "MYK",
+    "quantity": 18,
+    "author": "Yafis",
     "category": "Romance",
-    "deleted": false
+    "deleted": false,
+    "lastUpdated": "2024-01-10T11:07:00.857Z"
   },
   {
     "id": 6,

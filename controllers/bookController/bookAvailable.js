@@ -22,11 +22,13 @@ export const bookAvailable = async (req, res) => {
             if (author) books[bookIndex].author = author;
             if (category) books[bookIndex].category = category;
 
-            // Update deleted flag if provided in the request body
-            if (typeof deleted !== 'boolean') {
-                return res.status(400).json({ message: 'Please provide the "deleted" property in the request body as a boolean.' });
-            }else{
-                books[bookIndex].deleted = deleted;
+            // Check if "deleted" property is provided before updating
+            if (deleted !== undefined) {
+                if (typeof deleted !== 'boolean') {
+                    return res.status(400).json({ message: 'Please provide the "deleted" property in the request body as a boolean.' });
+                } else {
+                    books[bookIndex].deleted = deleted;
+                }
             }
 
             // Update the timestamp
