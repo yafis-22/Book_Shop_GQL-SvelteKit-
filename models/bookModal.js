@@ -83,13 +83,13 @@ export const Book = sequelize.define('Book', {
 //     }
 //   };
 
-export const saveBooks = async (books) => {
-    try {
-      await fs.writeFile(booksDataPath, JSON.stringify(books, null, 2));
-    } catch (error) {
-      throw error;
-    }
-  };
+// export const saveBooks = async (books) => {
+//     try {
+//       await fs.writeFile(booksDataPath, JSON.stringify(books, null, 2));
+//     } catch (error) {
+//       throw error;
+//     }
+//   };
 
 export const softDeleteBook = async (bookId) => {
     try {

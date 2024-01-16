@@ -1,34 +1,27 @@
-import * as bookModel from '../../models/bookModal.js';
+import { Book } from '../../models/bookModal.js';
 
 export const updateBook = async (req, res) => {
   try {
-    let books = await bookModel.getBooks();
+    const bookId = req.params.id;
 
-    const bookId = parseInt(req.params.id);
+    // Find the book by ID
+    const existingBook = await Book.findByPk(bookId);
 
-    // Find the index of the book by ID
-    const bookIndex = books.findIndex((book) => book.id === bookId);
-
-    if (bookIndex !== -1) {
+    if (existingBook) {
       // Update the book details from the request body
       const { title, description, lendingPrice, quantity, author, category } = req.body;
 
       // Update the book object
-      books[bookIndex] = {
-        ...books[bookIndex],
+      await existingBook.update({
         title,
         description,
         lendingPrice,
         quantity,
         author,
         category,
-        timestamp: new Date().toISOString(),
-      };
+      });
 
-      // Write the updated book data back to booksData.json using the model
-      await bookModel.saveBooks(books);
-
-      res.json({ message: 'Book updated successfully', data: books[bookIndex] });
+      res.json({ message: 'Book updated successfully', data: existingBook });
     } else {
       res.status(404).send('Book not found');
     }
