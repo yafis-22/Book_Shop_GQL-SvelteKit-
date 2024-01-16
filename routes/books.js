@@ -2,7 +2,7 @@ import express from 'express';
 import { isAdmin, authenticateUser } from '../middlewares/authMiddleware.js';
 import { lendBook } from '../controllers/bookController/lendBook.js';
 import { addBook } from '../controllers/bookController/addBooks.js';
-import { updateBook, patchBook } from '../controllers/bookController/updateBook.js'; 
+import { updateBook } from '../controllers/bookController/updateBook.js'; 
 import { deleteBook } from '../controllers/bookController/deleteBook.js';
 import { returnBook } from '../controllers/bookController/returnBook.js';
 import { getBooks, getBooksByCategory, getBookById } from '../controllers/bookController/getBooks.js';
@@ -59,7 +59,7 @@ router.get('/category/:category', (req, res, next) => {
 router.put('/:id', isAdmin, updateBook);
 
 // Make book available
-router.patch('/:id', isAdmin, patchBook );
+router.patch('/:id', isAdmin, updateBook );
 
 // Restore a soft-deleted book
 router.patch('/:id/restore', isAdmin, bookAvailable);
