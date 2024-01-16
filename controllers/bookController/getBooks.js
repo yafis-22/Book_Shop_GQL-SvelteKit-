@@ -37,10 +37,8 @@ export const getBooks = async (req, res) => {
     } : {};
 
     let allBooks = await Book.findAll({
-      where: {
-        ...whereCondition,
-        ...(isAdmin ? {} : { deleted: false }),
-      },
+      where: whereCondition,
+      paranoid: !isAdmin, // Exclude soft-deleted records for regular users
       offset: (page - 1) * pageSize,
       limit: pageSize,
     });
@@ -48,7 +46,10 @@ export const getBooks = async (req, res) => {
     // Sorting logic
     sortBooks(allBooks, sortField, sortOrder);
 
-    const totalBooks = await Book.count({ where: whereCondition });
+    const totalBooks = await Book.count({
+      where: whereCondition,
+      paranoid: !isAdmin,
+    });
 
     res.json({
       message: 'Books retrieved successfully',
@@ -76,7 +77,7 @@ export const getBooksByCategory = async (req, res) => {
     let categoryBooks = await Book.findAll({
       where: {
         category: categoryParam,
-        ...(req.login && req.login.role !== 'admin' ? { deleted: false } : {}),
+        ...(req.login && req.login.role !== 'admin' ? { deletedAt: null } : {}),
       },
       offset: (page - 1) * pageSize,
       limit: pageSize,
@@ -110,14 +111,10 @@ export const getBooksByCategory = async (req, res) => {
 export const getBookById = async (req, res) => {
   const bookId = req.params.id;
   try {
-    const book = await Book.findByPk(bookId);
+    const book = await Book.findByPk(bookId, { paranoid: !req.login || req.login.role !== 'admin' });
 
-    if (!book) {
-      return res.status(404).send('Book not found');
-    }
-
-    if (req.login && req.login.role !== 'admin' && book.deleted) {
-      // For regular users, do not show deleted books
+    if (!book || (req.login && req.login.role !== 'admin')) {
+      // For regular users, do not show soft-deleted books
       return res.status(404).send('Book not found');
     }
 
@@ -127,3 +124,4 @@ export const getBookById = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
+

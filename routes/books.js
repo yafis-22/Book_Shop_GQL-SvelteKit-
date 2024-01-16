@@ -19,9 +19,6 @@ router.post('/lend/:id?', authenticateUser, lendBook);
 // Return a lent book
 router.post('/return/:id?', authenticateUser, returnBook);
 
-// Update a book (only accessible by admin)
-router.put('/:id', isAdmin, updateBook);
-
 // Delete a book (only accessible by admin)
 router.delete('/:id?', isAdmin, deleteBook);
 
@@ -58,7 +55,13 @@ router.get('/category/:category', (req, res, next) => {
   }
 }, getBooksByCategory);
 
+// Update a book (only accessible by admin)
+router.put('/:id', isAdmin, updateBook);
+
 // Make book available
-router.patch('/:id', isAdmin, bookAvailable )
+router.patch('/:id', isAdmin, bookAvailable );
+
+// Restore a soft-deleted book
+router.patch('/:id/restore', isAdmin, bookAvailable);
   
 export default router;
