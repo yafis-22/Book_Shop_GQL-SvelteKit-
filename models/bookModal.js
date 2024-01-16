@@ -49,39 +49,39 @@ export const Book = sequelize.define('Book', {
   },
 });
 
-export const getBooks = async () => {
-    try {
-      const booksData = await fs.readFile(booksDataPath, 'utf8');
-      return JSON.parse(booksData);
-    } catch (error) {
-      throw error;
-    }
-  };
+// export const getBooks = async () => {
+//     try {
+//       const booksData = await fs.readFile(booksDataPath, 'utf8');
+//       return JSON.parse(booksData);
+//     } catch (error) {
+//       throw error;
+//     }
+//   };
 
-export const getBooksByCategory = async (categoryParam) => {
-    try {
-      const books = await getBooks();
+// export const getBooksByCategory = async (categoryParam) => {
+//     try {
+//       const books = await getBooks();
   
-      // If a category is specified, filter books by that category
-      if (categoryParam) {
-        const lowercaseCategoryParam = categoryParam.toLowerCase();
-        return books.filter((book) => book.category.toLowerCase() === lowercaseCategoryParam);
-      } else {
-        return null;
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
+//       // If a category is specified, filter books by that category
+//       if (categoryParam) {
+//         const lowercaseCategoryParam = categoryParam.toLowerCase();
+//         return books.filter((book) => book.category.toLowerCase() === lowercaseCategoryParam);
+//       } else {
+//         return null;
+//       }
+//     } catch (error) {
+//       throw error;
+//     }
+//   };
 
-export const getBookById = async (bookId) => {
-    try {
-      const books = await getBooks();
-      return books.find((book) => book.id === bookId);
-    } catch (error) {
-      throw error;
-    }
-  };
+// export const getBookById = async (bookId) => {
+//     try {
+//       const books = await getBooks();
+//       return books.find((book) => book.id === bookId);
+//     } catch (error) {
+//       throw error;
+//     }
+//   };
 
 export const saveBooks = async (books) => {
     try {

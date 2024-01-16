@@ -1,4 +1,4 @@
-import * as bookModel from '../../models/bookModal.js';
+import {Book} from '../../models/bookModal.js';
 
 const sortBooks = (books, sortField, sortOrder) => {
   if (sortField && sortOrder) {
@@ -24,7 +24,7 @@ export const getBooks = async (req, res) => {
     if (page <= 0) {
       return res.status(400).json({ message: 'Please enter a valid page number greater than 0.' });
     }
-    let allBooks = await bookModel.getBooks();
+    let allBooks = await Book.findAll();
     
     if (!isAdmin) {
       allBooks = allBooks.filter((book) => !book.deleted);
@@ -71,7 +71,7 @@ export const getBooksByCategory = async (req, res) => {
       if (page <= 0) {
         return res.status(400).json({ message: 'Please enter a valid page number greater than 0.' });
       }
-      let categoryBooks = await bookModel.getBooksByCategory(categoryParam);
+      let categoryBooks = await Book.findAll({ where: { category: categoryParam } });;
 
       const isAdmin = req.login && req.login.role === 'admin';
 
@@ -112,7 +112,7 @@ export const getBookById = async (req, res) => {
     const bookId = parseInt(req.params.id);
   
     try {
-      const book = await bookModel.getBookById(bookId);
+      const book = await Book.findByPk(bookId);
   
       const isAdmin = req.login && req.login.role === 'admin';
 
