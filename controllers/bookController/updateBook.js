@@ -11,6 +11,10 @@ export const updateBook = async (req, res) => {
       // Update the book details from the request body
       const { title, description, lendingPrice, quantity, author, category } = req.body;
 
+    // Check if req.body is empty
+    if (Object.keys(req.body).length === 0) {
+      return res.status(400).json({ message: 'Request body is empty.' });
+    }
       // Update the book object
       await existingBook.update({
         title,
@@ -31,60 +35,52 @@ export const updateBook = async (req, res) => {
   }
 };
 
-// import * as bookModel from '../../models/bookModal.js';
 
-// export const bookAvailable = async (req, res) => {
-//     try {
-//         const bookId = parseInt(req.params.id);
-//         const books = await bookModel.getBooks();
+export const patchBook = async (req, res) => {
+  try {
+    const bookId = parseInt(req.params.id);
 
-//         const bookIndex = books.findIndex(book => book.id === bookId);
+    // Find the book in the database
+    const book = await Book.findByPk(bookId);
 
-//         if (bookIndex !== -1) {
-//             // Check if req.body is empty
-//             if (Object.keys(req.body).length === 0) {
-//                 return res.status(400).json({ message: 'Request body is empty.' });
-//             }
+    if (!book) {
+      return res.status(404).json({ message: 'Book not found.' });
+    }
 
-//             // Update details if provided in the request body
-//             const { title, description, lendingPrice, quantity, author, category, deleted } = req.body;
-//             if (title) books[bookIndex].title = title;
-//             if (description) books[bookIndex].description = description;
-//             if (lendingPrice) books[bookIndex].lendingPrice = lendingPrice;
-//             if (quantity) books[bookIndex].quantity = quantity;
-//             if (author) books[bookIndex].author = author;
-//             if (category) books[bookIndex].category = category;
+    // Check if req.body is empty
+    if (Object.keys(req.body).length === 0) {
+      return res.status(400).json({ message: 'Request body is empty.' });
+    }
 
-//             // Check if "deleted" property is provided before updating
-//             if (deleted !== undefined) {
-//                 if (typeof deleted !== 'boolean') {
-//                     return res.status(400).json({ message: 'Please provide the "deleted" property in the request body as a boolean.' });
-//                 } else {
-//                     books[bookIndex].deleted = deleted;
-//                 }
-//             }
+    // Update details if provided in the request body
+    const { title, description, lendingPrice, quantity, author, category } = req.body;
 
-//             // Update the timestamp
-//             books[bookIndex].lastUpdated = new Date().toISOString();
+    // Use Sequelize update method to update the book
+    const updatedBook = await Book.update(
+      {
+        title: title || book.title,
+        description: description || book.description,
+        lendingPrice: lendingPrice || book.lendingPrice,
+        quantity: quantity || book.quantity,
+        author: author || book.author,
+        category: category || book.category,
+        lastUpdated: new Date().toISOString(),
+      },
+      {
+        where: { id: bookId },
+        returning: true, // Return the updated book
+        plain: true,
+      }
+    );
 
-//             // Save the updated books array
-//             await bookModel.saveBooks(books);
+    const updatedBookData = updatedBook[1];
 
-//             if (deleted === false) {
-//                 // Book is now available
-//                 return res.json({ message: 'Book is now available. Successfully updated', data: books[bookIndex] });
-//             } else if (deleted === true) {
-//                     // cannot delete
-//                     return res.json({ message: 'Book cannot be delete from update route.'});
-//             } else {
-//                 // Book details updated
-//                 return res.json({ message: 'Book details updated.', data: books[bookIndex] });
-//             }
-//         } else {
-//             res.status(404).json({ message: 'Book not found.' });
-//         }
-//     } catch (err) {
-//         console.error('Error making book available', err);
-//         res.status(500).send('Internal Server Error');
-//     }
-// };
+    res.json({
+      message: 'Book details updated.',
+      data: updatedBookData,
+    });
+  } catch (err) {
+    console.error('Error making book available:', err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
