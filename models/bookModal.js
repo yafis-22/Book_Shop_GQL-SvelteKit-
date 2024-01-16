@@ -14,9 +14,9 @@ const booksDataPath = path.join(__dirname, '../data/booksData.json');
 
 export const Book = sequelize.define('Book', {
   id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
+    type: DataTypes.INTEGER,
     primaryKey: true,
+    autoIncrement: true
   },
   title: {
     type: DataTypes.STRING,
