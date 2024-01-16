@@ -4,6 +4,7 @@ import userRoutes from './routes/users.js';
 import booksRoutes from './routes/books.js';
 import authRoutes from './routes/authLogin.js';
 import fs from 'fs';
+import sequelize from './sequelize.js';
 
 const app = express();
 
@@ -21,8 +22,18 @@ app.use(`/api/${config.API_VERSION}/users`, userRoutes);
 app.use(`/api/${config.API_VERSION}/books`, booksRoutes);
 app.use(`/api/${config.API_VERSION}/login`, authRoutes);
 
+// Check database connection
+try {
+  await sequelize.authenticate();
+  console.log('Connection to the database has been established successfully.');
+} catch (error) {
+  console.error('Unable to connect to the database:', error);
+  process.exit(1); // Exit the process if unable to connect to the database
+}
 
-// Server to listen at port 3002
-app.listen(PORT, () => {
+// Sync models with the database and start the server
+sequelize.sync({alter: true}).then(() => {
+  app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
   });
+});

@@ -1,3 +1,6 @@
+import { DataTypes } from 'sequelize';
+import sequelize from '../sequelize.js';
+
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs from 'fs/promises';
@@ -8,6 +11,37 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const booksDataPath = path.join(__dirname, '../data/booksData.json');
+
+export const Book = sequelize.define('Book', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.STRING,
+  },
+  lendingPrice: {
+    type: DataTypes.FLOAT,
+  },
+  quantity: {
+    type: DataTypes.INTEGER,
+  },
+  author: {
+    type: DataTypes.STRING,
+  },
+  category: {
+    type: DataTypes.STRING,
+  },
+  deleted: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+});
 
 export const getBooks = async () => {
     try {
