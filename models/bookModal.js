@@ -14,28 +14,34 @@ const booksDataPath = path.join(__dirname, '../data/booksData.json');
 
 export const Book = sequelize.define('Book', {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
-    autoIncrement: true,
   },
   title: {
     type: DataTypes.STRING,
+    unique: true,
     allowNull: false,
   },
   description: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   lendingPrice: {
     type: DataTypes.FLOAT,
+    allowNull: false,
   },
   quantity: {
     type: DataTypes.INTEGER,
+    allowNull: false,
   },
   author: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   category: {
     type: DataTypes.STRING,
+    allowNull: false,
   },
   deleted: {
     type: DataTypes.BOOLEAN,
