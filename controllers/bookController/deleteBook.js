@@ -5,7 +5,7 @@ export const deleteBook = async (req, res) => {
     let bookId;
 
     if (req.params.id) {
-      bookId = parseInt(req.params.id);
+      bookId = req.params.id;
     } else if (req.body.bookId) {
       bookId = req.body.bookId;
     } else {
@@ -18,9 +18,7 @@ export const deleteBook = async (req, res) => {
 
     // Sequelize's destroy method for soft deletion
     const deletedBook = await Book.destroy({
-      where: { id: bookId },
-      returning: true, // Ensure the deleted record is returned
-      paranoid: false, // Override 
+      where: { id: bookId }
     });
 
     if (deletedBook > 0) {
