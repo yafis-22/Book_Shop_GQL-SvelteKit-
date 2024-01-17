@@ -11,6 +11,9 @@ export const bookAvailable = async (req, res) => {
     });
 
     if (deletedBook) {
+      if (!deletedBook.deletedAt) {
+        return res.json({ message: 'Book is already activated', data: deletedBook });
+    }
       // Restore the soft-deleted book
       await deletedBook.restore();
 

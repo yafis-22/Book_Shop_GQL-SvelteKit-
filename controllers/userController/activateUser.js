@@ -11,6 +11,9 @@ export const activateUser = async (req, res) => {
         });
 
         if (deletedUser) {
+            if (!deletedUser.deletedAt) {
+                return res.json({ message: 'User is already activated', data: deletedUser });
+            }
             // Restore the soft-deleted user
             await deletedUser.restore();
       
