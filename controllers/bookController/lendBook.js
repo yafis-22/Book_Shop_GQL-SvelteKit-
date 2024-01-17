@@ -1,8 +1,7 @@
-import * as userModel from '../../models/userModal.js';
-import * as bookModel from '../../models/bookModal.js';
+import { User } from '../../models/userModal.js';
+import { Book } from '../../models/bookModal.js';
 
 export const lendBook = async (req, res) => {
-    
   try {
     // Check the role of the user making the request
     const { role } = req.login;
@@ -11,39 +10,35 @@ export const lendBook = async (req, res) => {
     if (role === 'admin') {
       return res.status(403).json({ message: 'Admins are not allowed to lend books.' });
     }
+
     let bookId;
 
     if (req.params.id) {
-      bookId = parseInt(req.params.id);    
-  } else if (req.body.bookId) {
+      bookId = parseInt(req.params.id);
+    } else if (req.body.bookId) {
       bookId = req.body.bookId;
-  } else {
+    } else {
       return res.status(400).json({ error: 'Book ID not provided in URL or request body' });
     }
 
-    // Fetch user ID from the authenticated user's token
-    const userId = req.login.id;
+    // Fetch user and book details using models
+    const user = await User.findByPk(req.login.id);
+    const book = await Book.findByPk(bookId);
 
-    // Get user and book details using models
-    const users = await userModel.getUsers();
-    const books = await bookModel.getBooks();
-
-    // Find the user by ID
-    const user = users.find((user) => user.id === userId);
-
+    // Check if the user and book exist
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    // Check if the user has already lent a book with the same ID
-    if (user.lentBooks.some((lentBook) => lentBook.bookId === bookId)) {
-      return res.status(400).json({ message: 'User has already lent a book with the same ID' });
-    }
-
-    // Find the book by ID
-    const book = books.find((book) => book.id === bookId);
 
     if (!book) {
       return res.status(404).json({ message: 'Book not found' });
+    }
+
+    // Check if the user has already lent a book with the same ID
+    const hasAlreadyLent = await user.hasLentBook(book);
+
+    if (hasAlreadyLent) {
+      return res.status(400).json({ message: 'User has already lent a book with the same ID' });
     }
 
     // Check if the book is available
@@ -55,19 +50,16 @@ export const lendBook = async (req, res) => {
     const lendingPrice = book.lendingPrice;
     const initialCharge = lendingPrice;
 
-    // Update user data
-    user.lentBooks.push({
-      bookId,
-      initialCharge,
-      timestamp: new Date().toISOString(),
+    // Use Sequelize's association to add the lent book to the user
+    await user.addLentBook(book, {
+      through: {
+        initialCharge,
+        timestamp: new Date(),
+      },
     });
 
     // Update book data
-    book.quantity--;
-
-    // Write the updated data back using models
-    await userModel.saveUsers(users);
-    await bookModel.saveBooks(books);
+    await book.decrement('quantity');
 
     res.json({
       message: 'Book lent successfully',
