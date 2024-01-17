@@ -35,7 +35,6 @@ export const getAllUsers = async (req, res) => {
 
     let allUsers = await User.findAll({
       where: whereCondition,
-      paranoid: !isAdmin, // Exclude soft-deleted records for regular users
       offset: (page - 1) * pageSize,
       limit: pageSize,
     });
@@ -43,9 +42,8 @@ export const getAllUsers = async (req, res) => {
       // Sorting logic
       sortUsers(allUsers, sortField, sortOrder);
 
-      const totalUsers = await Book.count({
+      const totalUsers = await User.count({
         where: whereCondition,
-        paranoid: !isAdmin,
       });
 
       res.json({
@@ -64,10 +62,10 @@ export const getAllUsers = async (req, res) => {
   
 export const getUserById = async (req, res) => {
 
-    const userId = parseInt(req.params.id);
+    const userId = req.params.id;
   
     try {
-      const user = await userModel.getUserById(userId);
+      const user = await User.findByPk(userId);
   
       if (user) {
         res.json(user);
