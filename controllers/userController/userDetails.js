@@ -1,4 +1,5 @@
 import { User } from '../../models/userModal.js';
+import { Book } from '../../models/bookModal.js';
 
 export const userDetails = async (req, res) => {
   try {
@@ -11,7 +12,18 @@ export const userDetails = async (req, res) => {
     }
 
     // Get user details using Sequelize's findByPk method
-    const user = await User.findByPk(userId);
+    const user = await User.findByPk(userId, {
+      include: [
+        {
+          model: Book,
+          as: 'lentBooks',
+          attributes: ['id', 'title', 'author', 'category'],
+          through: {
+            attributes: ['initialCharge', 'timestamp'],
+          },
+        },
+      ],
+    });
 
     if (!user) {
       return res.status(404).send('User not found');
