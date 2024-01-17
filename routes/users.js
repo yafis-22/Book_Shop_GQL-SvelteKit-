@@ -31,5 +31,6 @@ router.put('/me', authenticateUser, updateUser);
 router.patch('/me', authenticateUser, updateUser);
 
 // Activate user
-router.patch('/:id', isAdmin, activateUser);
+router.patch('/:id/restore', isAdmin, activateUser);
+
 export default router;
