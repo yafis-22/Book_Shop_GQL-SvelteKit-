@@ -1,4 +1,5 @@
-import * as userModel from '../../models/userModal.js';
+import { User } from '../../models/userModal.js';
+import { Op } from 'sequelize';
 
 const sortUsers = (users, sortField, sortOrder) => {
   if (sortField && sortOrder) {
@@ -23,33 +24,37 @@ export const getAllUsers = async (req, res) => {
       if (page <= 0) {
         return res.status(400).json({ message: 'Please enter a valid page number greater than 0.' });
       }
-      let allUsers = await userModel.getUsers();
-  
-      if (search) {
-        // Case-insensitive search across various fields
-        allUsers = allUsers.filter((user) =>
-          Object.values(user).some((field) =>
-            field.toString().toLowerCase().includes(search.toLowerCase())
-          )
-        );
-      }
+      // Build the where condition for search
+    const whereCondition = search ? {
+      [Op.or]: [
+        { username: { [Op.iLike]: `%${search}%` } },
+        { email: { [Op.iLike]: `%${search}%` } },
+        { address: { [Op.iLike]: `%${search}%` } },
+      ],
+    } : {};
+
+    let allUsers = await User.findAll({
+      where: whereCondition,
+      paranoid: !isAdmin, // Exclude soft-deleted records for regular users
+      offset: (page - 1) * pageSize,
+      limit: pageSize,
+    });
       
       // Sorting logic
       sortUsers(allUsers, sortField, sortOrder);
 
-      // Calculate start and end index for pagination
-      const startIndex = (page - 1) * pageSize;
-      const endIndex = page * pageSize;
+      const totalUsers = await Book.count({
+        where: whereCondition,
+        paranoid: !isAdmin,
+      });
 
-      // Get the books for the current page
-      const paginatedUsers = allUsers.slice(startIndex, endIndex);
       res.json({
         message: 'Users retrieved successfully',
-        totalUsers: allUsers.length,
-        usersFetched: paginatedUsers.length,
-        users: paginatedUsers,
+        totalUsers,
+        usersFetched: allUsers.length,
+        data: allUsers,
         currentPage: page,
-        totalPages: Math.ceil(allUsers.length / pageSize),
+        totalPages: Math.ceil(totalUsers / pageSize),
       });
     } catch (err) {
       console.error('Error reading user data:', err);
