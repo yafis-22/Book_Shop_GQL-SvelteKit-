@@ -1,5 +1,6 @@
 import { User } from '../../models/userModal.js';
 import { Book } from '../../models/bookModal.js';
+import { LentBooks } from '../../models/lentBooksModal.js';
 
 export const lendBook = async (req, res) => {
   try {
@@ -14,7 +15,7 @@ export const lendBook = async (req, res) => {
     let bookId;
 
     if (req.params.id) {
-      bookId = parseInt(req.params.id);
+      bookId = req.params.id;
     } else if (req.body.bookId) {
       bookId = req.body.bookId;
     } else {
@@ -42,7 +43,7 @@ export const lendBook = async (req, res) => {
     }
 
     // Check if the book is available
-    if (book.quantity <= 0 || book.deleted) {
+    if (book.quantity <= 0 || book.deletedAt) {
       return res.status(400).json({ message: 'Book not available for lending' });
     }
 
@@ -51,11 +52,11 @@ export const lendBook = async (req, res) => {
     const initialCharge = lendingPrice;
 
     // Use Sequelize's association to add the lent book to the user
-    await user.addLentBook(book, {
-      through: {
-        initialCharge,
-        timestamp: new Date(),
-      },
+    await LentBooks.create({
+      userId: user.id,
+      bookId: book.id,
+      initialCharge,
+      timestamp: new Date(),
     });
 
     // Update book data

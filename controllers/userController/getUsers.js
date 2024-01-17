@@ -1,6 +1,6 @@
 import { User } from '../../models/userModal.js';
 import { Op } from 'sequelize';
-
+import { Book } from '../../models/bookModal.js';
 const sortUsers = (users, sortField, sortOrder) => {
   if (sortField && sortOrder) {
     users.sort((a, b) => {
@@ -65,7 +65,18 @@ export const getUserById = async (req, res) => {
     const userId = req.params.id;
   
     try {
-      const user = await User.findByPk(userId);
+      const user = await User.findByPk(userId, {
+      include: [
+        {
+          model: Book,
+          as: 'lentBooks',
+          attributes: ['id', 'title', 'author', 'category'],
+          through: {
+            attributes: ['initialCharge', 'timestamp'],
+          },
+        },
+      ],
+    });
   
       if (user) {
         res.json(user);

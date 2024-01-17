@@ -5,6 +5,9 @@ import booksRoutes from './routes/books.js';
 import authRoutes from './routes/authLogin.js';
 import fs from 'fs';
 import sequelize from './sequelize.js';
+import { User } from './models/userModal.js';
+import { Book } from './models/bookModal.js';
+import { LentBooks } from './models/lentBooksModal.js';
 
 const app = express();
 
@@ -15,6 +18,19 @@ const PORT = config.PORT;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+// associations 
+Book.belongsToMany(User, {
+  as: 'lentUsers',
+  through: LentBooks,
+  foreignKey: 'bookId',
+});
+
+User.belongsToMany(Book, {
+  as: 'lentBooks',
+  through: LentBooks,
+  foreignKey: 'userId',
+});
 
 // Routes
 app.use(`/api/${config.API_VERSION}/admins`, adminRoutes);
