@@ -1,4 +1,4 @@
-import * as userModel from '../../models/userModal.js';
+import { User } from '../../models/userModal.js';
 
 export const userDetails = async (req, res) => {
   try {
@@ -10,17 +10,18 @@ export const userDetails = async (req, res) => {
       return res.status(403).json({ message: 'Invalid User Token.' });
     }
 
-    // Get user details using the model
-    const user = await userModel.getUserById(userId);
+    // Get user details using Sequelize's findByPk method
+    const user = await User.findByPk(userId);
 
     if (!user) {
       return res.status(404).send('User not found');
     }
 
     // Send only the user's details
-    res.json({ message: 'User details', data:user });
+    res.json({ message: 'User details', data: user });
   } catch (err) {
     console.error('Error fetching user details:', err);
     res.status(500).send('Internal Server Error');
   }
 };
+
