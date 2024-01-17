@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
-import * as userModel from '../models/userModal.js';
+import { User } from '../models/userModal.js';
 
 // Read the configuration from JSON file
 const configFile = 'config.json';
@@ -52,12 +52,14 @@ export const authenticateUser = async (req, res, next) => {
         return res.status(403).json({ message: 'Invalid token or token expired. Please login again' });
       } else {
         // Check if the user is soft-deleted
-        const user = await userModel.getUserById(login.id);
+        const user = await User.findOne({
+          where: { id: login.id },
+          paranoid: false, // Include soft-deleted records
+        });
   
-        if (!user || user.deleted) {
+        if (!user || user.deletedAt) {
           return res.status(401).json({ message: 'User is deleted or does not exist' });
         }
-  
         req.login = login;
         next();
       }
