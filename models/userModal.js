@@ -1,16 +1,3 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import fs from 'fs/promises';
-import path from 'path';
-
-// Get the directory name using import.meta.url
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const userDataPath = path.join(__dirname, '../data/userData.json');
-const adminDataPath = path.join(__dirname, '../data/adminData.json');
-
-// user modal
 import { DataTypes } from 'sequelize';
 import sequelize from '../sequelize.js';
 import { Book } from './bookModal.js';
