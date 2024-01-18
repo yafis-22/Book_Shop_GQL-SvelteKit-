@@ -1,4 +1,4 @@
-import { User } from '../../models/userModal.js';
+import { User } from '../../models/index.js';
 
 export const deleteUser = async (req, res) => {
   try {

@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { User } from '../models/userModal.js';
+import { User } from '../models/index.js';
 import { Admin } from '../models/adminModal.js';
 import fs from 'fs';
 

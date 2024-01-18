@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
-import { User } from '../models/userModal.js';
+import { User } from '../models/index.js';
 
 // Read the configuration from JSON file
 const configFile = 'config.json';

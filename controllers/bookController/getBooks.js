@@ -1,4 +1,4 @@
-import { Book } from '../../models/bookModal.js';
+import { Book } from '../../models/index.js';
 import { Op } from 'sequelize';
 
 const sortBooks = (books, sortField, sortOrder) => {

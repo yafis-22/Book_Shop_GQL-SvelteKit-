@@ -1,6 +1,6 @@
-import { User } from '../../models/userModal.js';
+import { User } from '../../models/index.js';
 import { Op } from 'sequelize';
-import { Book } from '../../models/bookModal.js';
+import { Book } from '../../models/index.js';
 const sortUsers = (users, sortField, sortOrder) => {
   if (sortField && sortOrder) {
     users.sort((a, b) => {

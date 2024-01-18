@@ -1,4 +1,4 @@
-import { User } from '../../models/userModal.js';
+import { User } from '../../models/index.js';
 import bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
 

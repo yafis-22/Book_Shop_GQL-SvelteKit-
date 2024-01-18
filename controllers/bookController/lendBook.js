@@ -1,5 +1,5 @@
-import { User } from '../../models/userModal.js';
-import { Book } from '../../models/bookModal.js';
+import { User } from '../../models/index.js';
+import { Book } from '../../models/index.js';
 import { LentBooks } from '../../models/lentBooksModal.js';
 
 export const lendBook = async (req, res) => {

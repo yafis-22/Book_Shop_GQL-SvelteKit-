@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { User } from '../../models/userModal.js';
+import { User } from '../../models/index.js';
 import { Admin } from '../../models/adminModal.js';
 
 const isAlphanumeric = (str) => /^[a-zA-Z0-9]+$/.test(str);

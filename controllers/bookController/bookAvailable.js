@@ -1,4 +1,4 @@
-import { Book } from '../../models/bookModal.js';
+import { Book } from '../../models/index.js';
 
 export const bookAvailable = async (req, res) => {
   try {

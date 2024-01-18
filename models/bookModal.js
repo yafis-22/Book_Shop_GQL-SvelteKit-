@@ -1,5 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../sequelize.js';
+import { User } from './index.js';
+import { LentBooks } from './lentBooksModal.js';
 
 export const Book = sequelize.define('Book', {
   id: {
@@ -35,3 +37,4 @@ export const Book = sequelize.define('Book', {
 }, {
   paranoid: true, // Enable soft deletion
 });
+
