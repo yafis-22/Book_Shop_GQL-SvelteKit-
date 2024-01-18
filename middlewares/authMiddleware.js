@@ -57,7 +57,7 @@ export const authenticateUser = async (req, res, next) => {
           paranoid: false, // Include soft-deleted records
         });
   
-        if (!user || user.deletedAt) {
+        if (!user) {
           return res.status(401).json({ message: 'User is deleted or does not exist' });
         }
         req.login = login;

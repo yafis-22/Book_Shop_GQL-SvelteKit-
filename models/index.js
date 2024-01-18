@@ -14,4 +14,4 @@ User.belongsToMany(Book, {
     foreignKey: 'bookId',
   });
 
-  export {User, Book}
+  export {User, Book, LentBooks}

@@ -1,6 +1,7 @@
 import { User } from '../../models/index.js';
 import { Op } from 'sequelize';
 import { Book } from '../../models/index.js';
+
 const sortUsers = (users, sortField, sortOrder) => {
   if (sortField && sortOrder) {
     users.sort((a, b) => {
@@ -35,6 +36,7 @@ export const getAllUsers = async (req, res) => {
 
     let allUsers = await User.findAll({
       where: whereCondition,
+      paranoid: false, 
       offset: (page - 1) * pageSize,
       limit: pageSize,
     });
@@ -44,6 +46,7 @@ export const getAllUsers = async (req, res) => {
 
       const totalUsers = await User.count({
         where: whereCondition,
+        paranoid: false
       });
 
       res.json({
@@ -66,6 +69,7 @@ export const getUserById = async (req, res) => {
   
     try {
       const user = await User.findByPk(userId, {
+      paranoid: false,
       include: [
         {
           model: Book,
