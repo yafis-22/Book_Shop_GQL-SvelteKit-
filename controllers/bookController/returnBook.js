@@ -1,11 +1,9 @@
-import { User } from '../../models/index.js';
-import { Book } from '../../models/index.js';
-import { LentBooks } from '../../models/index.js';
+import { User, Book, LentBooks } from '../../models/index.js';
 
 export const returnBook = async (req, res) => {
   try {
     // Check the role of the user making the request
-    const { role, id } = req.login;
+    const { role } = req.login;
 
     // If the user is an admin, disallow returning books
     if (role === 'admin') {
@@ -15,21 +13,21 @@ export const returnBook = async (req, res) => {
     let bookId;
 
     if (req.params.id) {
-      bookId = req.params.id;
+      bookId = parseInt(req.params.id);
     } else if (req.body.bookId) {
       bookId = req.body.bookId;
     } else {
       return res.status(400).json({ error: 'Book ID not provided in URL or request body' });
     }
 
-    // Fetch user from the database using Sequelize
-    const user = await User.findByPk(id, {
+    // Fetch user and book details using Sequelize models
+    const user = await User.findByPk(req.login.id, {
       include: [{
-        model: LentBooks,
-        as: 'lentBooks', 
-        where: {
-          bookId,
-          returnedAt: null,
+        model: Book,
+        as: 'lentBooks',
+        through: {
+          model: LentBooks,
+          where: { bookId },
         },
       }],
     });
@@ -38,12 +36,13 @@ export const returnBook = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Find the book in the user's lent books
-    const lentBook = user.lentBooks[0];
-
-    if (!lentBook) {
+    // Check if the book is in the user's lent books
+    if (!user.lentBooks || user.lentBooks.length === 0) {
       return res.status(404).json({ message: 'Book not found in the user\'s lent books' });
     }
+
+    // Retrieve the lent book details
+    const lentBook = user.lentBooks[0]; // Assuming only one lent book per user per book
 
     // Find the book by ID
     const book = await Book.findByPk(bookId);
@@ -54,20 +53,21 @@ export const returnBook = async (req, res) => {
 
     // Calculate charges until the return date
     const lendingPrice = book.lendingPrice;
-    const days = calculateDaysDifference(lentBook.timestamp, new Date());
+    const days = calculateDaysDifference(lentBook.LentBooks.timestamp, new Date().toISOString());
     const initialCharge = lendingPrice;
     const additionalCharge = days > 9 ? 5 * (days - 9) : 0;
     const totalCharge = initialCharge + additionalCharge;
 
-    // Update the lent book with the return date
-    await LentBooks.update({ returnedAt: new Date() }, { where: { id: lentBook.id } });
+    // Remove the lent book association
+    await user.removeLentBook(book);
 
     // Increase the book quantity
-    await Book.increment('quantity', { where: { id: bookId } });
+    await book.increment('quantity');
 
     res.json({
       message: 'Book returned successfully',
-      chargeDetails: {
+      data: {
+        bookId,
         initialCharge,
         additionalCharge,
         totalCharge,
@@ -76,7 +76,7 @@ export const returnBook = async (req, res) => {
     });
   } catch (err) {
     console.error('Error returning book:', err);
-    res.status(500).send(err.message);
+    res.status(500).send('Internal Server Error');
   }
 };
 
