@@ -32,7 +32,7 @@ try {
 }
 
 // Sync models with the database and start the server
-sequelize.sync({alter: true}).then(() => {
+sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
   });
