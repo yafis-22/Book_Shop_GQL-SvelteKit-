@@ -2,7 +2,7 @@ import { Book } from '../../models/index.js';
 
 export const bookAvailable = async (req, res) => {
   try {
-    const bookId = parseInt(req.params.id);
+    const bookId = req.params.id;
 
     // Find the soft-deleted book by ID
     const deletedBook = await Book.findOne({
