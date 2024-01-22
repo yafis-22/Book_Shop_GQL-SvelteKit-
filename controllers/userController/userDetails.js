@@ -20,6 +20,7 @@ export const userDetails = async (req, res) => {
           attributes: ['id', 'title', 'author', 'category'],
           through: {
             attributes: ['initialCharge', 'timestamp'],
+            as: 'chargedDetails'
           },
         },
       ],

@@ -54,7 +54,7 @@ export const authenticateUser = async (req, res, next) => {
         // Check if the user is soft-deleted
         const user = await User.findOne({
           where: { id: login.id },
-          paranoid: false, // Include soft-deleted records
+          //paranoid: false, // Include soft-deleted records
         });
   
         if (!user) {

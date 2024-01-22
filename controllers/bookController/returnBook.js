@@ -13,7 +13,7 @@ export const returnBook = async (req, res) => {
     let bookId;
 
     if (req.params.id) {
-      bookId = parseInt(req.params.id);
+      bookId = req.params.id;
     } else if (req.body.bookId) {
       bookId = req.body.bookId;
     } else {
