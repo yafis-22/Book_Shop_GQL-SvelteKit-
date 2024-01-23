@@ -1,5 +1,4 @@
-import { User } from '../../models/index.js';
-import { Book } from '../../models/index.js';
+import { User, Book } from '../../models/index.js';
 
 export const deleteUser = async (req, res) => {
   try {

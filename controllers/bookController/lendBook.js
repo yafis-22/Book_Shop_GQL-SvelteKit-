@@ -1,6 +1,4 @@
-import { User } from '../../models/index.js';
-import { Book } from '../../models/index.js';
-import { LentBooks } from '../../models/index.js';
+import { User, Book, LentBooks } from '../../models/index.js';
 
 export const lendBook = async (req, res) => {
   try {
