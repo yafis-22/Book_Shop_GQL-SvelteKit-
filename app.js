@@ -4,7 +4,7 @@ import userRoutes from './routes/users.js';
 import booksRoutes from './routes/books.js';
 import authRoutes from './routes/authLogin.js';
 import fs from 'fs';
-import sequelize from './sequelize.js';
+import sequelize from './db/sequelize.js';
 
 const app = express();
 

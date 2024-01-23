@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../sequelize.js';
+import sequelize from '../db/sequelize.js';
 
 export const Admin = sequelize.define('Admin', {
     id: {
