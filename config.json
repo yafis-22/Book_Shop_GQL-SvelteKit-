@@ -1,5 +1,0 @@
-{
-    "PORT": 3002,
-    "API_VERSION": "v1",
-    "JWT_SECRET_KEY": "mysecretkey"
-}
