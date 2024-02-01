@@ -1,5 +1,7 @@
 <script>
     import "bootstrap/dist/css/bootstrap.min.css";
+    import "bootstrap-icons/font/bootstrap-icons.css";
+    
     let userLoggedIn = false; // Set this to true if the user is logged in
 </script>
 
@@ -32,7 +34,7 @@
             </div>
             <div class="login-register-buttons">
                 {#if userLoggedIn}
-                    <i class="fa fa-user"></i>
+                    <i class="bi bi-person"></i>
                 {:else}
                     <button class="btn btn-outline-primary" type="button">Login</button>
                     <button class="btn btn-outline-primary" type="button">Register</button>
@@ -93,7 +95,7 @@
         background-color: #343a40;
     }
 
-    .fa-user {
+    .bi-person {
         color: #343a40;
         margin-right: 10px;
     }
