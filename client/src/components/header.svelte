@@ -18,7 +18,7 @@
             <Link to="/" class="nav-link">Home</Link>
           </li>
           <li class="nav-item">
-            <Link to="/categories" class="nav-link">Categories</Link>
+            <Link to="/getBooks" class="nav-link">Categories</Link>
           </li>
           <li class="nav-item">
             <Link to="/blog" class="nav-link">Blog</Link>
@@ -50,28 +50,12 @@
         background-color: #ffffff;
     }
 
-    .navbar-brand {
-        color: #343a40;
-        font-family: 'IBM Plex Sans', sans-serif;
-        font-size: 1.5rem;
-    }
-
     .navbar-nav {
         margin: 0 auto;
     }
 
     .navbar-nav .nav-item {
         text-align: center;
-    }
-
-    .navbar-nav .nav-link {
-        color: #343a40;
-        border-bottom: 3px solid transparent;
-        transition: border-color 0.3s;
-    }
-
-    .navbar-nav .nav-link:hover {
-        border-color: #343a40;
     }
 
     .search-bar {
@@ -84,16 +68,6 @@
 
     .login-register-buttons {
         margin-left: 10px; /* Add some space between search bar and buttons */
-    }
-
-    .btn-outline-primary {
-        color: #343a40;
-        border-color: #343a40;
-    }
-
-    .btn-outline-primary:hover {
-        color: #fff;
-        background-color: #343a40;
     }
 
     .bi-person {

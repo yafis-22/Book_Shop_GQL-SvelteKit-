@@ -1,50 +1,53 @@
 <script>
     import "bootstrap/dist/css/bootstrap.min.css";
     import "bootstrap-icons/font/bootstrap-icons.css";
-    //import { navigate } from "@sveltejs/kit";
-  
-    let formData = {
-      username: "",
-      password: "",
-    };
-  
-    let isAdmin = false;
-    let errorMessage = "";
-  
-    const loginUser = async () => {
-      try {
+    import authStore from '../stores/authStore';
+
+let formData = {
+    username: "",
+    password: "",
+};
+
+let isAdmin = false;
+let errorMessage = "";
+
+const loginUser = async () => {
+    try {
         const response = await fetch("http://localhost:3002/api/v1/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
         });
-  
+
         if (response.ok) {
-          const data = await response.json();
-          console.log('User logged in successfully:', data);
-  
-          // Check if the user is an admin
-          isAdmin = data.role === 'admin';
-  
-          // Check if the selected role matches the actual role of the user
-          if ((isAdmin && !data.isAdmin) || (!isAdmin && data.isAdmin)) {
-            errorMessage = `You are not ${isAdmin ? 'admin' : 'user'}`;
-          } else {
-            // Redirect to the appropriate dashboard
-           // navigate(isAdmin ? '/admin-dashboard' : '/user-dashboard');
-          }
+            const data = await response.json();
+            console.log('User logged in successfully:', data);
+
+            // Update the auth store with the token and isAdmin information
+            authStore.set({
+                userToken: data.userToken || data.adminToken,
+                isAdmin: data.role === 'admin',
+            });
+
+            // Check if the selected role matches the actual role of the user
+            if ((isAdmin && !data.isAdmin) || (!isAdmin && data.isAdmin)) {
+                errorMessage = `You are not ${isAdmin ? 'admin' : 'user'}`;
+            } else {
+                // Redirect to the appropriate dashboard
+                // navigate(isAdmin ? '/admin-dashboard' : '/user-dashboard');
+            }
         } else {
-          const errorData = await response.json();
-          errorMessage = errorData.message || "Invalid username or password";
+            const errorData = await response.json();
+            errorMessage = errorData.message || "Invalid username or password";
         }
-      } catch (error) {
+    } catch (error) {
         console.error("Error logging in:", error);
         errorMessage = "Internal Server Error";
-      }
-    };
-  </script>
+    }
+};
+</script>
   
   <div class="container">
     <h2 class="mt-4">Sign In</h2>

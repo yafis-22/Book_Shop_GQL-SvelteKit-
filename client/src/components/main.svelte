@@ -3,6 +3,7 @@
   import HomePage from "./homePage.svelte";
   import UserLogin from "./userLogin.svelte";
   import UserRegistrationForm from "./userRegistrationForm.svelte";
+  import BookManagement from './bookManagement.svelte';
 </script>
 
 <Router>
@@ -14,6 +15,9 @@
   </Route>
   <Route path="/register">
     <UserRegistrationForm />
+  </Route>
+  <Route path="/getBooks">
+    <BookManagement />
   </Route>
 </Router>
 
