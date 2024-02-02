@@ -19,7 +19,7 @@ const sortBooks = (books, sortField, sortOrder) => {
 
 export const getBooks = async (req, res) => {
   try {
-    const { search, page = 1, pageSize = 10, sortField, sortOrder } = req.query;
+    const { search, page = 1, pageSize = 12, sortField, sortOrder } = req.query;
     const isAdmin = req.login && req.login.role === 'admin';
     
     if (page <= 0) {
