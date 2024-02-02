@@ -5,8 +5,10 @@ import booksRoutes from './routes/books.js';
 import authRoutes from './routes/authLogin.js';
 import fs from 'fs';
 import sequelize from './db/sequelize.js';
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 
 // Read the configuration from JSON file
 const configFile = 'config.json';
