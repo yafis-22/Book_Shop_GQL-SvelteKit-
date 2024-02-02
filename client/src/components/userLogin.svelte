@@ -1,7 +1,7 @@
 <script>
     import "bootstrap/dist/css/bootstrap.min.css";
     import "bootstrap-icons/font/bootstrap-icons.css";
-    import { navigate } from "@sveltejs/kit";
+    //import { navigate } from "@sveltejs/kit";
   
     let formData = {
       username: "",
@@ -33,7 +33,7 @@
             errorMessage = `You are not ${isAdmin ? 'admin' : 'user'}`;
           } else {
             // Redirect to the appropriate dashboard
-            navigate(isAdmin ? '/admin-dashboard' : '/user-dashboard');
+           // navigate(isAdmin ? '/admin-dashboard' : '/user-dashboard');
           }
         } else {
           const errorData = await response.json();
