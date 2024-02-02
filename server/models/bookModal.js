@@ -32,6 +32,10 @@ export const Book = sequelize.define('Book', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  imageSrc: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 }, {
   paranoid: true, // Enable soft deletion
 });

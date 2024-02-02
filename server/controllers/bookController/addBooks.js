@@ -2,7 +2,7 @@ import { Book } from '../../models/index.js';
 
 export const addBook = async (req, res) => {
   try {
-    const { title, description, lendingPrice, quantity, author, category } = req.body;
+    const { title, description, lendingPrice, quantity, author, category, imageSrc } = req.body;
 
     if (!title || !description || !lendingPrice || !quantity || !author || !category) {
       return res.status(400).json({ message: 'Please enter all fields i.e title, description, lendingPrice, quantity, author, category.' });
@@ -21,6 +21,7 @@ export const addBook = async (req, res) => {
       quantity,
       author,
       category,
+      imageSrc,
     });
 
     res.json({ message: 'Book added successfully', data: newBook });
