@@ -21,13 +21,13 @@
         set(booksData);
       });
     });
-  </script>
+
+</script>
   
-  <h2 class="mt-4">Book Management</h2>
+<h2 class="mt-2">All Books</h2>
   
-  <div class="d-flex flex-wrap">
-    {#each $books as book (book.id)}
-      <BookCard {book} />
-    {/each}
-  </div>
-  
+<div class="d-flex flex-wrap">
+  {#each $books as book (book.id)}
+    <BookCard {book} />
+  {/each}
+</div>

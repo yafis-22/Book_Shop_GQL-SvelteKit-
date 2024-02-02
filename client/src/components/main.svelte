@@ -4,6 +4,7 @@
   import UserLogin from "./userLogin.svelte";
   import UserRegistrationForm from "./userRegistrationForm.svelte";
   import BookManagement from './bookManagement.svelte';
+ import BookDetails from "./bookDetails.svelte";
 </script>
 
 <Router>
@@ -16,8 +17,10 @@
   <Route path="/register">
     <UserRegistrationForm />
   </Route>
-  <Route path="/getBooks">
+  <Route path="/books">
     <BookManagement />
   </Route>
+  <Route path="/books/:id" let:params>
+    <BookDetails {params} />
+  </Route>
 </Router>
-

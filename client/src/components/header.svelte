@@ -18,7 +18,7 @@
             <Link to="/" class="nav-link">Home</Link>
           </li>
           <li class="nav-item">
-            <Link to="/getBooks" class="nav-link">Categories</Link>
+            <Link to="/books" class="nav-link">Categories</Link>
           </li>
           <li class="nav-item">
             <Link to="/blog" class="nav-link">Blog</Link>
