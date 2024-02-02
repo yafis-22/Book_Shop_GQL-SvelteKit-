@@ -1,41 +1,44 @@
-<script> 
- import "bootstrap/dist/css/bootstrap.min.css"; 
+<script>
+    import { navigate } from "svelte-routing";
+    import "bootstrap/dist/css/bootstrap.min.css";
+
     let formData = {
-      username: '',
-      password: '',
-      email: '',
-      phoneNumber: '',
-      address: '',
-      role: 'user', // Default role as 'user'
+        username: '',
+        password: '',
+        email: '',
+        phoneNumber: '',
+        address: '',
+        role: 'user', // Default role as 'user'
     };
-  
+
     let errorMessage = '';
-  
+
     const registerUser = async () => {
-      try {
-        const response = await fetch('http://localhost:3002/api/v1/users', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-  
-        if (response.ok) {
-          const data = await response.json();
-          console.log('User registered successfully:', data);
-          
-        } else {
-          const errorData = await response.json();
-          errorMessage = errorData.message;
+        try {
+            const response = await fetch('http://localhost:3002/api/v1/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('User registered successfully:', data);
+
+                // Redirect to the login page after successful registration
+                navigate('/login');
+            } else {
+                const errorData = await response.json();
+                errorMessage = errorData.message;
+            }
+        } catch (error) {
+            console.error('Error registering user:', error);
+            res.status(500).send('Internal Server Error');
         }
-      } catch (error) {
-        console.error('Error registering user:', error);
-        res.status(500).send('Internal Server Error'); 
-      }
     };
-  
-  </script>
+</script>
   
   <div class="container">
     <h2>User Registration</h2>

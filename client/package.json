@@ -21,6 +21,7 @@
 	"type": "module",
 	"dependencies": {
 		"bootstrap": "^5.3.2",
-		"bootstrap-icons": "^1.11.3"
+		"bootstrap-icons": "^1.11.3",
+		"svelte-routing": "^2.11.0"
 	}
 }

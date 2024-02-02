@@ -1,4 +1,5 @@
 <script>
+    import { Link } from "svelte-routing";
     import "bootstrap/dist/css/bootstrap.min.css";
     import "bootstrap-icons/font/bootstrap-icons.css";
     
@@ -7,42 +8,42 @@
 
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">BookLender</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Categories</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-            </ul>
-            <div class="search-bar">
-                <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-            </div>
-            <div class="login-register-buttons">
-                {#if userLoggedIn}
-                    <i class="bi bi-person"></i>
-                {:else}
-                    <button class="btn btn-outline-primary" type="button">Login</button>
-                    <button class="btn btn-outline-primary" type="button">Register</button>
-                {/if}
-            </div>
+      <Link to="/" class="navbar-brand">BookLender</Link>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <Link to="/" class="nav-link">Home</Link>
+          </li>
+          <li class="nav-item">
+            <Link to="/categories" class="nav-link">Categories</Link>
+          </li>
+          <li class="nav-item">
+            <Link to="/blog" class="nav-link">Blog</Link>
+          </li>
+          <li class="nav-item">
+            <Link to="/about" class="nav-link">About</Link>
+          </li>
+          <li class="nav-item">
+            <Link to="/contact" class="nav-link">Contact</Link>
+          </li>
+        </ul>
+        <div class="search-bar">
+          <input class="form-control" type="search" placeholder="Search" aria-label="Search">
         </div>
+        <div class="login-register-buttons">
+          {#if userLoggedIn}
+            <i class="bi bi-person"></i>
+          {:else}
+            <Link to="/login" class="btn btn-outline-dark" type="button">Login</Link>
+            <Link to="/register" class="btn btn-outline-dark" type="button">Register</Link>
+          {/if}
+        </div>
+      </div>
     </div>
-</nav>
+  </nav>
 
 <style>
     .navbar {

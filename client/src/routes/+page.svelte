@@ -1,11 +1,10 @@
 <script>
-   import HomePage from "../components/homePage.svelte";
-   import UserLogin from "../components/userLogin.svelte";
-</script>
-
-<main>
-<UserLogin />
-</main>
+   import Main from "../components/main.svelte"
+ </script>
+ 
+ <main>
+   <Main />
+ </main>
 
 <style>
    main {
