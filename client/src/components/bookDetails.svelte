@@ -27,7 +27,7 @@
         <p>Lending Price: ${book.lendingPrice}</p>
         <p>Category: <span class="badge bg-primary">{book.category}</span></p>
         <p>Description: {book.description}</p>
-        
+        <a href="/books">Back to Books</a>
       </div>
     </div>
   </div>
