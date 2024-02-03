@@ -3,6 +3,7 @@
   import { get } from "svelte/store";
   import { navigate } from "svelte-routing";
   import authStore from '../stores/authStore';
+  import BookUpdate from "./bookUpdate.svelte";
 
   let books = [];
   let searchQuery = '';
@@ -60,10 +61,25 @@
     fetchBooks();
   };
 
-  const handleDelete = (id) => {
-    // Implement the delete functionality here
-    console.log(`Deleting book with ID: ${id}`);
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3002/api/v1/books/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${get(authStore).userToken}`,
+        },
+      });
+
+      if (response.ok) {
+        fetchBooks(); // Refresh the book list after successful deletion
+      } else {
+        console.error(`Error deleting book with ID ${id}:`, response.statusText);
+      }
+    } catch (error) {
+      console.error(`Error deleting book with ID ${id}:`, error);
+    }
   };
+
 
   const handleUpdate = (id) => {
     // Implement the update functionality here
