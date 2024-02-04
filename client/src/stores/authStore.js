@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 
 // Initial state
 const initialState = {
-    userToken: null,
+    userToken:localStorage.getItem('userToken') || null,
     isAdmin: false,
 };
 

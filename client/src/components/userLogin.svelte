@@ -26,6 +26,8 @@
             const data = await response.json();
             console.log('User logged in successfully:', data);
 
+            // Save token to local storage
+        localStorage.setItem('userToken', data.userToken || data.adminToken);
             // Log the roles
             console.log('Role:', data.role);
 

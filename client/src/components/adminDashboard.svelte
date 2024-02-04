@@ -3,15 +3,35 @@
   import { navigate } from "svelte-routing";
   import authStore from "../stores/authStore";
   import BookTable from "./bookTable.svelte";
+  import UserTable from "./userTable.svelte";
+  import BookAdd from "./bookAdd.svelte";
 
-  let showModal = false;
+  let showUserModal = false;
+  let showBookModal = false;
+  let showAddBookModal = false; // New state variable for the Add Book modal
 
-  const openModal = () => {
-    showModal = true;
+  const openUserModal = () => {
+    showUserModal = true;
   };
 
-  const closeModal = () => {
-    showModal = false;
+  const closeUserModal = () => {
+    showUserModal = false;
+  };
+
+  const openBookModal = () => {
+    showBookModal = true;
+  };
+
+  const closeBookModal = () => {
+    showBookModal = false;
+  };
+
+  const openAddBookModal = () => {
+    showAddBookModal = true;
+  };
+
+  const closeAddBookModal = () => {
+    showAddBookModal = false;
   };
 
   onMount(() => {
@@ -24,19 +44,39 @@
 
 <div>
   <h1 class="dashboard-title">Welcome to Admin Dashboard</h1>
-  <button class="action-button" on:click={() => navigate("/admin/add-book")}
-    >Add New Book</button
-  >
-  <button class="action-button" on:click={openModal}>Fetch All Books</button>
-  <button class="action-button" on:click={() => navigate("/admin/all-users")}
-    >Fetch All Users</button
-  >
+  <button class="action-button" on:click={openAddBookModal}>
+    Add New Book
+  </button>
+  <button class="action-button" on:click={openBookModal}>
+    Fetch All Books
+  </button>
+  <button class="action-button" on:click={openUserModal}>
+    Fetch All Users
+  </button>
 
-  {#if showModal}
+  {#if showAddBookModal}
     <!-- Modal -->
     <div class="modal">
       <div class="modal-content">
-        <span class="close" on:click={closeModal}>&times;</span>
+        <span class="close" on:click={closeAddBookModal}>&times;</span>
+        <BookAdd on:close={closeAddBookModal} />
+      </div>
+    </div>
+  {/if}
+  {#if showUserModal}
+    <!-- Modal -->
+    <div class="modal">
+      <div class="modal-content">
+        <span class="close" on:click={closeUserModal}>&times;</span>
+        <UserTable />
+      </div>
+    </div>
+  {/if}
+  {#if showBookModal}
+    <!-- Modal -->
+    <div class="modal">
+      <div class="modal-content">
+        <span class="close" on:click={closeBookModal}>&times;</span>
         <BookTable />
       </div>
     </div>
