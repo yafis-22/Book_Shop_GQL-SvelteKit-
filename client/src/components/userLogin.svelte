@@ -1,7 +1,7 @@
 <script>
   import "bootstrap/dist/css/bootstrap.min.css";
   import "bootstrap-icons/font/bootstrap-icons.css";
-  import authStore from '../stores/authStore';
+  import authStore from "../stores/authStore";
   import { navigate } from "svelte-routing";
 
   let formData = {
@@ -14,49 +14,50 @@
 
   const loginUser = async () => {
     try {
-        const response = await fetch("http://localhost:3002/api/v1/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
+      const response = await fetch("http://localhost:3002/api/v1/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("User logged in successfully:", data);
+
+        // Save token to local storage
+        localStorage.setItem("userToken", data.userToken || data.adminToken);
+        // Log the roles
+        console.log("Role:", data.role);
+
+        // Update the auth store with the token and isAdmin information
+        authStore.set({
+          userToken: data.userToken || data.adminToken,
+          isAdmin: data.role === "admin", // Check if the role is 'admin'
         });
 
-        if (response.ok) {
-            const data = await response.json();
-            console.log('User logged in successfully:', data);
+        // Redirect to the appropriate dashboard
+        navigate(isAdmin ? "/admin" : "/user-dashboard");
+      } else {
+        const errorData = await response.json();
+        errorMessage = errorData.message || "Invalid username or password";
 
-            // Save token to local storage
-        localStorage.setItem('userToken', data.userToken || data.adminToken);
-            // Log the roles
-            console.log('Role:', data.role);
+        // Log the entire errorData object for inspection
+        console.log("Error data:", errorData);
 
-            // Update the auth store with the token and isAdmin information
-            authStore.set({
-                userToken: data.userToken || data.adminToken,
-                isAdmin: data.role === 'admin', // Check if the role is 'admin'
-            });
-
-            // Redirect to the appropriate dashboard
-             navigate(isAdmin ? '/admin' : '/user-dashboard');
-        } else {
-            const errorData = await response.json();
-            errorMessage = errorData.message || "Invalid username or password";
-
-            // Log the entire errorData object for inspection
-            console.log('Error data:', errorData);
-
-            // Check if the error is due to incorrect role
-            if (errorData.message === 'Invalid username or password') {
-                errorMessage = `Invalid ${isAdmin ? 'admin' : 'user'} username or password`;
-            }
+        // Check if the error is due to incorrect role
+        if (errorData.message === "Invalid username or password") {
+          errorMessage = `Invalid ${
+            isAdmin ? "admin" : "user"
+          } username or password`;
         }
+      }
     } catch (error) {
-        console.error("Error logging in:", error);
-        errorMessage = "Internal Server Error";
+      console.error("Error logging in:", error);
+      errorMessage = "Internal Server Error";
     }
-};
-
+  };
 </script>
 
 <div class="container">
@@ -102,7 +103,9 @@
         <label class="form-check-label" for="isAdmin">Login as Admin</label>
       </div>
 
-      <button type="button" class="btn btn-dark" on:click={loginUser}>Sign In</button>
+      <button type="button" class="btn btn-dark" on:click={loginUser}
+        >Sign In</button
+      >
       <div class="mt-3">
         <a href="forgot-password">Forgot password?</a>
       </div>
@@ -124,40 +127,38 @@
   </div>
 </div>
 
-
-
 <style>
   .container {
-      max-width: 400px;
-      margin: auto;
-      padding: 20px;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
   }
 
   .card {
-      padding: 20px;
+    padding: 20px;
   }
 
   label {
-      margin-bottom: 5px;
+    margin-bottom: 5px;
   }
 
   .form-control {
-      margin-bottom: 15px;
+    margin-bottom: 15px;
   }
 
   .alert {
-      margin-top: 20px;
+    margin-top: 20px;
   }
 
   input {
-      background-color: #f5f5f5;
+    background-color: #f5f5f5;
   }
 
   .form-label {
-      color: #5a5a5a;
+    color: #5a5a5a;
   }
 
   a {
-      color: #555555;
+    color: #555555;
   }
 </style>

@@ -40,6 +40,11 @@
       navigate("/login");
     }
   });
+  const logout = () => {
+    authStore.set({ userToken: null, isAdmin: false });
+    // Redirect to the login page after logout
+    navigate('/login');
+  };
 </script>
 
 <div>
@@ -52,6 +57,9 @@
   </button>
   <button class="action-button" on:click={openUserModal}>
     Fetch All Users
+  </button>
+  <button class="action-button" on:click={logout}>
+    Logout
   </button>
 
   {#if showAddBookModal}
