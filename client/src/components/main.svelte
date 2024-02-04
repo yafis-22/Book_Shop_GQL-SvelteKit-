@@ -20,7 +20,7 @@
   <Route path="/books">
     <BookManagement />
   </Route>
-  <Route path="/admin">
+  <Route path="/admins">
     <AdminDashboard />
   </Route>
 </Router>
