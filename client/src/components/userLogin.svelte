@@ -30,6 +30,7 @@
         localStorage.setItem("userToken", data.userToken || data.adminToken);
         // Log the roles
         console.log("Role:", data.role);
+        
 
         // Update the auth store with the token and isAdmin information
         authStore.set({
@@ -38,7 +39,7 @@
         });
 
         // Redirect to the appropriate dashboard
-        navigate(isAdmin ? "/admins" : "/user-dashboard");
+        navigate(isAdmin ? "/admins" : "/users");
       } else {
         const errorData = await response.json();
         errorMessage = errorData.message || "Invalid username or password";
