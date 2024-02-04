@@ -2,36 +2,40 @@
   import { onMount } from "svelte";
   import { get } from "svelte/store";
   import { navigate } from "svelte-routing";
-  import authStore from '../stores/authStore';
-  import BookUpdate from "./bookUpdate.svelte";
+  import authStore from "../stores/authStore";
 
   let books = [];
-  let searchQuery = '';
+  let searchQuery = "";
   let currentPage = 1;
   let totalPages = 1;
-  let sortField = '';
-  let sortOrder = '';
+  let sortField = "";
+  let sortOrder = "";
   let sortOptions = [
-    { field: 'id', label: 'Id' },
-    { field: 'title', label: 'Title' },
-    { field: 'description', label: 'Description' },
-    { field: 'quantity', label: 'Quantity' },
-    { field: 'author', label: 'Author' },
-    { field: 'category', label: 'Category' },
-    { field: 'lendingPrice', label: 'Lending Price' },
-    { field: 'createdAt', label: 'Created At' },
-    { field: 'updatedAt', label: 'Updated At' },
-    { field: 'deletedAt', label: 'Deleted At' },
+    { field: "id", label: "Id" },
+    { field: "title", label: "Title" },
+    { field: "description", label: "Description" },
+    { field: "quantity", label: "Quantity" },
+    { field: "author", label: "Author" },
+    { field: "category", label: "Category" },
+    { field: "lendingPrice", label: "Lending Price" },
+    { field: "createdAt", label: "Created At" },
+    { field: "updatedAt", label: "Updated At" },
+    { field: "deletedAt", label: "Deleted At" },
   ];
+
+  let successMessage = "";
 
   const fetchBooks = async () => {
     try {
-      const response = await fetch(`http://localhost:3002/api/v1/books?page=${currentPage}&pageSize=12&search=${searchQuery}&sortField=${sortField}&sortOrder=${sortOrder}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${get(authStore).userToken}`,
+      const response = await fetch(
+        `http://localhost:3002/api/v1/books?page=${currentPage}&pageSize=12&search=${searchQuery}&sortField=${sortField}&sortOrder=${sortOrder}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${get(authStore).userToken}`,
+          },
         },
-      });
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -72,26 +76,64 @@
 
       if (response.ok) {
         fetchBooks(); // Refresh the book list after successful deletion
+        successMessage = "Book deleted successfully";
       } else {
-        console.error(`Error deleting book with ID ${id}:`, response.statusText);
+        console.error(
+          `Error deleting book with ID ${id}:`,
+          response.statusText,
+        );
       }
     } catch (error) {
       console.error(`Error deleting book with ID ${id}:`, error);
     }
   };
 
-
   const handleUpdate = (id) => {
     // Implement the update functionality here
     console.log(`Updating book with ID: ${id}`);
+  };
+
+  const handleRestore = async (bookId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3002/api/v1/books/${bookId}/restore`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${get(authStore).userToken}`,
+          },
+        },
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+
+        fetchBooks();
+        successMessage = "Book restored successfully";
+      } else {
+        console.error("Error restoring book:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error restoring book:", error);
+    }
   };
 </script>
 
 <div>
   <h1>All Books</h1>
-  
+
+  {#if successMessage}
+    <div class="notification">
+      <p class="success-message">{successMessage}</p>
+    </div>
+  {/if}
+
   <div class="mb-3">
-    <input type="text" bind:value={searchQuery} placeholder="Search by title, author, category..." />
+    <input
+      type="text"
+      bind:value={searchQuery}
+      placeholder="Search by title, author, category..."
+    />
     <button on:click={handleSearch}>Search</button>
   </div>
 
@@ -114,16 +156,16 @@
     <table class="table">
       <thead>
         <tr>
-          <th on:click={() => handleSort('id')}>Id</th>
-          <th on:click={() => handleSort('title')}>Title</th>
-          <th on:click={() => handleSort('description')}>Description</th>
-          <th on:click={() => handleSort('quantity')}>Quantity</th>
-          <th on:click={() => handleSort('author')}>Author</th>
-          <th on:click={() => handleSort('category')}>Category</th>
-          <th on:click={() => handleSort('lendingPrice')}>Lending Price</th>
-          <th on:click={() => handleSort('createdAt')}>Created At</th>
-          <th on:click={() => handleSort('updatedAt')}>Updated At</th>
-          <th on:click={() => handleSort('deletedAt')}>Deleted At</th>
+          <th on:click={() => handleSort("id")}>Id</th>
+          <th on:click={() => handleSort("title")}>Title</th>
+          <th on:click={() => handleSort("description")}>Description</th>
+          <th on:click={() => handleSort("quantity")}>Quantity</th>
+          <th on:click={() => handleSort("author")}>Author</th>
+          <th on:click={() => handleSort("category")}>Category</th>
+          <th on:click={() => handleSort("lendingPrice")}>Lending Price</th>
+          <th on:click={() => handleSort("createdAt")}>Created At</th>
+          <th on:click={() => handleSort("updatedAt")}>Updated At</th>
+          <th on:click={() => handleSort("deletedAt")}>Deleted At</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -141,25 +183,47 @@
             <td>{book.updatedAt}</td>
             <td>{book.deletedAt}</td>
             <td>
-              <button type="button" class="btn btn-success" on:click={() => handleUpdate(book.id)}>Update</button>
-              <button type="button" class="btn btn-danger" on:click={() => handleDelete(book.id)}>Delete</button>
+              <button
+                type="button"
+                class="btn btn-success"
+                on:click={() => handleUpdate(book.id)}>Update</button
+              >
+              <button
+                type="button"
+                class="btn btn-danger"
+                on:click={() => handleDelete(book.id)}>Delete</button
+              >
+              {#if book.deletedAt != null}
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  on:click={() => handleRestore(book.id)}>Restore</button
+                >
+              {/if}
             </td>
           </tr>
         {/each}
       </tbody>
     </table>
-    
+
     <div class="pagination">
       {#if currentPage > 1}
-        <button on:click={() => handlePageChange(currentPage - 1)}>&lt; Prev</button>
+        <button on:click={() => handlePageChange(currentPage - 1)}
+          >&lt; Prev</button
+        >
       {/if}
-      
+
       {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-        <button on:click={() => handlePageChange(page)} class:selected={page === currentPage}>{page}</button>
+        <button
+          on:click={() => handlePageChange(page)}
+          class:selected={page === currentPage}>{page}</button
+        >
       {/each}
-      
+
       {#if currentPage < totalPages}
-        <button on:click={() => handlePageChange(currentPage + 1)}>Next &gt;</button>
+        <button on:click={() => handlePageChange(currentPage + 1)}
+          >Next &gt;</button
+        >
       {/if}
     </div>
   {:else}
@@ -175,11 +239,14 @@
     border-collapse: collapse;
   }
 
-  .table, .table th, .table td {
+  .table,
+  .table th,
+  .table td {
     border: 1px solid #dee2e6;
   }
 
-  .table th, .table td {
+  .table th,
+  .table td {
     padding: 0.75rem;
     vertical-align: top;
     cursor: pointer;
@@ -249,5 +316,20 @@
   .btn:hover {
     opacity: 0.9;
   }
-</style>
 
+  .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+  }
+
+  .success-message {
+    font-weight: bold;
+  }
+</style>
