@@ -69,7 +69,7 @@
                 {
                     method: "PATCH",
                     headers: {
-                        addressization: `Bearer ${get(authStore).userToken}`,
+                        Authorization: `Bearer ${get(authStore).userToken}`,
                     },
                 },
             );

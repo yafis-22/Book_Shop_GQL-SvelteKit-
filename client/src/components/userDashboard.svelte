@@ -6,30 +6,33 @@
     let user = {};
     let lentBooks = [];
   
-    onMount(async () => {
-      // Redirect to login if not a user
-      if (authStore.isAdmin) {
-        navigate('/admin');
-      } else {
-        // Fetch user details and lent books
-        try {
-          const response = await fetch('http://localhost:3002/api/v1/users/me', {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${$authStore.userToken}`,
-            },
-          });
+    const fetchUserDetails = async () => {
+      try {
+        const response = await fetch('http://localhost:3002/api/v1/users/me', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${$authStore.userToken}`,
+          },
+        });
   
-          if (response.ok) {
-            const data = await response.json();
-            user = data.data;
-            lentBooks = user.lentBooks || [];
-          } else {
-            console.error('Error fetching user details:', response.statusText);
-          }
-        } catch (error) {
-          console.error('Error fetching user details:', error);
+        if (response.ok) {
+          const data = await response.json();
+          user = data.data;
+          lentBooks = user.lentBooks || [];
+        } else {
+          console.error('Error fetching user details:', response.statusText);
         }
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    };
+  
+    onMount(() => {
+      // Redirect to login if not a user
+      if ($authStore.isAdmin) {
+        navigate('/admins');
+      } else {
+        fetchUserDetails();
       }
     });
   
@@ -64,9 +67,37 @@
     };
   
     const returnBook = async (bookId) => {
-      // Implement book return functionality here
-      console.log(`Returning book with ID: ${bookId}`);
-    };
+    try {
+      const response = await fetch(`http://localhost:3002/api/v1/books/return/${bookId}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${$authStore.userToken}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Book returned successfully:', data);
+        
+        // Optionally, you can display a success message to the user
+        alert(`Book returned successfully:
+          Initial Charge: $${data.data.initialCharge}
+          Additional Charge: $${data.data.additionalCharge}
+          Total Charge: $${data.data.totalCharge}
+          Days Lended: ${data.data.days}`);
+        
+        // Refresh the list of lended books
+        fetchUserDetails();
+      } else {
+        const errorData = await response.json();
+        console.error('Error returning book:', errorData.message);
+        // Optionally, you can display an error message to the user
+      }
+    } catch (error) {
+      console.error('Error returning book:', error);
+      // Optionally, you can display an error message to the user
+    }
+  };
   
     const logout = () => {
       authStore.set({ userToken: null, isAdmin: false });

@@ -1,15 +1,50 @@
 <script>
-  import { navigate } from 'svelte-routing';
+  import authStore from "../stores/authStore";
 
   export let book;
 
   // Provide a default image if not provided
-  const defaultImage = 'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTuwIVgNXdfsXqFjytVZYcw1SN4SdtCDTmwZopiASdnffYt_K1J';
+  const defaultImage =
+    "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTuwIVgNXdfsXqFjytVZYcw1SN4SdtCDTmwZopiASdnffYt_K1J";
 
   // Function to check if an image URL is valid
   const isValidImageUrl = (url) => {
     // You can implement your own logic to check URL validity
-    return url && url.startsWith('https');
+    return url && url.startsWith("https");
+  };
+
+  const lendBook = async () => {
+    // Call the backend API to lend the book
+    try {
+      const response = await fetch(
+        `http://localhost:3002/api/v1/books/lend/${book.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${$authStore.userToken}`,
+          },
+        },
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Book lent successfully:", data);
+
+        // Show alert with book information
+        alert(`Book Lended:
+              Title: ${book.title}
+              Author: ${book.author}
+              Initial Charges: $${data.chargeDetails.initialCharge}`);
+      } else {
+        const errorData = await response.json();
+        console.error("Error lending book:", errorData.message);
+        
+      }
+    } catch (error) {
+      console.error("Error lending book:", error);
+      
+    }
   };
 </script>
 
@@ -25,11 +60,12 @@
       <p class="card-text">Author: {book.author}</p>
       <div class="price-button-container">
         <p class="card-price">${book.lendingPrice}</p>
-        <button class="btn btn-dark">Lend</button>
+        <button class="btn btn-dark" on:click={lendBook}>Lend</button>
       </div>
     </div>
   </div>
 </div>
+
 <style>
   .card {
     padding: 10px; /* Small padding */

@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { readable } from 'svelte/store';
-    import BookCard from './BookCard.svelte';
+    import BookCard from './bookCard.svelte';
   
     const fetchBooks = async () => {
       try {

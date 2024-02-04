@@ -30,7 +30,6 @@
         localStorage.setItem("userToken", data.userToken || data.adminToken);
         // Log the roles
         console.log("Role:", data.role);
-        
 
         // Update the auth store with the token and isAdmin information
         authStore.set({
