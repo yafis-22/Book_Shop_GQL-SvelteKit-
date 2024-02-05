@@ -7,11 +7,7 @@
   import BookDetails from "./bookDetails.svelte";
   import AdminDashboard from "./adminDashboard.svelte";
   import UserDashboard from "./userDashboard.svelte";
-  import Header from "./header.svelte";
-  import Footer from "./footer.svelte";
 </script>
-
-
 
 <Router>
   <Route path="/">
@@ -26,8 +22,8 @@
   <Route path="/books">
     <BookManagement />
   </Route>
-  <Route path="/books/:id">
-    <BookDetails />
+  <Route path="/books/:id" let:params>
+    <BookDetails bookId={params.id} />
   </Route>
   <Route path="/admins">
     <AdminDashboard />

@@ -49,7 +49,7 @@
 </script>
 
 <div class="col-md-3">
-  <!-- <Link to={`/books/${book.id}`}> -->
+  <Link to={`/books/${book.id}`}>
   <div class="card mb-3" style="width: 18rem;" >
     {#if isValidImageUrl(book.imageSrc)}
       <img src={book.imageSrc} class="card-img-top" alt="Book Cover" />
@@ -65,7 +65,7 @@
       </div>
     </div>
   </div>
-   <!-- </Link> -->
+   </Link>
 </div>
 
 

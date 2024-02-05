@@ -1,42 +1,120 @@
 <script>
-  import { onMount } from 'svelte';
-  //import { useParams } from 'svelte-routing';
-  
-  export let book = {};
+  import { onMount } from "svelte";
+  import { readable } from "svelte/store";
+  import Header from './header.svelte';
+  import Footer from './footer.svelte';
 
-  // Fetch book details based on the ID from the route params
-  const fetchBookDetails = async (bookId) => {
+  export let bookId;
+
+  const fetchBookDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:3002/api/v1/books/${bookId}`);
+      const response = await fetch(
+        `http://localhost:3002/api/v1/books/${bookId}`,
+      );
       const data = await response.json();
-      console.log('Fetched book details:', data);
-      return data.data || {};
+      return data || null;
     } catch (error) {
-      console.error('Error fetching book details:', error);
-      return {};
+      console.error("Error fetching book details:", error);
+      return null;
     }
   };
 
-  const { id } = useParams();
-
-  onMount(async () => {
-    // Fetch book details when the component is mounted
-    const bookDetails = await fetchBookDetails(id);
-    book = bookDetails;
+  export const bookDetails = readable(null, (set) => {
+    onMount(async () => {
+      const details = await fetchBookDetails();
+      set(details);
+    });
   });
+
+  const defaultImage =
+    "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTuwIVgNXdfsXqFjytVZYcw1SN4SdtCDTmwZopiASdnffYt_K1J";
+
+  // Function to check if an image URL is valid
+  const isValidImageUrl = (url) => {
+    return url && url.startsWith("https");
+  };
 </script>
+<Header />
 
-<div>
-  <h2>{book.title}</h2>
-  <p>Author: {book.author}</p>
-  <p>Description: {book.description}</p>
-  <p>Lending Price: ${book.lendingPrice}</p>
-  <!-- Add more details as needed -->
+{#if $bookDetails}
+  <div class="card book-card">
+    {#if isValidImageUrl($bookDetails.imageSrc)}
+      <img src={$bookDetails.imageSrc} class="card-img-top" alt="Book Cover" />
+    {:else}
+      <img src={defaultImage} class="card-img-top" alt="No Preview" />
+    {/if}
 
-  <!-- You can also include the lend button here if needed -->
-  <button class="btn btn-dark">Lend</button>
-</div>
+    <div class="card-body book-info">
+      <h4>{$bookDetails.title}</h4>
+      <p>
+        By: {$bookDetails.author}
+        
+      </p>
+      <span class="category-tag">{$bookDetails.category}</span><br>
+        <p class="mt-3">
+          Description: {$bookDetails.description}
+        </p>
+      <p>Quantity: {$bookDetails.quantity}</p>
+      <p><strong>After 9 Days you will be charged $5/day</strong></p>
+      <div class="price-button-container">
+      <h5>${$bookDetails.lendingPrice}</h5>
+      <button type="button" class="btn btn-dark">Lend</button>
+      </div>
+    </div>
+  </div>
+{:else}
+  <p>Loading...</p>
+{/if}
 
+<Footer />
 <style>
-  /* Add your styling here */
+
+.price-button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto; /* Push to the bottom of the card */
+  }
+  .book-card {
+    max-width: 400px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    border-radius: 10px;
+    padding: 10px; /* Small padding */
+  }
+
+  .book-card img {
+    margin-left: 80px;
+    max-width: 200px;
+    max-height: 250px;
+    object-fit: fill;
+  }
+
+  .book-info {
+    padding: 20px;
+    background-color: white;
+  }
+
+  .category-tag {
+    background-color: #b3b3b3;
+    color: #373737;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+ 
+
+  p {
+    color: #666;
+    font-size: 0.9em;
+  }
+
+  button {
+    cursor: pointer;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
 </style>
