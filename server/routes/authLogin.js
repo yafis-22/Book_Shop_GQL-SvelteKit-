@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
       // Generate a JWT token for regular users
       const userToken = jwt.sign({ id: user.id, username: user.username, role: 'user' }, secretKey, { expiresIn: '1h' });
 
-      res.json({ message: 'Login successful as user', userToken });
+      res.json({ message: 'Login successful as user', userToken, role: 'user' }); // Include role in the response
     } else {
       // If the user is not found in regular users, check in admin users
       const adminUser = await Admin.findOne({ where: { username } });
@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
         // Generate a JWT token for admin users
         const adminToken = jwt.sign({ id: adminUser.id, username: adminUser.username, role: 'admin' }, secretKey, { expiresIn: '1h' });
 
-        res.json({ message: 'Login successful as admin', adminToken });
+        res.json({ message: 'Login successful as admin', adminToken, role: 'admin' }); // Include role in the response
       } else {
         res.status(401).json({ message: 'Invalid username or password' });
       }
