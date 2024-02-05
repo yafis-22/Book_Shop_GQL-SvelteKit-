@@ -4,6 +4,7 @@
   import UserLogin from "./userLogin.svelte";
   import UserRegistrationForm from "./userRegistrationForm.svelte";
   import BookManagement from './bookManagement.svelte';
+  import BookDetails from "./bookDetails.svelte";
   import AdminDashboard from "./adminDashboard.svelte";
   import UserDashboard from "./userDashboard.svelte";
 </script>
@@ -20,6 +21,9 @@
   </Route>
   <Route path="/books">
     <BookManagement />
+  </Route>
+  <Route path="/books/:id">
+    <BookDetails />
   </Route>
   <Route path="/admins">
     <AdminDashboard />

@@ -79,7 +79,6 @@
         const data = await response.json();
         console.log('Book returned successfully:', data);
         
-        // Optionally, you can display a success message to the user
         alert(`Book returned successfully:
           Initial Charge: $${data.data.initialCharge}
           Additional Charge: $${data.data.additionalCharge}
@@ -91,11 +90,11 @@
       } else {
         const errorData = await response.json();
         console.error('Error returning book:', errorData.message);
-        // Optionally, you can display an error message to the user
+       
       }
     } catch (error) {
       console.error('Error returning book:', error);
-      // Optionally, you can display an error message to the user
+      
     }
   };
   
@@ -110,8 +109,7 @@
     <div class="user-details">
       <p>Email: {user.email}</p>
       <p>Phone Number: {user.phoneNumber}</p>
-      <!-- Add more user details as needed -->
-  
+      
       <button class="action-button" on:click={() => navigate('/user/update-profile')}>
         Update Profile
       </button>

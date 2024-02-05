@@ -1,5 +1,6 @@
 <script>
   import authStore from "../stores/authStore";
+  import { Link } from 'svelte-routing';
 
   export let book;
 
@@ -39,17 +40,17 @@
       } else {
         const errorData = await response.json();
         console.error("Error lending book:", errorData.message);
-        
+        alert("Please sign in to lend the book");
       }
     } catch (error) {
       console.error("Error lending book:", error);
-      
     }
   };
 </script>
 
 <div class="col-md-3">
-  <div class="card mb-3" style="width: 18rem;">
+  <!-- <Link to={`/books/${book.id}`}> -->
+  <div class="card mb-3" style="width: 18rem;" >
     {#if isValidImageUrl(book.imageSrc)}
       <img src={book.imageSrc} class="card-img-top" alt="Book Cover" />
     {:else}
@@ -64,7 +65,9 @@
       </div>
     </div>
   </div>
+   <!-- </Link> -->
 </div>
+
 
 <style>
   .card {
@@ -99,4 +102,6 @@
     align-items: center;
     margin-top: auto; /* Push to the bottom of the card */
   }
+ 
+  
 </style>
