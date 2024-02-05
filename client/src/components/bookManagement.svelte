@@ -2,6 +2,8 @@
     import { onMount } from 'svelte';
     import { readable } from 'svelte/store';
     import BookCard from './bookCard.svelte';
+    import Header from './header.svelte';
+    import Footer from './footer.svelte';
   
     const fetchBooks = async () => {
       try {
@@ -23,6 +25,7 @@
     });
 
 </script>
+<Header />
   
 <h2 class="mt-2">All Books</h2>
   
@@ -31,3 +34,5 @@
     <BookCard {book} />
   {/each}
 </div>
+
+<Footer />

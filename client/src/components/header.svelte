@@ -1,9 +1,19 @@
 <script>
-    import { Link } from "svelte-routing";
-    import "bootstrap/dist/css/bootstrap.min.css";
-    import "bootstrap-icons/font/bootstrap-icons.css";
-    
-    let userLoggedIn = false; // Set this to true if the user is logged in
+  import { Link, navigate } from "svelte-routing";
+  import authStore from "../stores/authStore";
+  import "bootstrap/dist/css/bootstrap.min.css";
+  import "bootstrap-icons/font/bootstrap-icons.css";
+
+  $: userLoggedIn = $authStore.userLoggedIn;
+  $: isAdmin = $authStore.isAdmin;
+
+  const handleIconClick = () => {
+    if (userLoggedIn) {
+      navigate(isAdmin ? "/admins" : "/users");
+    } else {
+      navigate("/login");
+    }
+  };
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-light">
@@ -36,7 +46,7 @@
         </div>
         <div class="login-register-buttons">
           {#if userLoggedIn}
-            <i class="bi bi-person"></i>
+          <i class="bi bi-person" on:click={handleIconClick}></i>
           {:else}
             <Link to="/login" class="btn btn-outline-dark" type="button">Login</Link>
             <Link to="/register" class="btn btn-outline-dark" type="button">Register</Link>

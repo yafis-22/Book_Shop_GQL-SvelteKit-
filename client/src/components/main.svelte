@@ -7,7 +7,11 @@
   import BookDetails from "./bookDetails.svelte";
   import AdminDashboard from "./adminDashboard.svelte";
   import UserDashboard from "./userDashboard.svelte";
+  import Header from "./header.svelte";
+  import Footer from "./footer.svelte";
 </script>
+
+
 
 <Router>
   <Route path="/">
@@ -32,3 +36,5 @@
     <UserDashboard />
   </Route>
 </Router>
+
+

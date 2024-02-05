@@ -3,6 +3,8 @@
   import "bootstrap-icons/font/bootstrap-icons.css";
   import authStore from "../stores/authStore";
   import { navigate } from "svelte-routing";
+  import Header from "./header.svelte";
+  import Footer from "./footer.svelte";
 
   let formData = {
     username: "",
@@ -35,6 +37,7 @@
         authStore.set({
           userToken: data.userToken || data.adminToken,
           isAdmin: data.role === "admin", // Check if the role is 'admin'
+          userLoggedIn: true,
         });
 
         // Redirect to the appropriate dashboard
@@ -59,7 +62,7 @@
     }
   };
 </script>
-
+<Header />
 <div class="container">
   <h2 class="mt-4">Sign In</h2>
 
@@ -126,7 +129,7 @@
     <p>Don't have an account? <a href="/register">Sign up</a></p>
   </div>
 </div>
-
+<Footer />
 <style>
   .container {
     max-width: 400px;

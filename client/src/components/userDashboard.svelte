@@ -2,6 +2,8 @@
     import { onMount } from 'svelte';
     import { navigate } from 'svelte-routing';
     import authStore from '../stores/authStore';
+    import Header from './header.svelte';
+    import Footer from './footer.svelte';
   
     let user = {};
     let lentBooks = [];
@@ -104,6 +106,7 @@
     };
   </script>
   
+  <Header />
   <div>
     <h1 class="dashboard-title">Welcome, {user.username}</h1>
     <div class="user-details">
@@ -140,7 +143,7 @@
       </button>
     </div>
   </div>
-  
+  <Footer />
   <style>
     .dashboard-title {
       font-size: 24px;

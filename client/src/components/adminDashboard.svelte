@@ -5,6 +5,8 @@
   import BookTable from "./bookTable.svelte";
   import UserTable from "./userTable.svelte";
   import BookAdd from "./bookAdd.svelte";
+  import Header from "./header.svelte";
+  import Footer from "./footer.svelte";
 
   let showUserModal = false;
   let showBookModal = false;
@@ -46,7 +48,7 @@
     navigate('/login');
   };
 </script>
-
+<Header />
 <div>
   <h1 class="dashboard-title">Welcome to Admin Dashboard</h1>
   <button class="action-button" on:click={openAddBookModal}>
@@ -90,7 +92,7 @@
     </div>
   {/if}
 </div>
-
+<Footer />
 <style>
   /* Admin Dashboard styles */
   .dashboard-title {
