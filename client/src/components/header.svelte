@@ -3,7 +3,7 @@
   import authStore from "../stores/authStore";
   import "bootstrap/dist/css/bootstrap.min.css";
   import "bootstrap-icons/font/bootstrap-icons.css";
-
+  let expanded = false;
   $: userLoggedIn = $authStore.userLoggedIn;
   $: isAdmin = $authStore.isAdmin;
 
@@ -17,44 +17,43 @@
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container-fluid">
-      <Link to="/" class="navbar-brand">BookLender</Link>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <Link to="/" class="nav-link">Home</Link>
-          </li>
-          <li class="nav-item">
-            <Link to="/books" class="nav-link">Books</Link>
-          </li>
-          <li class="nav-item">
-            <Link to="/blog" class="nav-link">Blog</Link>
-          </li>
-          <li class="nav-item">
-            <Link to="/about" class="nav-link">About</Link>
-          </li>
-          <li class="nav-item">
-            <Link to="/contact" class="nav-link">Contact</Link>
-          </li>
-        </ul>
-        <div class="search-bar">
-          <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-        </div>
-        <div class="login-register-buttons">
-          {#if userLoggedIn}
+  <div class="container-fluid">
+    <Link to="/" class="navbar-brand">BookLender</Link>
+    <button class="navbar-toggler" type="button" on:click={() => expanded = !expanded}>
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class={expanded ? "navbar-collapse show" : "navbar-collapse"} id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <Link to="/" class="nav-link">Home</Link>
+        </li>
+        <li class="nav-item">
+          <Link to="/books" class="nav-link">Books</Link>
+        </li>
+        <li class="nav-item">
+          <Link to="/blog" class="nav-link">Blog</Link>
+        </li>
+        <li class="nav-item">
+          <Link to="/about" class="nav-link">About</Link>
+        </li>
+        <li class="nav-item">
+          <Link to="/contact" class="nav-link">Contact</Link>
+        </li>
+      </ul>
+      <div class="search-bar">
+        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+      </div>
+      <div class="login-register-buttons">
+        {#if userLoggedIn}
           <i class="bi bi-person" on:click={handleIconClick}></i>
-          {:else}
-            <Link to="/login" class="btn btn-outline-dark" type="button">Login</Link>
-            <Link to="/register" class="btn btn-outline-dark" type="button">Register</Link>
-          {/if}
-        </div>
+        {:else}
+          <Link to="/login" class="btn btn-outline-dark" type="button">Login</Link>
+          <Link to="/register" class="btn btn-outline-dark" type="button">Register</Link>
+        {/if}
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 
 <style>
     .navbar {
@@ -85,4 +84,12 @@
         color: #343a40;
         margin-right: 10px;
     }
+
+    .navbar-collapse {
+    display: none;
+  }
+
+  .navbar-collapse.show {
+    display: block;
+  }
 </style>
