@@ -1,6 +1,7 @@
 <script>
   import { Link, navigate } from "svelte-routing";
   import authStore from "../stores/authStore";
+  import SearchBar from "./searchBar.svelte"
   import "bootstrap/dist/css/bootstrap.min.css";
   import "bootstrap-icons/font/bootstrap-icons.css";
   let expanded = false;
@@ -41,7 +42,7 @@
         </li>
       </ul>
       <div class="search-bar">
-        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+        <SearchBar />
       </div>
       <div class="login-register-buttons">
         {#if userLoggedIn}

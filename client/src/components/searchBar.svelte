@@ -18,9 +18,9 @@
     };
   </script>
   
-  <div>
-    <input bind:value={searchQuery} placeholder="Search for books" />
-    <button on:click={searchBooks}>Search</button>
+  <div class="search-container">
+    <input class="form-control" type="search" bind:value={searchQuery} placeholder="Search for books" aria-label="Search" />
+    <i class="bi bi-search search-icon" on:click={searchBooks}></i>
   
     {#if $searchResults.length > 0}
       <ul>
@@ -37,8 +37,18 @@
           </Link>
         {/each}
       </ul>
-    {:else}
-      <p>No results found.</p>
     {/if}
   </div>
+
+  <style>
+    .search-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .search-icon {
+    cursor: pointer;
+    margin-left: 8px;
+  }
+  </style>
   
