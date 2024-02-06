@@ -3,6 +3,7 @@
   import { get } from "svelte/store";
   import { navigate } from "svelte-routing";
   import authStore from "../stores/authStore";
+  import BookUpdate from "./bookUpdate.svelte";
 
   let books = [];
   let searchQuery = "";
@@ -24,6 +25,8 @@
   ];
 
   let successMessage = "";
+  let updateFormVisible = false;
+  let updatedBook = {};
 
   const fetchBooks = async () => {
     try {
@@ -88,10 +91,21 @@
     }
   };
 
-  const handleUpdate = (id) => {
-    // Implement the update functionality here
-    console.log(`Updating book with ID: ${id}`);
+  const handleUpdate = (book) => {
+    updateFormVisible = true;
+    updatedBook = { ...book };
   };
+
+  const handleUpdateSuccess = () => {
+    fetchBooks(); // Refresh the book list after successful update
+    successMessage = 'Book updated successfully';
+    updateFormVisible = false;
+  };
+
+  const handleUpdateCancel = () => {
+    updateFormVisible = false;
+  };
+
 
   const handleRestore = async (bookId) => {
     try {
@@ -128,14 +142,23 @@
     </div>
   {/if}
 
-  <div class="mb-3">
-    <input
-      type="text"
-      bind:value={searchQuery}
-      placeholder="Search by title, author, category..."
-    />
-    <button on:click={handleSearch}>Search</button>
-  </div>
+  {#if updateFormVisible}
+  <BookUpdate
+  bind:book={updatedBook}
+  onSuccess={handleUpdateSuccess}
+  onCancel={handleUpdateCancel}
+/>
+
+  {:else}
+    <!-- Book List -->
+    <div class="mb-3">
+      <input
+        type="text"
+        bind:value={searchQuery}
+        placeholder="Search by title, author, category..."
+      />
+      <button on:click={handleSearch}>Search</button>
+    </div>
 
   <div class="mb-3">
     <label for="sortField">Sort by:</label>
@@ -186,7 +209,7 @@
               <button
                 type="button"
                 class="btn btn-success"
-                on:click={() => handleUpdate(book.id)}>Update</button
+                on:click={() => handleUpdate(book)}>Update</button
               >
               <button
                 type="button"
@@ -228,6 +251,7 @@
     </div>
   {:else}
     <p>No books available.</p>
+  {/if}
   {/if}
 </div>
 
