@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { readable } from "svelte/store";
+  import authStore from "../stores/authStore";
   import Header from './header.svelte';
   import Footer from './footer.svelte';
 
@@ -25,6 +26,39 @@
       set(details);
     });
   });
+
+  const lendBook = async () => {
+    // Call the backend API to lend the book
+    try {
+      const response = await fetch(
+        `http://localhost:3002/api/v1/books/lend/${bookId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${$authStore.userToken}`,
+          },
+        },
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Book lent successfully:", data);
+
+        // Show alert with book information
+        alert(`Book Lended:
+              Title: ${$bookDetails.title}
+              Author: ${$bookDetails.author}
+              Initial Charges: $${data.chargeDetails.initialCharge}`);
+      } else {
+        const errorData = await response.json();
+        console.error("Error lending book:", errorData.message);
+        alert("Please sign in to lend the book");
+      }
+    } catch (error) {
+      console.error("Error lending book:", error);
+    }
+  };
 
   const defaultImage =
     "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTuwIVgNXdfsXqFjytVZYcw1SN4SdtCDTmwZopiASdnffYt_K1J";
@@ -58,7 +92,7 @@
       <p><strong>After 9 Days you will be charged $5/day</strong></p>
       <div class="price-button-container">
       <h5>${$bookDetails.lendingPrice}</h5>
-      <button type="button" class="btn btn-dark">Lend</button>
+      <button type="button" class="btn btn-dark" on:click={lendBook}>Lend</button>
       </div>
     </div>
   </div>
