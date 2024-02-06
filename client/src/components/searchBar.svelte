@@ -51,7 +51,7 @@
   {#if $searchResults.length > 0 && $isResultsVisible}
     <ul class="search-results">
       {#each $searchResults as book (book.id)}
-        <Link to={`/books/${book.id}`} class = "link">
+        <Link to={`/books/${book.id}`} class="text-decoration-none">
           <div class="card-body">
             <h5 class="card-title">{book.title}</h5>
             <p class="card-text">Author: {book.author}</p>
@@ -66,6 +66,10 @@
 </div>
 
 <style>
+  .link {
+    color: inherit; /* Use the parent color */
+    text-decoration: none; /* Remove underline */
+  }
   .search-container {
     display: flex;
     align-items: center;
@@ -90,12 +94,8 @@
   }
 
   .card-body {
+    color: #5a5a5a;
     border: 1px solid #ddd;
     padding: 10px;
-  }
-
-  .no-results-message {
-    margin: 10px 0;
-    color: #777;
   }
 </style>

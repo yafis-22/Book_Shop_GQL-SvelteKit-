@@ -1,41 +1,81 @@
-<!-- App.svelte -->
-
 <script>
-    // Export the book data to be used in the component
-    export let books = [
-      { title: "The Art of Racing in the Rain", author: "Garth Stein", price: 17.00 },
-      { title: "Wings of Shadow", author: "Nicki Pau Preto", price: 15.00 },
-      { title: "The New Adolescence", author: "Christine Carter, Ph.D", price: 12.60 },
-      { title: "The Precipice", author: "Toby Ord", price: 19.00 },
-      { title: "The Clay Lion (The Clay Lion Series, Vol 1)", author: "Amelie Jahn", price: 17.00 },
-      { title: "The Clay Lion (The Clay Lion Series, Vol 1)", author: "Amelie Jahn", price: 17.00 },
-    ];
-  </script>
-  
-  <div class="container">
-    <div class="row row-cols-2 g-4">
-      {#each books as { title, author, price }}
-        <div class="col-md-2">
-          <div class="card">
-            <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTuwIVgNXdfsXqFjytVZYcw1SN4SdtCDTmwZopiASdnffYt_K1J" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">{title}</h5>
-              <p class="card-text">By {author}</p>
-              <div class="price-button-container">
-                <p class="card-price">${price}</p>
-                <button class="btn btn-dark">Lend</button>
-              </div>
+  import { onMount } from "svelte";
+  import { writable } from "svelte/store";
+  import authStore from "../stores/authStore";
+
+  let books = writable([]);
+
+  onMount(async () => {
+    // Fetch books from the backend
+    const response = await fetch("http://localhost:3002/api/v1/books");
+    const data = await response.json();
+    books.set(data.data.slice(0, 6)); // Get only the first 6 books
+  });
+
+  const lendBook = async (bookId, title, author, lendingPrice) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3002/api/v1/books/lend/${bookId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${$authStore.userToken}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Book lent successfully:", data);
+
+        alert(`Book Lended:
+            Title: ${title}
+            Author: ${author}
+            Initial Charges: $${data.chargeDetails.initialCharge}`);
+      } else {
+        const errorData = await response.json();
+        console.error("Error lending book:", errorData.message);
+
+        // Check for the specific error message indicating that the book is already lent
+        if (errorData.message === 'User has already lent a book with the same ID') {
+          alert('Book already lent');
+        } else {
+          console.error("Error lending book:", errorData.message);
+          alert("Please sign in to lend the book");
+        }
+      }
+    } catch (error) {
+      console.error("Error lending book:", error);
+    }
+  };
+</script>
+
+<div class="container">
+  <div class="row row-cols-2 g-4">
+    {#each $books as { id, title, author, lendingPrice }}
+      <div class="col-md-2">
+        <div class="card">
+          <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTuwIVgNXdfsXqFjytVZYcw1SN4SdtCDTmwZopiASdnffYt_K1J" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{title}</h5>
+            <p class="card-text">By {author}</p>
+            <div class="price-button-container">
+              <p class="card-price">${lendingPrice}</p>
+              <button class="btn btn-dark" on:click={() => lendBook(id, title, author, lendingPrice)}>Lend</button>
             </div>
           </div>
         </div>
-      {/each}
-    </div>
+      </div>
+    {/each}
   </div>
+</div>
 
   <style>
     .card {
-      height: 100%;
-      padding: 10px; /* Small padding */
+      height: 95%;
+      width: 180px;
+      padding: 10px; 
     }
   
     .card-body {
@@ -49,7 +89,7 @@
     }
   
     .card-img-top {
-      max-height: 100%; /* Adjust as needed */
+      height: 210px; 
       object-fit: contain; /* Ensure the whole image fits */
     }
   
