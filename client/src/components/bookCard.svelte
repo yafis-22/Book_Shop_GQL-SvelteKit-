@@ -15,37 +15,43 @@
   };
 
   const lendBook = async () => {
-    // Call the backend API to lend the book
-    try {
-      const response = await fetch(
-        `http://localhost:3002/api/v1/books/lend/${book.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${$authStore.userToken}`,
-          },
+  try {
+    const response = await fetch(
+      `http://localhost:3002/api/v1/books/lend/${book.id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${$authStore.userToken}`,
         },
-      );
+      },
+    );
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Book lent successfully:", data);
+    if (response.ok) {
+      const data = await response.json();
+      console.log("Book lent successfully:", data);
 
-        // Show alert with book information
-        alert(`Book Lended:
-              Title: ${book.title}
-              Author: ${book.author}
-              Initial Charges: $${data.chargeDetails.initialCharge}`);
+      // Show alert with book information
+      alert(`Book Lended:
+            Title: ${book.title}
+            Author: ${book.author}
+            Initial Charges: $${data.chargeDetails.initialCharge}`);
+    } else {
+      const errorData = await response.json();
+
+      // Check for the specific error message indicating that the book is already lent
+      if (errorData.message === 'User has already lent a book with the same ID') {
+        alert('Book already lent');
       } else {
-        const errorData = await response.json();
         console.error("Error lending book:", errorData.message);
         alert("Please sign in to lend the book");
       }
-    } catch (error) {
-      console.error("Error lending book:", error);
     }
-  };
+  } catch (error) {
+    console.error("Error lending book:", error);
+  }
+};
+
 </script>
 
 <div class="col-md-3">

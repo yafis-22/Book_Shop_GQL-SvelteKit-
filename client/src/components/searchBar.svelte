@@ -1,5 +1,4 @@
 <script>
-    import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import { Link } from 'svelte-routing';
   
@@ -48,7 +47,7 @@
 
   .search-icon {
     cursor: pointer;
-    margin-left: 8px;
+    margin-left: -20px;
   }
   </style>
   
