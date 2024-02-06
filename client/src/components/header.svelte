@@ -73,10 +73,6 @@
         margin-left: auto; /* Move search bar to the right */
     }
 
-    .form-control {
-        color: #343a40;
-    }
-
     .login-register-buttons {
         margin-left: 10px; /* Add some space between search bar and buttons */
     }

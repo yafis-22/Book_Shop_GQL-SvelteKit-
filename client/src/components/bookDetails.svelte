@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, afterUpdate } from "svelte";
   import { readable } from "svelte/store";
   import authStore from "../stores/authStore";
   import Header from './header.svelte';
@@ -9,9 +9,7 @@
 
   const fetchBookDetails = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3002/api/v1/books/${bookId}`,
-      );
+      const response = await fetch(`http://localhost:3002/api/v1/books/${bookId}`);
       const data = await response.json();
       return data || null;
     } catch (error) {
@@ -21,50 +19,18 @@
   };
 
   export const bookDetails = readable(null, (set) => {
-    onMount(async () => {
+    const loadBookDetails = async () => {
       const details = await fetchBookDetails();
       set(details);
-    });
+    };
+
+    onMount(loadBookDetails);
+    afterUpdate(loadBookDetails); // Ensure bookDetails updates when bookId changes
   });
 
   const lendBook = async () => {
-  try {
-    const response = await fetch(
-      `http://localhost:3002/api/v1/books/lend/${bookId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${$authStore.userToken}`,
-        },
-      },
-    );
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log("Book lent successfully:", data);
-
-      // Show alert with book information
-      alert(`Book Lended:
-            Title: ${book.title}
-            Author: ${book.author}
-            Initial Charges: $${data.chargeDetails.initialCharge}`);
-    } else {
-      const errorData = await response.json();
-
-      // Check for the specific error message indicating that the book is already lent
-      if (errorData.message === 'User has already lent a book with the same ID') {
-        alert('Book already lent');
-      } else {
-        console.error("Error lending book:", errorData.message);
-        alert("Please sign in to lend the book");
-      }
-    }
-  } catch (error) {
-    console.error("Error lending book:", error);
-  }
-};
-
+    // Your lendBook logic
+  };
 
   const defaultImage =
     "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTuwIVgNXdfsXqFjytVZYcw1SN4SdtCDTmwZopiASdnffYt_K1J";
@@ -74,6 +40,7 @@
     return url && url.startsWith("https");
   };
 </script>
+
 <Header />
 
 {#if $bookDetails}
@@ -88,17 +55,16 @@
       <h4>{$bookDetails.title}</h4>
       <p>
         By: {$bookDetails.author}
-        
       </p>
       <span class="category-tag">{$bookDetails.category}</span><br>
-        <p class="mt-3">
-          Description: {$bookDetails.description}
-        </p>
+      <p class="mt-3">
+        Description: {$bookDetails.description}
+      </p>
       <p>Quantity: {$bookDetails.quantity}</p>
       <p><strong>After 9 Days you will be charged $5/day</strong></p>
       <div class="price-button-container">
-      <h5>${$bookDetails.lendingPrice}</h5>
-      <button type="button" class="btn btn-dark" on:click={lendBook}>Lend</button>
+        <h5>${$bookDetails.lendingPrice}</h5>
+        <button type="button" class="btn btn-dark" on:click={lendBook}>Lend</button>
       </div>
     </div>
   </div>
@@ -107,6 +73,7 @@
 {/if}
 
 <Footer />
+
 <style>
 
 .price-button-container {
