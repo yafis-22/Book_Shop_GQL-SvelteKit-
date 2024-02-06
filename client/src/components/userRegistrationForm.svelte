@@ -1,5 +1,7 @@
 <script>
     import { navigate } from "svelte-routing";
+    import Header from "./header.svelte";
+    import Footer from "./footer.svelte";
     import "bootstrap/dist/css/bootstrap.min.css";
 
     let formData = {
@@ -39,6 +41,7 @@
         }
     };
 </script>
+<Header />
   
   <div class="container">
     <h2>User Registration</h2>
@@ -87,7 +90,8 @@
       <button type="button" class="btn btn-dark" on:click={registerUser}>Register</button>
       </div>
     </form>
-  </div> 
+  </div>
+  <Footer /> 
 
   <style>
     .container {
