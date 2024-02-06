@@ -1,5 +1,5 @@
 <script>
-  import { writable, onDestroy } from "svelte/store";
+  import { writable } from "svelte/store";
   import { onMount } from "svelte";
   import { Link } from "svelte-routing";
 
@@ -32,9 +32,9 @@
     document.addEventListener("click", handleDocumentClick);
 
     // Cleanup the event listener when the component is destroyed
-    onDestroy(() => {
+    return () => {
       document.removeEventListener("click", handleDocumentClick);
-    });
+    };
   });
 </script>
 
@@ -51,7 +51,7 @@
   {#if $searchResults.length > 0 && $isResultsVisible}
     <ul class="search-results">
       {#each $searchResults as book (book.id)}
-        <Link to={`/books/${book.id}`}>
+        <Link to={`/books/${book.id}`} class = "link">
           <div class="card-body">
             <h5 class="card-title">{book.title}</h5>
             <p class="card-text">Author: {book.author}</p>
