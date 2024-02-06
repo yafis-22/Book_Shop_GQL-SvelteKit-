@@ -1,22 +1,41 @@
 <script>
-  import { writable } from "svelte/store";
+  import { writable, onDestroy } from "svelte/store";
+  import { onMount } from "svelte";
   import { Link } from "svelte-routing";
 
   let searchQuery = "";
-
   const searchResults = writable([]);
+  const isResultsVisible = writable(false);
 
   const searchBooks = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3002/api/v1/books/?search=${searchQuery}`,
+        `http://localhost:3002/api/v1/books/?search=${searchQuery}`
       );
       const data = await response.json();
       searchResults.set(data.data);
+      isResultsVisible.set(true);
     } catch (error) {
       console.error("Error searching books:", error);
     }
   };
+
+  const handleDocumentClick = (event) => {
+    const isClickedInsideSearchResults = event.target.closest(".search-results");
+
+    if (!isClickedInsideSearchResults) {
+      isResultsVisible.set(false);
+    }
+  };
+
+  onMount(() => {
+    document.addEventListener("click", handleDocumentClick);
+
+    // Cleanup the event listener when the component is destroyed
+    onDestroy(() => {
+      document.removeEventListener("click", handleDocumentClick);
+    });
+  });
 </script>
 
 <div class="search-container">
@@ -29,7 +48,7 @@
   />
   <i class="bi bi-search search-icon" on:click={searchBooks}></i>
 
-  {#if $searchResults.length > 0}
+  {#if $searchResults.length > 0 && $isResultsVisible}
     <ul class="search-results">
       {#each $searchResults as book (book.id)}
         <Link to={`/books/${book.id}`}>
@@ -55,7 +74,7 @@
 
   .search-icon {
     cursor: pointer;
-    margin-left: -20px;
+    margin-left: -16px;
   }
 
   .search-results {
