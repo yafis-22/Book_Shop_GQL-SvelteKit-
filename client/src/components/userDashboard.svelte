@@ -2,11 +2,14 @@
     import { onMount } from 'svelte';
     import { navigate } from 'svelte-routing';
     import authStore from '../stores/authStore';
+    import UserUpdate from './userUpdate.svelte';
     import Header from './header.svelte';
     import Footer from './footer.svelte';
   
     let user = {};
     let lentBooks = [];
+    let isUpdating = false;
+    let successMessage = "";
   
     const fetchUserDetails = async () => {
       try {
@@ -29,14 +32,7 @@
       }
     };
   
-    onMount(() => {
-      // Redirect to login if not a user
-      if ($authStore.isAdmin) {
-        navigate('/admins');
-      } else {
-        fetchUserDetails();
-      }
-    });
+    onMount(fetchUserDetails);
   
     const deleteProfile = async () => {
       const confirmDelete = confirm('Are you sure you want to delete your profile?');
@@ -63,6 +59,24 @@
         }
       }
     };
+
+    const updateProfile = () => {
+    // Open the modal for updating user details
+    isUpdating = true;
+  };
+  const cancelUpdate = () => {
+    // Close the modal
+    isUpdating = false;
+  };
+  const handleUpdate = (updatedUser) => {
+    fetchUserDetails();
+    successMessage = 'User updated successfully';
+    isUpdating = false;
+
+    setTimeout(() => {
+      successMessage = "";
+    }, 3000);
+  };
   
     const lendBook = async () => {
       navigate('/books');
@@ -108,12 +122,22 @@
   
   <Header />
   <div>
+    {#if successMessage}
+    <div class="notification">
+      <p class="success-message">{successMessage}</p>
+    </div>
+  {/if}
+    <!-- Modal for updating user details -->
+  {#if isUpdating}
+  <UserUpdate user={user} onUpdate={handleUpdate} onCancel={cancelUpdate} />
+{:else}
+
     <h1 class="dashboard-title">Welcome, {user.username}</h1>
     <div class="user-details">
       <p>Email: {user.email}</p>
       <p>Phone Number: {user.phoneNumber}</p>
       
-      <button class="action-button" on:click={() => navigate('/user/update-profile')}>
+      <button class="action-button" on:click={updateProfile}>
         Update Profile
       </button>
       <button class="action-button" on:click={deleteProfile}>
@@ -142,6 +166,7 @@
         Lend a Book
       </button>
     </div>
+  {/if}
   </div>
   <Footer />
   <style>
@@ -164,5 +189,20 @@
     .lend-return-section {
       margin-top: 20px;
     }
+    .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+  }
+
+  .success-message {
+    font-weight: bold;
+  }
   </style>
   

@@ -41,7 +41,7 @@
         });
 
         // Redirect to the appropriate dashboard
-        navigate(isAdmin ? "/admins" : "/users");
+        navigate(isAdmin ? "/admins" : "/users/me");
       } else {
         const errorData = await response.json();
         errorMessage = errorData.message || "Invalid username or password";

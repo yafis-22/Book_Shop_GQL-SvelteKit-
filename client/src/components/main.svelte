@@ -28,7 +28,7 @@
   <Route path="/admins">
     <AdminDashboard />
   </Route>
-  <Route path="/users">
+  <Route path="/users/me">
     <UserDashboard />
   </Route>
 </Router>
