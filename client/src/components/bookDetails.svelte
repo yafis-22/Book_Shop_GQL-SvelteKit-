@@ -47,8 +47,8 @@
 
       // Show alert with book information
       alert(`Book Lended:
-            Title: ${book.title}
-            Author: ${book.author}
+            Title: ${$bookDetails.title}
+            Author: ${$bookDetails.author}
             Initial Charges: $${data.chargeDetails.initialCharge}`);
     } else {
       const errorData = await response.json();
