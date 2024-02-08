@@ -2,7 +2,7 @@
   import "bootstrap/dist/css/bootstrap.min.css";
   import "bootstrap-icons/font/bootstrap-icons.css";
   import authStore from "../stores/authStore";
-  import { navigate } from "svelte-routing";
+  import { Link, navigate } from "svelte-routing";
   import Header from "./header.svelte";
   import Footer from "./footer.svelte";
 
@@ -126,8 +126,9 @@
   </div>
   <hr />
   <div class="text-center">
-    <p>Don't have an account? <a href="/register">Sign up</a></p>
-  </div>
+    <p class="account">Don't have an account? <Link to="/register" class="text-dark">Sign up</Link></p>
+</div>
+
 </div>
 <Footer />
 <style>
@@ -161,7 +162,10 @@
     color: #5a5a5a;
   }
 
-  a {
+  .account {
     color: #555555;
-  }
+}
+a {
+    color: #555555;
+}
 </style>
