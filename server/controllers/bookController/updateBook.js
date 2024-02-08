@@ -9,7 +9,7 @@ export const updateBook = async (req, res) => {
 
     if (existingBook) {
       // Update the book details from the request body
-      const { title, description, lendingPrice, quantity, author, category } = req.body;
+      const { title, description, lendingPrice, quantity, author, category, imageSrc } = req.body;
 
     // Check if req.body is empty
     if (Object.keys(req.body).length === 0) {
@@ -23,6 +23,7 @@ export const updateBook = async (req, res) => {
         quantity,
         author,
         category,
+        imageSrc
       });
 
       res.json({ message: 'Book updated successfully', data: existingBook });
