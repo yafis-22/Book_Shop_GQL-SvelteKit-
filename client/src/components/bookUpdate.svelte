@@ -67,6 +67,9 @@
   
       <label for="lendingPrice">Lending Price:</label>
       <input type="number" bind:value={updatedBook.lendingPrice} />
+      
+      <label for="imageSrc">Image Source:</label>
+      <input type="text" bind:value={updatedBook.imageSrc} />
   
       <button type="submit">Update</button>
       <button type="button" on:click={handleUpdateCancel}>Cancel</button>

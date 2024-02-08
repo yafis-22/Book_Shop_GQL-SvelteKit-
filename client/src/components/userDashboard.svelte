@@ -35,30 +35,34 @@
     onMount(fetchUserDetails);
   
     const deleteProfile = async () => {
-      const confirmDelete = confirm('Are you sure you want to delete your profile?');
-  
-      if (confirmDelete) {
-        // Perform delete operation
-        try {
-          const response = await fetch('http://localhost:3002/api/v1/users/me', {
-            method: 'DELETE',
-            headers: {
-              Authorization: `Bearer ${$authStore.userToken}`,
-            },
-          });
-  
-          if (response.ok) {
-            // Logout user and redirect to login
-            authStore.set({ userToken: null, isAdmin: false });
-            navigate('/login');
-          } else {
-            console.error('Error deleting user profile:', response.statusText);
-          }
-        } catch (error) {
-          console.error('Error deleting user profile:', error);
+  const confirmDelete = confirm('Are you sure you want to delete your profile?');
+
+  if (confirmDelete) {
+    // Check if the user has lended books
+    if (lentBooks.length > 0) {
+      alert('Clear your lended books before deleting your profile.');
+    } else {
+      try {
+        const response = await fetch('http://localhost:3002/api/v1/users/me', {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${$authStore.userToken}`,
+          },
+        });
+
+        if (response.ok) {
+          // Logout user and redirect to login
+          authStore.set({ userToken: null, isAdmin: false });
+          navigate('/login');
+        } else {
+          console.error('Error deleting user profile:', response.statusText);
         }
+      } catch (error) {
+        console.error('Error deleting user profile:', error);
       }
-    };
+    }
+  }
+};
 
     const updateProfile = () => {
     // Open the modal for updating user details
