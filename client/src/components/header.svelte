@@ -32,7 +32,7 @@
           <Link to="/books" class="nav-link">Books</Link>
         </li>
         <li class="nav-item">
-          <Link to="/blog" class="nav-link">Blog</Link>
+          <Link to="/categories" class="nav-link">Categories</Link>
         </li>
         <li class="nav-item">
           <Link to="/about" class="nav-link">About</Link>

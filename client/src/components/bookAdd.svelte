@@ -87,7 +87,12 @@
   
       <div class="mb-3">
         <label for="category" class="form-label">Category</label>
-        <input type="text" class="form-control" id="category" bind:value={formData.category} required />
+        <select class="form-select" id="category" bind:value={formData.category} required>
+          <option value="" disabled>Select a category</option>
+          {#each ['Romance', 'Science', 'Adventure', 'Fantasy', 'Friction', 'History', 'Literature', 'Mystery'] as category}
+            <option value={category}>{category}</option>
+          {/each}
+        </select>
       </div>
   
       <div class="mb-3">

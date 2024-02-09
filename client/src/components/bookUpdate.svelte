@@ -62,8 +62,13 @@
       <label for="author">Author:</label>
       <input type="text" bind:value={updatedBook.author} />
   
-      <label for="category">Category:</label>
-      <input type="text" bind:value={updatedBook.category} />
+      <label for="category" class="form-label">Category</label>
+        <select class="form-select" id="category" bind:value={updatedBook.category} required>
+          <option value="" disabled>Select a category</option>
+          {#each ['Romance', 'Science', 'Adventure', 'Fantasy', 'Friction', 'History', 'Literature', 'Mystery'] as category}
+            <option value={category}>{category}</option>
+          {/each}
+        </select>
   
       <label for="lendingPrice">Lending Price:</label>
       <input type="number" bind:value={updatedBook.lendingPrice} />
