@@ -11,7 +11,7 @@
   // Function to check if an image URL is valid
   const isValidImageUrl = (url) => {
     // You can implement your own logic to check URL validity
-    return url && url.startsWith("https");
+    return url && url.startsWith("http");
   };
 
   const lendBook = async () => {
