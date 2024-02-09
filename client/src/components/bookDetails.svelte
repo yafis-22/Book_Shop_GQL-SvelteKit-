@@ -71,7 +71,7 @@
 
   // Function to check if an image URL is valid
   const isValidImageUrl = (url) => {
-    return url && url.startsWith("https");
+    return url && url.startsWith("http");
   };
 </script>
 

@@ -56,44 +56,53 @@
 
 <div class="col-md-3">
   <Link to={`/books/${book.id}`} class="text-decoration-none">
-  <div class="card mb-3" style="width: 18rem;" >
-    {#if isValidImageUrl(book.imageSrc)}
-      <img src={book.imageSrc} class="card-img-top" alt="Book Cover" />
-    {:else}
-      <img src={defaultImage} class="card-img-top" alt="No Preview" />
-    {/if}
-    <div class="card-body">
-      <h5 class="card-title">{book.title}</h5>
-      <p class="card-text">Author: {book.author}</p>
-      <div class="price-button-container">
-        <p class="card-price">${book.lendingPrice}</p>
-        <button class="btn btn-dark" on:click={lendBook}>Lend</button>
+    <div class="card mb-3" style="width: 18rem; height: 400px;"> <!-- Set a fixed height -->
+      {#if isValidImageUrl(book.imageSrc)}
+        <div class="image-container" style="height: 250px;"> <!-- Set a fixed height for the image container -->
+          <img src={book.imageSrc} class="card-img-top" alt="Book Cover" />
+        </div>
+      {:else}
+        <div class="image-container" style="height: 250px;"> <!-- Set a fixed height for the image container -->
+          <img src={defaultImage} class="card-img-top" alt="No Preview" />
+        </div>
+      {/if}
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title">{book.title}</h5>
+        <p class="card-text">Author: {book.author}</p>
+        <div class="price-button-container mt-auto"> <!-- Use mt-auto to push to the bottom of the card -->
+          <p class="card-price">${book.lendingPrice}</p>
+          <button class="btn btn-dark" on:click={lendBook}>Lend</button>
+        </div>
       </div>
     </div>
-  </div>
-   </Link>
+  </Link>
 </div>
-
 
 <style>
   .card {
     padding: 10px; /* Small padding */
     margin: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .image-container {
+    overflow: hidden; /* Hide any overflow if the image is larger */
+    height: 100%; /* Take up the full height of the container */
+  }
+
+  .card-img-top {
+    object-fit: fill; /* Ensure the whole image covers the container */
+    width: 100%; /* Ensure the image takes the full width of the container */
+    height: 100%; /* Ensure the image takes the full height of the container */
   }
 
   .card-body {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    flex-grow: 1;
   }
 
   .card-title {
     font-size: 15px;
-  }
-
-  .card-img-top {
-    max-height: 250px; /* Adjust as needed */
-    object-fit: fill; /* Ensure the whole image fits */
   }
 
   .card-text {
@@ -106,8 +115,5 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: auto; /* Push to the bottom of the card */
   }
- 
-  
 </style>

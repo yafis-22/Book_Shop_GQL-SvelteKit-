@@ -166,24 +166,41 @@
 
         <div class="pagination">
             {#if currentPage > 1}
-                <button on:click={() => handlePageChange(currentPage - 1)}
-                    >&lt; Prev</button
-                >
+              <button on:click={() => handlePageChange(currentPage - 1)}>&lt; Prev</button>
             {/if}
-
-            {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-                <button
-                    on:click={() => handlePageChange(page)}
-                    class:selected={page === currentPage}>{page}</button
-                >
-            {/each}
-
+          
+            {#if totalPages <= 7}
+              {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
+                <button on:click={() => handlePageChange(page)} class:selected={page === currentPage}>{page}</button>
+              {/each}
+            {:else}
+              {#if currentPage <= 4}
+                {#each Array.from({ length: 5 }, (_, i) => i + 1) as page}
+                  <button on:click={() => handlePageChange(page)} class:selected={page === currentPage}>{page}</button>
+                {/each}
+                <span>...</span>
+                <button on:click={() => handlePageChange(totalPages)}>{totalPages}</button>
+              {:else if currentPage > totalPages - 4}
+                <button on:click={() => handlePageChange(1)}>1</button>
+                <span>...</span>
+                {#each Array.from({ length: 5 }, (_, i) => totalPages - 4 + i) as page}
+                  <button on:click={() => handlePageChange(page)} class:selected={page === currentPage}>{page}</button>
+                {/each}
+              {:else}
+                <button on:click={() => handlePageChange(1)}>1</button>
+                <span>...</span>
+                {#each Array.from({ length: 3 }, (_, i) => currentPage - 1 + i) as page}
+                  <button on:click={() => handlePageChange(page)} class:selected={page === currentPage}>{page}</button>
+                {/each}
+                <span>...</span>
+                <button on:click={() => handlePageChange(totalPages)}>{totalPages}</button>
+              {/if}
+            {/if}
+          
             {#if currentPage < totalPages}
-                <button on:click={() => handlePageChange(currentPage + 1)}
-                    >Next &gt;</button
-                >
+              <button on:click={() => handlePageChange(currentPage + 1)}>Next &gt;</button>
             {/if}
-        </div>
+          </div>
     {:else}
         <p>No users available.</p>
     {/if}
