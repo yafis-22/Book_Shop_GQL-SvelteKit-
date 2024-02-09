@@ -31,6 +31,9 @@ export const Book = sequelize.define('Book', {
   category: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      isIn: [['Romance', 'Science', 'Adventure', 'Fantasy', 'Friction', 'History', 'Literature', 'Mystery']],
+    },
   },
   imageSrc: {
     type: DataTypes.STRING,
