@@ -7,6 +7,7 @@
   import BookDetails from "./bookDetails.svelte";
   import AdminDashboard from "./adminDashboard.svelte";
   import UserDashboard from "./userDashboard.svelte";
+    import BookCategories from "./bookCategories.svelte";
 </script>
 
 <Router>
@@ -24,6 +25,9 @@
   </Route>
   <Route path="/books/:id" let:params>
     <BookDetails bookId={params.id} />
+  </Route>
+  <Route path="/books/category/:category" let:params>
+    <BookCategories category={params.category} />
   </Route>
   <Route path="/admins">
     <AdminDashboard />

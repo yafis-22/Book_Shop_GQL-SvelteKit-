@@ -5,9 +5,15 @@
   import "bootstrap/dist/css/bootstrap.min.css";
   import "bootstrap-icons/font/bootstrap-icons.css";
   let expanded = false;
+  let showCategories = false;
   $: userLoggedIn = $authStore.userLoggedIn;
   $: isAdmin = $authStore.isAdmin;
+  let selectedCategory = null;
 
+  const handleCategoryClick = (category) => {
+    selectedCategory = category;   
+  };
+  
   const handleIconClick = () => {
     if (userLoggedIn) {
       navigate(isAdmin ? "/admins" : "/users/me");
@@ -15,6 +21,21 @@
       navigate("/login");
     }
   };
+  const toggleCategories = () => {
+    showCategories = !showCategories;
+  };
+
+  const categories = [
+    'Romance',
+    'Science',
+    'Adventure',
+    'Fantasy',
+    'Friction',
+    'History',
+    'Literature',
+    'Mystery'
+  ];
+
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-light">
@@ -32,7 +53,14 @@
           <Link to="/books" class="nav-link">Books</Link>
         </li>
         <li class="nav-item">
-          <Link to="/categories" class="nav-link">Categories</Link>
+          <button class="nav-link dropdown-toggle" on:click={toggleCategories}>Categories</button>
+          {#if showCategories}
+            <div class="categories-dropdown">
+              {#each categories as category (category)}
+              <Link to={`/books/category/${category}`} on:click={() => handleCategoryClick(category)} class="dropdown-item p-2">{category}</Link>
+    {/each}
+            </div>
+          {/if}
         </li>
         <li class="nav-item">
           <Link to="/about" class="nav-link">About</Link>
@@ -88,5 +116,12 @@
 
   .navbar-collapse.show {
     display: block;
+  }
+  .categories-dropdown {
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    width: 200px;
   }
 </style>
