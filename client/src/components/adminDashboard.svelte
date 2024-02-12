@@ -48,22 +48,27 @@
 <Header />
 <div class="dashboard-title">
   <h2>Welcome to Admin Dashboard</h2>
-  <div class="align">
-  <p>Email: {user.email}</p>
-  <p>Phone Number: {user.phoneNumber}</p>
-  <ul class="nav nav-pills">
-    <li class="nav-item">
-      <a class="nav-link" on:click={() => activeTab = "addBook"} class:active={activeTab === "addBook"}>Add New Book</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" on:click={() => activeTab = "fetchAllBooks"} class:active={activeTab === "fetchAllBooks"}>Fetch All Books</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" on:click={() => activeTab = "fetchAllUsers"} class:active={activeTab === "fetchAllUsers"}>Fetch All Users</a>
-    </li>
-  </ul>
-</div>
-<hr>
+  <div class="user-info">
+    <p>Email: {user.email}</p>
+    <p>Phone Number: {user.phoneNumber}</p>
+  </div>
+  <div class="nav-container">
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a class="nav-link" on:click={() => activeTab = "addBook"} class:active={activeTab === "addBook"}>Add New Book</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" on:click={() => activeTab = "fetchAllBooks"} class:active={activeTab === "fetchAllBooks"}>Fetch All Books</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" on:click={() => activeTab = "fetchAllUsers"} class:active={activeTab === "fetchAllUsers"}>Fetch All Users</a>
+      </li>
+    </ul>
+    <button class="btn btn-dark" on:click={logout}>
+      Logout
+    </button>
+  </div>
+  <hr>
   {#if activeTab === "addBook"}
     <!-- Add Book Content -->
     <BookAdd />
@@ -76,10 +81,6 @@
     <!-- Fetch All Users Content -->
     <UserTable />
   {/if}
-
-  <button class="action-button" on:click={logout}>
-    Logout
-  </button>
 </div>
 
 <Footer />
@@ -91,11 +92,24 @@
     text-align: center;
   }
 
+  .nav-link {
+    cursor: pointer;
+  }
+
+  .user-info {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
   .action-button {
     background-color: #007bff;
     color: #fff;
     padding: 10px 20px;
-    margin-right: 10px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -105,5 +119,4 @@
   .action-button:hover {
     background-color: #0056b3;
   }
-
 </style>

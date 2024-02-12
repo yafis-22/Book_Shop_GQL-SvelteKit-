@@ -92,33 +92,38 @@
 </script>
 
 <div>
-    <h1>All users</h1>
+    <h2 class="mt-4 mb-4">All Users</h2>
 
     {#if successMessage}
-        <div class="notification">
-            <p class="success-message">{successMessage}</p>
+        <div class="alert alert-success">
+            <p class="font-weight-bold">{successMessage}</p>
         </div>
     {/if}
 
-    <div class="mb-3">
+    <div class="mb-3 col-md-6 offset-md-3">
+        <div class="input-group">
         <input
             type="text"
+            class="form-control"
             bind:value={searchQuery}
-            placeholder="Search by username, address, category..."
+            placeholder="Search by username, address..."
         />
-        <button on:click={handleSearch}>Search</button>
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" on:click={handleSearch}>Search</button>
+          </div>
+        </div>
     </div>
 
-    <div class="mb-3">
+    <div class="d-flex justify-content-end m-4">
         <label for="sortField">Sort by:</label>
-        <select bind:value={sortField} on:change={handleSort} id="sortField">
+        <select class="custom-select mr-sm-2" bind:value={sortField} on:change={handleSort} id="sortField">
             {#each sortOptions as option (option.field)}
                 <option value={option.field}>{option.label}</option>
             {/each}
         </select>
 
         <label for="sortOrder">Order:</label>
-        <select bind:value={sortOrder} on:change={handleSort} id="sortOrder">
+        <select class="custom-select mr-sm-2" bind:value={sortOrder} on:change={handleSort} id="sortOrder">
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
         </select>
@@ -128,23 +133,21 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th on:click={() => handleSort("id")}>Id</th>
-                    <th on:click={() => handleSort("username")}>Username</th>
-                    <th on:click={() => handleSort("email")}>Email</th>
-                    <th on:click={() => handleSort("phoneNumber")}
-                        >Phone Number</th
-                    >
-                    <th on:click={() => handleSort("address")}>Address</th>
-                    <th on:click={() => handleSort("createdAt")}>Created At</th>
-                    <th on:click={() => handleSort("updatedAt")}>Updated At</th>
-                    <th on:click={() => handleSort("deletedAt")}>Deleted At</th>
-                    <th>Action</th>
+                    <th scope="col" on:click={() => handleSort("id")}>Id</th>
+                    <th scope="col" on:click={() => handleSort("username")}>Username</th>
+                    <th scope="col" on:click={() => handleSort("email")}>Email</th>
+                    <th scope="col" on:click={() => handleSort("phoneNumber")}>Phone Number</th>
+                    <th scope="col" on:click={() => handleSort("address")}>Address</th>
+                    <th scope="col" on:click={() => handleSort("createdAt")}>Created At</th>
+                    <th scope="col" on:click={() => handleSort("updatedAt")}>Updated At</th>
+                    <th scope="col" on:click={() => handleSort("deletedAt")}>Deleted At</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
                 {#each users as User (User.id)}
                     <tr>
-                        <td>{User.id}</td>
+                        <th scope="row">{User.id}</th>
                         <td>{User.username}</td>
                         <td>{User.email}</td>
                         <td>{User.phoneNumber}</td>
@@ -156,10 +159,9 @@
                             {#if User.deletedAt != null}
                                 <button
                                     type="button"
-                                    class="btn btn-secondary"
+                                    class="btn btn-secondary btn-sm"
                                     on:click={() => handleRestore(User.id)}
-                                    >Restore</button
-                                >
+                                >Restore</button>
                             {/if}
                         </td>
                     </tr>
@@ -167,155 +169,115 @@
             </tbody>
         </table>
 
-        <div class="pagination">
-            {#if currentPage > 1}
-                <button on:click={() => handlePageChange(currentPage - 1)}
-                    >&lt; Prev</button
-                >
-            {/if}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {#if currentPage > 1}
+                    <li class="page-item">
+                        <button class="page-link" on:click={() => handlePageChange(currentPage - 1)}
+                            >&lt; Prev</button
+                        >
+                    </li>
+                {/if}
 
-            {#if totalPages <= 7}
-                {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-                    <button
-                        on:click={() => handlePageChange(page)}
-                        class:selected={page === currentPage}>{page}</button
-                    >
-                {/each}
-            {:else if currentPage <= 4}
-                {#each Array.from({ length: 5 }, (_, i) => i + 1) as page}
-                    <button
-                        on:click={() => handlePageChange(page)}
-                        class:selected={page === currentPage}>{page}</button
-                    >
-                {/each}
-                <span>...</span>
-                <button on:click={() => handlePageChange(totalPages)}
-                    >{totalPages}</button
-                >
-            {:else if currentPage > totalPages - 4}
-                <button on:click={() => handlePageChange(1)}>1</button>
-                <span>...</span>
-                {#each Array.from({ length: 5 }, (_, i) => totalPages - 4 + i) as page}
-                    <button
-                        on:click={() => handlePageChange(page)}
-                        class:selected={page === currentPage}>{page}</button
-                    >
-                {/each}
-            {:else}
-                <button on:click={() => handlePageChange(1)}>1</button>
-                <span>...</span>
-                {#each Array.from({ length: 3 }, (_, i) => currentPage - 1 + i) as page}
-                    <button
-                        on:click={() => handlePageChange(page)}
-                        class:selected={page === currentPage}>{page}</button
-                    >
-                {/each}
-                <span>...</span>
-                <button on:click={() => handlePageChange(totalPages)}
-                    >{totalPages}</button
-                >
-            {/if}
+                {#if totalPages <= 7}
+                    {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
+                        <li class="page-item">
+                            <button
+                                class="page-link"
+                                on:click={() => handlePageChange(page)}
+                                class:selected={page === currentPage}>{page}</button
+                            >
+                        </li>
+                    {/each}
+                {:else if currentPage <= 4}
+                    {#each Array.from({ length: 5 }, (_, i) => i + 1) as page}
+                        <li class="page-item">
+                            <button
+                                class="page-link"
+                                on:click={() => handlePageChange(page)}
+                                class:selected={page === currentPage}>{page}</button
+                            >
+                        </li>
+                    {/each}
+                    <li class="page-item">
+                        <span class="page-link">...</span>
+                    </li>
+                    <li class="page-item">
+                        <button class="page-link" on:click={() => handlePageChange(totalPages)}
+                            >{totalPages}</button
+                        >
+                    </li>
+                {:else if currentPage > totalPages - 4}
+                    <li class="page-item">
+                        <button class="page-link" on:click={() => handlePageChange(1)}>1</button>
+                    </li>
+                    <li class="page-item">
+                        <span class="page-link">...</span>
+                    </li>
+                    {#each Array.from({ length: 5 }, (_, i) => totalPages - 4 + i) as page}
+                        <li class="page-item">
+                            <button
+                                class="page-link"
+                                on:click={() => handlePageChange(page)}
+                                class:selected={page === currentPage}>{page}</button
+                            >
+                        </li>
+                    {/each}
+                {:else}
+                    <li class="page-item">
+                        <button class="page-link" on:click={() => handlePageChange(1)}>1</button>
+                    </li>
+                    <li class="page-item">
+                        <span class="page-link">...</span>
+                    </li>
+                    {#each Array.from({ length: 3 }, (_, i) => currentPage - 1 + i) as page}
+                        <li class="page-item">
+                            <button
+                                class="page-link"
+                                on:click={() => handlePageChange(page)}
+                                class:selected={page === currentPage}>{page}</button
+                            >
+                        </li>
+                    {/each}
+                    <li class="page-item">
+                        <span class="page-link">...</span>
+                    </li>
+                    <li class="page-item">
+                        <button class="page-link" on:click={() => handlePageChange(totalPages)}
+                            >{totalPages}</button
+                        >
+                    </li>
+                {/if}
 
-            {#if currentPage < totalPages}
-                <button on:click={() => handlePageChange(currentPage + 1)}
-                    >Next &gt;</button
-                >
-            {/if}
-        </div>
+                {#if currentPage < totalPages}
+                    <li class="page-item">
+                        <button class="page-link" on:click={() => handlePageChange(currentPage + 1)}
+                            >Next &gt;</button
+                        >
+                    </li>
+                {/if}
+            </ul>
+        </nav>
     {:else}
         <p>No users available.</p>
     {/if}
 </div>
 
 <style>
-    .table {
-        width: 100%;
-        margin-bottom: 1rem;
-        color: #212529;
-        border-collapse: collapse;
-    }
+    .page-link {
+    color: black;
+  }
+  .alert {
+    margin-top: 20px;
+    border-radius: 4px;
+  }
 
-    .table,
-    .table th,
-    .table td {
-        border: 1px solid #dee2e6;
-    }
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
 
-    .table th,
-    .table td {
-        padding: 0.75rem;
-        vertical-align: top;
-        cursor: pointer;
-    }
-
-    .table thead th {
-        vertical-align: bottom;
-        border-bottom: 2px solid #dee2e6;
-        background-color: #f8f9fa;
-    }
-
-    .table tbody tr:hover {
-        background-color: #f8f9fa;
-    }
-
-    .table td {
-        text-align: left;
-    }
-
-    .pagination {
-        margin-top: 1rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .pagination button {
-        margin-right: 0.5rem;
-        cursor: pointer;
-        padding: 0.5rem 1rem;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        transition: background-color 0.3s;
-    }
-
-    .pagination button:hover {
-        background-color: #0056b3;
-    }
-
-    .pagination button.selected {
-        font-weight: bold;
-        text-decoration: underline;
-        background-color: #0056b3;
-    }
-
-    .btn {
-        padding: 0.5rem 1rem;
-        margin-right: 0.5rem;
-        cursor: pointer;
-        border: none;
-        border-radius: 4px;
-        transition: background-color 0.3s;
-    }
-
-    .btn:hover {
-        opacity: 0.9;
-    }
-
-    .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background-color: #28a745;
-        color: #fff;
-        padding: 10px;
-        border-radius: 4px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        z-index: 999;
-    }
-
-    .success-message {
-        font-weight: bold;
-    }
+  .pagination {
+    margin-top: 1rem;
+  }
 </style>

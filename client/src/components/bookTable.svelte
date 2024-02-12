@@ -29,28 +29,28 @@
   let updatedBook = {};
 
   const fetchBooks = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3002/api/v1/books?page=${currentPage}&pageSize=12&search=${searchQuery}&sortField=${sortField}&sortOrder=${sortOrder}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${get(authStore).userToken}`,
-          },
+  try {
+    const response = await fetch(
+      `http://localhost:3002/api/v1/books?page=${currentPage}&pageSize=12&search=${searchQuery}&sortField=${sortField}&sortOrder=${sortOrder}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${get(authStore).userToken}`,
         },
-      );
+      },
+    );
 
-      if (response.ok) {
-        const data = await response.json();
-        books = data.data;
-        totalPages = data.totalPages;
-      } else {
-        console.error("Error fetching books:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error fetching books:", error);
+    if (response.ok) {
+      const data = await response.json();
+      books = data.data;
+      totalPages = data.totalPages;
+    } else {
+      console.error("Error fetching books:", response.statusText);
     }
-  };
+  } catch (error) {
+    console.error("Error fetching books:", error);
+  }
+};
 
   onMount(fetchBooks);
 
@@ -142,11 +142,11 @@
 </script>
 
 <div>
-  <h1>All Books</h1>
+  <h2 class="mt-4 mb-4">All Books</h2>
 
   {#if successMessage}
-    <div class="notification">
-      <p class="success-message">{successMessage}</p>
+    <div class="alert alert-success">
+      <p class="font-weight-bold">{successMessage}</p>
     </div>
   {/if}
 
@@ -158,51 +158,58 @@
     />
   {:else}
     <!-- Book List -->
-    <div class="mb-3">
-      <input
-        type="text"
-        bind:value={searchQuery}
-        placeholder="Search by title, author, category..."
-      />
-      <button on:click={handleSearch}>Search</button>
+    <div class="mb-3 col-md-6 offset-md-3">
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control"
+          bind:value={searchQuery}
+          placeholder="Search by title, author, category..."
+        />
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" on:click={handleSearch}>Search</button>
+        </div>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <label for="sortField">Sort by:</label>
-      <select bind:value={sortField} on:change={handleSort} id="sortField">
-        {#each sortOptions as option (option.field)}
-          <option value={option.field}>{option.label}</option>
-        {/each}
-      </select>
+    <div class="d-flex justify-content-end m-4">
+          <label class="sr-only" for="sortField">Sort by:</label>
+          <select class="custom-select mr-sm-2" bind:value={sortField} on:change={handleSort} id="sortField">
+            {#each sortOptions as option (option.field)}
+              <option value={option.field}>{option.label}</option>
+            {/each}
+          </select>
+        
 
-      <label for="sortOrder">Order:</label>
-      <select bind:value={sortOrder} on:change={handleSort} id="sortOrder">
-        <option value="asc">Ascending</option>
-        <option value="desc">Descending</option>
-      </select>
-    </div>
+          <label class="sr-only" for="sortOrder">Order:</label>
+          <select class="custom-select mr-sm-2" bind:value={sortOrder} on:change={handleSort} id="sortOrder">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
+  
 
     {#if books.length > 0}
       <table class="table">
         <thead>
           <tr>
-            <th on:click={() => handleSort("id")}>Id</th>
-            <th on:click={() => handleSort("title")}>Title</th>
-            <th on:click={() => handleSort("description")}>Description</th>
-            <th on:click={() => handleSort("quantity")}>Quantity</th>
-            <th on:click={() => handleSort("author")}>Author</th>
-            <th on:click={() => handleSort("category")}>Category</th>
-            <th on:click={() => handleSort("lendingPrice")}>Lending Price</th>
-            <th on:click={() => handleSort("createdAt")}>Created At</th>
-            <th on:click={() => handleSort("updatedAt")}>Updated At</th>
-            <th on:click={() => handleSort("deletedAt")}>Deleted At</th>
-            <th>Action</th>
+            <th scope="col" on:click={() => handleSort("id")}>Id</th>
+            <th scope="col" on:click={() => handleSort("title")}>Title</th>
+            <th scope="col" on:click={() => handleSort("description")}>Description</th>
+            <th scope="col" on:click={() => handleSort("quantity")}>Quantity</th>
+            <th scope="col" on:click={() => handleSort("author")}>Author</th>
+            <th scope="col" on:click={() => handleSort("category")}>Category</th>
+            <th scope="col" on:click={() => handleSort("lendingPrice")}>Lending Price</th>
+            <th scope="col" on:click={() => handleSort("createdAt")}>Created At</th>
+            <th scope="col" on:click={() => handleSort("updatedAt")}>Updated At</th>
+            <th scope="col" on:click={() => handleSort("deletedAt")}>Deleted At</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
           {#each books as book (book.id)}
             <tr>
-              <td>{book.id}</td>
+              <th scope="row">{book.id}</th>
               <td>{book.title}</td>
               <td>{book.description}</td>
               <td>{book.quantity}</td>
@@ -215,18 +222,18 @@
               <td>
                 <button
                   type="button"
-                  class="btn btn-success"
+                  class="btn btn-success btn-sm"
                   on:click={() => handleUpdate(book)}>Update</button
                 >
                 <button
                   type="button"
-                  class="btn btn-danger"
+                  class="btn btn-danger btn-sm mt-2"
                   on:click={() => handleDelete(book.id)}>Delete</button
                 >
                 {#if book.deletedAt != null}
                   <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="btn btn-secondary btn-sm mt-2"
                     on:click={() => handleRestore(book.id)}>Restore</button
                   >
                 {/if}
@@ -236,61 +243,95 @@
         </tbody>
       </table>
 
-      <div class="pagination">
-        {#if currentPage > 1}
-          <button on:click={() => handlePageChange(currentPage - 1)}
-            >&lt; Prev</button
-          >
-        {/if}
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          {#if currentPage > 1}
+            <li class="page-item">
+              <button class="page-link" on:click={() => handlePageChange(currentPage - 1)}
+                >&lt; Prev</button
+              >
+            </li>
+          {/if}
 
-        {#if totalPages <= 7}
-          {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-            <button
-              on:click={() => handlePageChange(page)}
-              class:selected={page === currentPage}>{page}</button
-            >
-          {/each}
-        {:else if currentPage <= 4}
-          {#each Array.from({ length: 5 }, (_, i) => i + 1) as page}
-            <button
-              on:click={() => handlePageChange(page)}
-              class:selected={page === currentPage}>{page}</button
-            >
-          {/each}
-          <span>...</span>
-          <button on:click={() => handlePageChange(totalPages)}
-            >{totalPages}</button
-          >
-        {:else if currentPage > totalPages - 4}
-          <button on:click={() => handlePageChange(1)}>1</button>
-          <span>...</span>
-          {#each Array.from({ length: 5 }, (_, i) => totalPages - 4 + i) as page}
-            <button
-              on:click={() => handlePageChange(page)}
-              class:selected={page === currentPage}>{page}</button
-            >
-          {/each}
-        {:else}
-          <button on:click={() => handlePageChange(1)}>1</button>
-          <span>...</span>
-          {#each Array.from({ length: 3 }, (_, i) => currentPage - 1 + i) as page}
-            <button
-              on:click={() => handlePageChange(page)}
-              class:selected={page === currentPage}>{page}</button
-            >
-          {/each}
-          <span>...</span>
-          <button on:click={() => handlePageChange(totalPages)}
-            >{totalPages}</button
-          >
-        {/if}
+          {#if totalPages <= 7}
+            {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
+              <li class="page-item">
+                <button
+                  class="page-link"
+                  on:click={() => handlePageChange(page)}
+                  class:selected={page === currentPage}>{page}</button
+                >
+              </li>
+            {/each}
+          {:else if currentPage <= 4}
+            {#each Array.from({ length: 5 }, (_, i) => i + 1) as page}
+              <li class="page-item">
+                <button
+                  class="page-link"
+                  on:click={() => handlePageChange(page)}
+                  class:selected={page === currentPage}>{page}</button
+                >
+              </li>
+            {/each}
+            <li class="page-item">
+              <span class="page-link">...</span>
+            </li>
+            <li class="page-item">
+              <button class="page-link" on:click={() => handlePageChange(totalPages)}
+                >{totalPages}</button
+              >
+            </li>
+          {:else if currentPage > totalPages - 4}
+            <li class="page-item">
+              <button class="page-link" on:click={() => handlePageChange(1)}>1</button>
+            </li>
+            <li class="page-item">
+              <span class="page-link">...</span>
+            </li>
+            {#each Array.from({ length: 5 }, (_, i) => totalPages - 4 + i) as page}
+              <li class="page-item">
+                <button
+                  class="page-link"
+                  on:click={() => handlePageChange(page)}
+                  class:selected={page === currentPage}>{page}</button
+                >
+              </li>
+            {/each}
+          {:else}
+            <li class="page-item">
+              <button class="page-link" on:click={() => handlePageChange(1)}>1</button>
+            </li>
+            <li class="page-item">
+              <span class="page-link">...</span>
+            </li>
+            {#each Array.from({ length: 3 }, (_, i) => currentPage - 1 + i) as page}
+              <li class="page-item">
+                <button
+                  class="page-link"
+                  on:click={() => handlePageChange(page)}
+                  class:selected={page === currentPage}>{page}</button
+                >
+              </li>
+            {/each}
+            <li class="page-item">
+              <span class="page-link">...</span>
+            </li>
+            <li class="page-item">
+              <button class="page-link" on:click={() => handlePageChange(totalPages)}
+                >{totalPages}</button
+              >
+            </li>
+          {/if}
 
-        {#if currentPage < totalPages}
-          <button on:click={() => handlePageChange(currentPage + 1)}
-            >Next &gt;</button
-          >
-        {/if}
-      </div>
+          {#if currentPage < totalPages}
+            <li class="page-item">
+              <button class="page-link" on:click={() => handlePageChange(currentPage + 1)}
+                >Next &gt;</button
+              >
+            </li>
+          {/if}
+        </ul>
+      </nav>
     {:else}
       <p>No books available.</p>
     {/if}
@@ -298,104 +339,20 @@
 </div>
 
 <style>
-  .table {
-    width: 100%;
-    margin-bottom: 1rem;
-    color: #212529;
-    border-collapse: collapse;
+  .page-link {
+    color: black;
+  }
+  .alert {
+    margin-top: 20px;
+    border-radius: 4px;
   }
 
-  .table,
-  .table th,
-  .table td {
-    border: 1px solid #dee2e6;
-  }
-
-  .table th,
-  .table td {
-    padding: 0.75rem;
-    vertical-align: top;
-    cursor: pointer;
-  }
-
-  .table thead th {
-    vertical-align: bottom;
-    border-bottom: 2px solid #dee2e6;
-    background-color: #f8f9fa;
-  }
-
-  .table tbody tr:hover {
-    background-color: #f8f9fa;
-  }
-
-  .table td {
-    text-align: left;
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
   }
 
   .pagination {
     margin-top: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .pagination button {
-    margin-right: 0.5rem;
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-  }
-
-  .pagination button:hover {
-    background-color: #0056b3;
-  }
-
-  .pagination button.selected {
-    font-weight: bold;
-    text-decoration: underline;
-    background-color: #0056b3;
-  }
-
-  .btn {
-    padding: 0.5rem 1rem;
-    margin-right: 0.5rem;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-  }
-
-  .btn-success {
-    background-color: #28a745;
-    color: #fff;
-  }
-
-  .btn-danger {
-    background-color: #dc3545;
-    color: #fff;
-  }
-
-  .btn:hover {
-    opacity: 0.9;
-  }
-
-  .notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: #28a745;
-    color: #fff;
-    padding: 10px;
-    border-radius: 4px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    z-index: 999;
-  }
-
-  .success-message {
-    font-weight: bold;
   }
 </style>
