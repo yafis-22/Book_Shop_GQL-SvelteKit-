@@ -80,6 +80,9 @@
       if (response.ok) {
         fetchBooks(); // Refresh the book list after successful deletion
         successMessage = "Book deleted successfully";
+        setTimeout(() => {
+          successMessage = "";
+        }, 3000);
       } else {
         console.error(
           `Error deleting book with ID ${id}:`,
@@ -98,14 +101,16 @@
 
   const handleUpdateSuccess = () => {
     fetchBooks(); // Refresh the book list after successful update
-    successMessage = 'Book updated successfully';
+    successMessage = "Book updated successfully";
     updateFormVisible = false;
+    setTimeout(() => {
+      successMessage = "";
+    }, 3000);
   };
 
   const handleUpdateCancel = () => {
     updateFormVisible = false;
   };
-
 
   const handleRestore = async (bookId) => {
     try {
@@ -124,6 +129,9 @@
 
         fetchBooks();
         successMessage = "Book restored successfully";
+        setTimeout(() => {
+          successMessage = "";
+        }, 3000);
       } else {
         console.error("Error restoring book:", response.statusText);
       }
@@ -143,12 +151,11 @@
   {/if}
 
   {#if updateFormVisible}
-  <BookUpdate
-  bind:book={updatedBook}
-  onSuccess={handleUpdateSuccess}
-  onCancel={handleUpdateCancel}
-/>
-
+    <BookUpdate
+      bind:book={updatedBook}
+      onSuccess={handleUpdateSuccess}
+      onCancel={handleUpdateCancel}
+    />
   {:else}
     <!-- Book List -->
     <div class="mb-3">
@@ -160,115 +167,133 @@
       <button on:click={handleSearch}>Search</button>
     </div>
 
-  <div class="mb-3">
-    <label for="sortField">Sort by:</label>
-    <select bind:value={sortField} on:change={handleSort} id="sortField">
-      {#each sortOptions as option (option.field)}
-        <option value={option.field}>{option.label}</option>
-      {/each}
-    </select>
+    <div class="mb-3">
+      <label for="sortField">Sort by:</label>
+      <select bind:value={sortField} on:change={handleSort} id="sortField">
+        {#each sortOptions as option (option.field)}
+          <option value={option.field}>{option.label}</option>
+        {/each}
+      </select>
 
-    <label for="sortOrder">Order:</label>
-    <select bind:value={sortOrder} on:change={handleSort} id="sortOrder">
-      <option value="asc">Ascending</option>
-      <option value="desc">Descending</option>
-    </select>
-  </div>
+      <label for="sortOrder">Order:</label>
+      <select bind:value={sortOrder} on:change={handleSort} id="sortOrder">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+    </div>
 
-  {#if books.length > 0}
-    <table class="table">
-      <thead>
-        <tr>
-          <th on:click={() => handleSort("id")}>Id</th>
-          <th on:click={() => handleSort("title")}>Title</th>
-          <th on:click={() => handleSort("description")}>Description</th>
-          <th on:click={() => handleSort("quantity")}>Quantity</th>
-          <th on:click={() => handleSort("author")}>Author</th>
-          <th on:click={() => handleSort("category")}>Category</th>
-          <th on:click={() => handleSort("lendingPrice")}>Lending Price</th>
-          <th on:click={() => handleSort("createdAt")}>Created At</th>
-          <th on:click={() => handleSort("updatedAt")}>Updated At</th>
-          <th on:click={() => handleSort("deletedAt")}>Deleted At</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each books as book (book.id)}
+    {#if books.length > 0}
+      <table class="table">
+        <thead>
           <tr>
-            <td>{book.id}</td>
-            <td>{book.title}</td>
-            <td>{book.description}</td>
-            <td>{book.quantity}</td>
-            <td>{book.author}</td>
-            <td>{book.category}</td>
-            <td>{book.lendingPrice}</td>
-            <td>{book.createdAt}</td>
-            <td>{book.updatedAt}</td>
-            <td>{book.deletedAt}</td>
-            <td>
-              <button
-                type="button"
-                class="btn btn-success"
-                on:click={() => handleUpdate(book)}>Update</button
-              >
-              <button
-                type="button"
-                class="btn btn-danger"
-                on:click={() => handleDelete(book.id)}>Delete</button
-              >
-              {#if book.deletedAt != null}
+            <th on:click={() => handleSort("id")}>Id</th>
+            <th on:click={() => handleSort("title")}>Title</th>
+            <th on:click={() => handleSort("description")}>Description</th>
+            <th on:click={() => handleSort("quantity")}>Quantity</th>
+            <th on:click={() => handleSort("author")}>Author</th>
+            <th on:click={() => handleSort("category")}>Category</th>
+            <th on:click={() => handleSort("lendingPrice")}>Lending Price</th>
+            <th on:click={() => handleSort("createdAt")}>Created At</th>
+            <th on:click={() => handleSort("updatedAt")}>Updated At</th>
+            <th on:click={() => handleSort("deletedAt")}>Deleted At</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {#each books as book (book.id)}
+            <tr>
+              <td>{book.id}</td>
+              <td>{book.title}</td>
+              <td>{book.description}</td>
+              <td>{book.quantity}</td>
+              <td>{book.author}</td>
+              <td>{book.category}</td>
+              <td>{book.lendingPrice}</td>
+              <td>{book.createdAt}</td>
+              <td>{book.updatedAt}</td>
+              <td>{book.deletedAt}</td>
+              <td>
                 <button
                   type="button"
-                  class="btn btn-secondary"
-                  on:click={() => handleRestore(book.id)}>Restore</button
+                  class="btn btn-success"
+                  on:click={() => handleUpdate(book)}>Update</button
                 >
-              {/if}
-            </td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  on:click={() => handleDelete(book.id)}>Delete</button
+                >
+                {#if book.deletedAt != null}
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    on:click={() => handleRestore(book.id)}>Restore</button
+                  >
+                {/if}
+              </td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
 
-    <div class="pagination">
-      {#if currentPage > 1}
-        <button on:click={() => handlePageChange(currentPage - 1)}>&lt; Prev</button>
-      {/if}
-    
-      {#if totalPages <= 7}
-        {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-          <button on:click={() => handlePageChange(page)} class:selected={page === currentPage}>{page}</button>
-        {/each}
-      {:else}
-        {#if currentPage <= 4}
+      <div class="pagination">
+        {#if currentPage > 1}
+          <button on:click={() => handlePageChange(currentPage - 1)}
+            >&lt; Prev</button
+          >
+        {/if}
+
+        {#if totalPages <= 7}
+          {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
+            <button
+              on:click={() => handlePageChange(page)}
+              class:selected={page === currentPage}>{page}</button
+            >
+          {/each}
+        {:else if currentPage <= 4}
           {#each Array.from({ length: 5 }, (_, i) => i + 1) as page}
-            <button on:click={() => handlePageChange(page)} class:selected={page === currentPage}>{page}</button>
+            <button
+              on:click={() => handlePageChange(page)}
+              class:selected={page === currentPage}>{page}</button
+            >
           {/each}
           <span>...</span>
-          <button on:click={() => handlePageChange(totalPages)}>{totalPages}</button>
+          <button on:click={() => handlePageChange(totalPages)}
+            >{totalPages}</button
+          >
         {:else if currentPage > totalPages - 4}
           <button on:click={() => handlePageChange(1)}>1</button>
           <span>...</span>
           {#each Array.from({ length: 5 }, (_, i) => totalPages - 4 + i) as page}
-            <button on:click={() => handlePageChange(page)} class:selected={page === currentPage}>{page}</button>
+            <button
+              on:click={() => handlePageChange(page)}
+              class:selected={page === currentPage}>{page}</button
+            >
           {/each}
         {:else}
           <button on:click={() => handlePageChange(1)}>1</button>
           <span>...</span>
           {#each Array.from({ length: 3 }, (_, i) => currentPage - 1 + i) as page}
-            <button on:click={() => handlePageChange(page)} class:selected={page === currentPage}>{page}</button>
+            <button
+              on:click={() => handlePageChange(page)}
+              class:selected={page === currentPage}>{page}</button
+            >
           {/each}
           <span>...</span>
-          <button on:click={() => handlePageChange(totalPages)}>{totalPages}</button>
+          <button on:click={() => handlePageChange(totalPages)}
+            >{totalPages}</button
+          >
         {/if}
-      {/if}
-    
-      {#if currentPage < totalPages}
-        <button on:click={() => handlePageChange(currentPage + 1)}>Next &gt;</button>
-      {/if}
-    </div>
-  {:else}
-    <p>No books available.</p>
-  {/if}
+
+        {#if currentPage < totalPages}
+          <button on:click={() => handlePageChange(currentPage + 1)}
+            >Next &gt;</button
+          >
+        {/if}
+      </div>
+    {:else}
+      <p>No books available.</p>
+    {/if}
   {/if}
 </div>
 

@@ -8,96 +8,87 @@
   import Header from "./header.svelte";
   import Footer from "./footer.svelte";
 
-  let showUserModal = false;
-  let showBookModal = false;
-  let showAddBookModal = false; // New state variable for the Add Book modal
+  let activeTab = "addBook";
+  let user={};
 
-  const openUserModal = () => {
-    showUserModal = true;
-  };
-
-  const closeUserModal = () => {
-    showUserModal = false;
-  };
-
-  const openBookModal = () => {
-    showBookModal = true;
-  };
-
-  const closeBookModal = () => {
-    showBookModal = false;
-  };
-
-  const openAddBookModal = () => {
-    showAddBookModal = true;
-  };
-
-  const closeAddBookModal = () => {
-    showAddBookModal = false;
-  };
-
-  onMount(() => {
+  onMount(async () => {
     // Redirect to login if not an admin
     if (!$authStore.isAdmin) {
       navigate("/login");
     }
+
+    try {
+      const response = await fetch('http://localhost:3002/api/v1/admins/me', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${$authStore.userToken}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        user = data.data;
+        // Update user context for other components
+        setContext("user", user);
+      } else {
+        console.error('Error fetching user details:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
   });
+
   const logout = () => {
     authStore.set({ userToken: null, isAdmin: false });
     // Redirect to the login page after logout
     navigate('/login');
   };
 </script>
+
 <Header />
-<div>
-  <h1 class="dashboard-title">Welcome to Admin Dashboard</h1>
-  <button class="action-button" on:click={openAddBookModal}>
-    Add New Book
-  </button>
-  <button class="action-button" on:click={openBookModal}>
-    Fetch All Books
-  </button>
-  <button class="action-button" on:click={openUserModal}>
-    Fetch All Users
-  </button>
+<div class="dashboard-title">
+  <h2>Welcome to Admin Dashboard</h2>
+  <div class="align">
+  <p>Email: {user.email}</p>
+  <p>Phone Number: {user.phoneNumber}</p>
+  <ul class="nav nav-pills">
+    <li class="nav-item">
+      <a class="nav-link" on:click={() => activeTab = "addBook"} class:active={activeTab === "addBook"}>Add New Book</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" on:click={() => activeTab = "fetchAllBooks"} class:active={activeTab === "fetchAllBooks"}>Fetch All Books</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" on:click={() => activeTab = "fetchAllUsers"} class:active={activeTab === "fetchAllUsers"}>Fetch All Users</a>
+    </li>
+  </ul>
+</div>
+<hr>
+  {#if activeTab === "addBook"}
+    <!-- Add Book Content -->
+    <BookAdd />
+  {/if}
+  {#if activeTab === "fetchAllBooks"}
+    <!-- Fetch All Books Content -->
+    <BookTable />
+  {/if}
+  {#if activeTab === "fetchAllUsers"}
+    <!-- Fetch All Users Content -->
+    <UserTable />
+  {/if}
+
   <button class="action-button" on:click={logout}>
     Logout
   </button>
-
-  {#if showAddBookModal}
-    <!-- Modal -->
-    <div class="modal">
-      <div class="modal-content">
-        <span class="close" on:click={closeAddBookModal}>&times;</span>
-        <BookAdd on:close={closeAddBookModal} />
-      </div>
-    </div>
-  {/if}
-  {#if showUserModal}
-    <!-- Modal -->
-    <div class="modal">
-      <div class="modal-content">
-        <span class="close" on:click={closeUserModal}>&times;</span>
-        <UserTable />
-      </div>
-    </div>
-  {/if}
-  {#if showBookModal}
-    <!-- Modal -->
-    <div class="modal">
-      <div class="modal-content">
-        <span class="close" on:click={closeBookModal}>&times;</span>
-        <BookTable />
-      </div>
-    </div>
-  {/if}
 </div>
+
 <Footer />
 <style>
-  /* Admin Dashboard styles */
   .dashboard-title {
     color: #333;
     margin-bottom: 20px;
+    margin-top: 10px;
+    text-align: center;
   }
 
   .action-button {
@@ -115,28 +106,4 @@
     background-color: #0056b3;
   }
 
-  /* Modal styles */
-  .modal {
-    display: flex;
-    padding: 20px;
-    position: fixed;
-    background: rgba(0, 0, 0, 0.5);
-  }
-
-  .modal-content {
-    background: #fefefe;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    position: relative;
-  }
-
-  .close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    cursor: pointer;
-    color: #333;
-  }
 </style>

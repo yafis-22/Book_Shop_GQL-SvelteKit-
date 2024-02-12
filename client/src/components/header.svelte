@@ -16,7 +16,7 @@
   
   const handleIconClick = () => {
     if (userLoggedIn) {
-      navigate(isAdmin ? "/admins" : "/users/me");
+      navigate(isAdmin ? "/admins/me" : "/users/me");
     } else {
       navigate("/login");
     }

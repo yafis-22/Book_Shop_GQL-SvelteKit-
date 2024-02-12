@@ -29,7 +29,7 @@
   <Route path="/books/category/:category" let:params>
     <BookCategories category={params.category} />
   </Route>
-  <Route path="/admins">
+  <Route path="/admins/me">
     <AdminDashboard />
   </Route>
   <Route path="/users/me">
