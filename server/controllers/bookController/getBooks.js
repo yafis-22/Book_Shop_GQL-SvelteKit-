@@ -68,7 +68,7 @@ export const getBooks = async (req, res) => {
 export const getBooksByCategory = async (req, res) => {
   const categoryParam = req.params.category;
   try {
-    const { page = 1, pageSize = 10, sortField, sortOrder } = req.query;
+    const { page = 1, pageSize = 12, sortField, sortOrder } = req.query;
     
     if (page <= 0) {
       return res.status(400).json({ message: 'Please enter a valid page number greater than 0.' });
