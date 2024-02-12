@@ -41,10 +41,8 @@ export const getBooks = async (req, res) => {
       paranoid: !isAdmin, // Exclude soft-deleted records for regular users
       offset: (page - 1) * pageSize,
       limit: pageSize,
+      order: [[sortField || 'id', sortOrder || 'asc']],
     });
-
-    // Sorting logic
-    sortBooks(allBooks, sortField, sortOrder);
 
     const totalBooks = await Book.count({
       where: whereCondition,
@@ -81,10 +79,8 @@ export const getBooksByCategory = async (req, res) => {
       },
       offset: (page - 1) * pageSize,
       limit: pageSize,
+      order: [[sortField || 'id', sortOrder || 'asc']],
     });
-
-    // Sorting logic
-    sortBooks(categoryBooks, sortField, sortOrder);
 
     const totalBooks = await Book.count({ where: { category: categoryParam } });
 

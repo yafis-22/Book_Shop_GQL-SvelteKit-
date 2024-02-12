@@ -38,10 +38,8 @@ export const getAllUsers = async (req, res) => {
       paranoid: false, 
       offset: (page - 1) * pageSize,
       limit: pageSize,
+      order: [[sortField || 'id', sortOrder || 'asc']],
     });
-      
-      // Sorting logic
-      sortUsers(allUsers, sortField, sortOrder);
 
       const totalUsers = await User.count({
         where: whereCondition,
