@@ -41,28 +41,83 @@
   };
 </script>
 
-<div>
-        {#if successMessage}
-    <div class="notification">
-      <p class="success-message">{successMessage}</p>
-    </div>
+<div class="container mt-4">
+  {#if successMessage}
+      <div class="alert alert-success">
+          <p class="mb-0">{successMessage}</p>
+      </div>
   {/if}
-  <h1>Update Profile</h1>
+  <h2 class="mb-4 ">Update Profile</h2>
   <form on:submit|preventDefault={updateProfile}>
-    <label for="username">Username:</label>
-    <input type="text" id="username" bind:value={updatedUser.username} disabled />
+      <div class="card">
+          <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" bind:value={updatedUser.username} disabled />
+          </div>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" bind:value={updatedUser.email} />
+          <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" bind:value={updatedUser.email} />
+          </div>
 
-    <label for="phoneNumber">Phone Number:</label>
-    <input type="tel" id="phoneNumber" bind:value={updatedUser.phoneNumber} />
+          <div class="mb-3">
+              <label for="phoneNumber" class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" id="phoneNumber" bind:value={updatedUser.phoneNumber} />
+          </div>
 
-    <label for="address">Address:</label>
-    <textarea id="address" bind:value={updatedUser.address}></textarea>
+          <div class="mb-3">
+              <label for="address" class="form-label">Address</label>
+              <textarea id="address" class="form-control" bind:value={updatedUser.address}></textarea>
+          </div>
 
-    <button type="submit">Update Profile</button>
-    <button type="button" on:click={cancelUpdate}>Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Profile</button>
+          <button type="button" on:click={cancelUpdate} class="btn btn-secondary mt-3">Cancel</button>
+      </div>
   </form>
 </div>
+
+
+<style>
+  /* You can include custom styles here if needed */
+  .container {
+      max-width: 400px;
+      margin: auto;
+      padding: 20px;
+  }
+
+  .card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+  }
+
+  h2 {
+      text-align: center;
+  }
+
+  form {
+      margin-top: 20px;
+  }
+
+  label {
+      margin-bottom: 5px;
+  }
+
+  .form-control {
+      margin-bottom: 15px;
+  }
+
+  .alert {
+      margin-top: 20px;
+  }
+
+  input {
+      background-color: #F5F5F5;
+  }
+
+  .form-label {
+      color: #5A5A5A;
+  }
+</style>
 

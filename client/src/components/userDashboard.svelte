@@ -125,88 +125,95 @@
   </script>
   
   <Header />
-  <div>
-    {#if successMessage}
-    <div class="notification">
-      <p class="success-message">{successMessage}</p>
-    </div>
-  {/if}
-    <!-- Modal for updating user details -->
-  {#if isUpdating}
-  <UserUpdate user={user} onUpdate={handleUpdate} onCancel={cancelUpdate} />
-{:else}
 
-    <h1 class="dashboard-title">Welcome, {user.username}</h1>
-    <div class="user-details">
-      <p>Email: {user.email}</p>
-      <p>Phone Number: {user.phoneNumber}</p>
-      
-      <button class="action-button" on:click={updateProfile}>
-        Update Profile
-      </button>
-      <button class="action-button" on:click={deleteProfile}>
-        Delete Profile
-      </button>
-      <button class="action-button" on:click={logout}>
-        Logout
-      </button>
-    </div>
-  
-    <div class="lend-return-section">
-      <h2>Lended Books</h2>
-      {#if lentBooks.length > 0}
-        <ul>
-          {#each lentBooks as book (book.id)}
-            <li>
-              {book.title} by {book.author} ({book.category})
-              <button class="action-button" on:click={() => returnBook(book.id)}>Return</button>
-            </li>
-          {/each}
-        </ul>
-      {:else}
-        <p>No books lended</p>
+  <div class="container mt-4">
+      {#if successMessage}
+          <div class="notification">
+              <p class="success-message">{successMessage}</p>
+          </div>
       {/if}
-      <button class="action-button" on:click={lendBook}>
-        Lend a Book
-      </button>
-    </div>
-  {/if}
+  
+      <!-- Modal for updating user details -->
+      {#if isUpdating}
+          <UserUpdate user={user} onUpdate={handleUpdate} onCancel={cancelUpdate} />
+      {:else}
+          <h1 class="dashboard-title">Welcome, {user.username}</h1>
+  
+          <div class="user-details">
+              <p>Email: {user.email}</p>
+              <p>Phone Number: {user.phoneNumber}</p>
+  
+              <button class="btn btn-primary action-button" on:click={updateProfile}>
+                  Update Profile
+              </button>
+              <button class="btn btn-danger action-button" on:click={deleteProfile}>
+                  Delete Profile
+              </button>
+              <button class="btn btn-primary action-button" on:click={lendBook}>
+                Lend a Book
+            </button>
+            <button class="btn btn-secondary action-button" on:click={logout}>
+                  Logout
+              </button>
+          </div>
+  
+          <div class="lend-return-section">
+              <h2>Lended Books</h2>
+              {#if lentBooks.length > 0}
+                  <ul class="list-group">
+                      {#each lentBooks as book (book.id)}
+                          <li class="list-group-item">
+                              {book.title} by {book.author} ({book.category})
+                              <button class="btn btn-warning action-button" on:click={() => returnBook(book.id)}>
+                                  Return
+                              </button>
+                          </li>
+                      {/each}
+                  </ul>
+              {:else}
+                  <p>No books lended</p>
+              {/if}
+              
+          </div>
+      {/if}
   </div>
+  
   <Footer />
+  
   <style>
-    .dashboard-title {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
+      .dashboard-title {
+          font-size: 24px;
+          margin-bottom: 20px;
+      }
   
-    .user-details {
-      margin-bottom: 20px;
-    }
+      .user-details {
+          margin-bottom: 20px;
+      }
   
-    .action-button {
-      margin-right: 10px;
-      margin-bottom: 10px;
-      padding: 8px 12px;
-      cursor: pointer;
-    }
+      .action-button {
+          margin-right: 10px;
+          margin-bottom: 10px;
+          cursor: pointer;
+      }
   
-    .lend-return-section {
-      margin-top: 20px;
-    }
-    .notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: #28a745;
-    color: #fff;
-    padding: 10px;
-    border-radius: 4px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    z-index: 999;
-  }
-
-  .success-message {
-    font-weight: bold;
-  }
+      .lend-return-section {
+          margin-top: 20px;
+      }
+  
+      .notification {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background-color: #28a745;
+          color: #fff;
+          padding: 10px;
+          border-radius: 4px;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+          z-index: 999;
+      }
+  
+      .success-message {
+          font-weight: bold;
+      }
   </style>
   
