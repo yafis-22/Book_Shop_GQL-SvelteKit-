@@ -40,7 +40,6 @@
       <h5 class="card-title">{book.title}</h5>
       <p class="card-text">Author: {book.author}</p>
       <div class="price-button-container mt-auto">
-        <!-- Use mt-auto to push to the bottom of the card -->
         <p class="card-price">${book.lendingPrice}</p>
         <button class="btn btn-dark" on:click={openModal}>Lend</button>
       </div>
