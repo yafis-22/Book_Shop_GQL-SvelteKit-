@@ -86,37 +86,38 @@
       navigate('/books');
     };
   
-    const returnBook = async (bookId) => {
-    try {
-      const response = await fetch(`http://localhost:3002/api/v1/books/return/${bookId}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${$authStore.userToken}`,
-        },
-      });
+    let returnDetails = null;
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Book returned successfully:', data);
-        
-        alert(`Book returned successfully:
-          Initial Charge: $${data.data.initialCharge}
-          Additional Charge: $${data.data.additionalCharge}
-          Total Charge: $${data.data.totalCharge}
-          Days Lended: ${data.data.days}`);
-        
-        // Refresh the list of lended books
-        fetchUserDetails();
-      } else {
-        const errorData = await response.json();
-        console.error('Error returning book:', errorData.message);
-       
-      }
+const showReturnDetails = (details) => {
+    returnDetails = details;
+};
+
+const hideReturnDetails = () => {
+    returnDetails = null;
+};
+
+const returnBook = async (bookId) => {
+    try {
+        const response = await fetch(`http://localhost:3002/api/v1/books/return/${bookId}`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${$authStore.userToken}`,
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            showReturnDetails(data.data);
+            // Refresh the list of lended books
+            fetchUserDetails();
+        } else {
+            const errorData = await response.json();
+            console.error('Error returning book:', errorData.message);
+        }
     } catch (error) {
-      console.error('Error returning book:', error);
-      
+        console.error('Error returning book:', error);
     }
-  };
+};
   
     const logout = () => {
       authStore.set({ userToken: null, isAdmin: false });
@@ -177,7 +178,26 @@
           </div>
       {/if}
   </div>
-  
+  <div class="modal" tabindex="-1" role="dialog" style="{returnDetails ? 'display: block;' : 'display: none;'}">
+    <div class="modal-background"></div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Book Return Details</h5>
+                <button type="button" class="close" aria-label="Close" on:click={hideReturnDetails}>
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Book returned successfully:</p>
+                <p>Initial Charge: ${returnDetails ? returnDetails.initialCharge : ''}</p>
+                <p>Additional Charge: ${returnDetails ? returnDetails.additionalCharge : ''}</p>
+                <p>Total Charge: ${returnDetails ? returnDetails.totalCharge : ''}</p>
+                <p>Days Lended: {returnDetails ? returnDetails.days : ''}</p>
+            </div>
+        </div>
+    </div>
+</div>
   <Footer />
   
   <style>
@@ -215,5 +235,14 @@
       .success-message {
           font-weight: bold;
       }
+
+      .modal-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(116, 114, 114, 0.8); /* Light background */
+    }
   </style>
   

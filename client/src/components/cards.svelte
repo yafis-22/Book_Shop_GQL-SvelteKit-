@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { writable } from "svelte/store";
-  import authStore from "../stores/authStore";
+import LendBook from "./lendBook.svelte";
 
   let books = writable([]);
 
@@ -12,42 +12,12 @@
     books.set(data.data.slice(0, 6)); // Get only the first 6 books
   });
 
-  const lendBook = async (bookId, title, author, lendingPrice) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3002/api/v1/books/lend/${bookId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${$authStore.userToken}`,
-          },
-        }
-      );
+  let showModal = false;
+  let selectedBook = null;
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Book lent successfully:", data);
-
-        alert(`Book Lended:
-            Title: ${title}
-            Author: ${author}
-            Initial Charges: $${data.chargeDetails.initialCharge}`);
-      } else {
-        const errorData = await response.json();
-        console.error("Error lending book:", errorData.message);
-
-        // Check for the specific error message indicating that the book is already lent
-        if (errorData.message === 'User has already lent a book with the same ID') {
-          alert('Book already lent');
-        } else {
-          console.error("Error lending book:", errorData.message);
-          alert("Please sign in to lend the book");
-        }
-      }
-    } catch (error) {
-      console.error("Error lending book:", error);
-    }
+  const lendBook = (id, title, author, lendingPrice) => {
+    selectedBook = { id, title, author, lendingPrice };
+    showModal = true;
   };
 </script>
 
@@ -69,8 +39,20 @@
       </div>
     {/each}
   </div>
+  {#if showModal}
+  <LendBook
+  book={selectedBook}
+  bind:showModal
+  onCloseModal={() => {
+    showModal = false;
+  }}
+/>
+  {/if}
 </div>
-
+{#if showModal}
+    <!-- Bootstrap modal backdrop class for light background overlay -->
+    <div class="modal-backdrop show"></div>
+  {/if}
   <style>
     .card {
       height: 95%;
