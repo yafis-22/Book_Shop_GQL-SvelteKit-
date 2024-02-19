@@ -7,7 +7,8 @@
   import BookDetails from "./bookDetails.svelte";
   import AdminDashboard from "./adminDashboard.svelte";
   import UserDashboard from "./userDashboard.svelte";
-    import BookCategories from "./bookCategories.svelte";
+  import BookCategories from "./bookCategories.svelte";
+  import Contact from "./contact.svelte";
 </script>
 
 <Router>
@@ -34,6 +35,9 @@
   </Route>
   <Route path="/users/me">
     <UserDashboard />
+  </Route>
+  <Route path="/contact">
+    <Contact />
   </Route>
 </Router>
 
