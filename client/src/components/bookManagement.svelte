@@ -4,6 +4,8 @@
   import BookCard from './bookCard.svelte';
   import Header from './header.svelte';
   import Footer from './footer.svelte';
+  import Sorting from './sorting.svelte';
+  import Pagination from './pagination.svelte';
 
   // Define the pagination parameters
   let currentPage = 1;
@@ -36,12 +38,15 @@
 
   // Fetch books on component mount
   onMount(async () => {
+    const storedPage = sessionStorage.getItem('currentPage');
+  currentPage = storedPage ? parseInt(storedPage, 10) : 1;
     await fetchBooks();
   });
 
   // Function to handle page change
   const handlePageChange = async (newPage) => {
     currentPage = newPage;
+    sessionStorage.setItem('currentPage', currentPage.toString());
     await fetchBooks();
   };
 
@@ -51,24 +56,12 @@
   };
 </script>
 
+
 <Header />
 
 <h2 class="m-3">All Books</h2>
 
-<div class="d-flex justify-content-end sort-options">
-  <label for="sortField">Sort by:</label>
-  <select bind:value={sortField} on:change={handleSort} id="sortField">
-    <option value="title">Title</option>
-    <option value="author">Author</option>
-    <option value="lendingPrice">Lending Price</option>
-  </select>
-
-  <label for="sortOrder">Order:</label>
-  <select bind:value={sortOrder} on:change={handleSort} id="sortOrder">
-    <option value="asc">Ascending</option>
-    <option value="desc">Descending</option>
-  </select>
-</div>
+<Sorting bind:sortField={sortField} bind:sortOrder={sortOrder} handleSort={handleSort} />
 
 <div class="d-flex flex-wrap">
   {#each $books as book (book.id)}
@@ -76,79 +69,7 @@
   {/each}
 </div>
 
-<div class="pagination">
-  {#if currentPage > 1}
-    <button on:click={() => handlePageChange(currentPage - 1)}>&lt; Prev</button>
-  {/if}
-
-  {#if totalPages <= 7}
-    {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-      <button on:click={() => handlePageChange(page)} class:selected={page === currentPage}>{page}</button>
-    {/each}
-  {:else}
-    {#if currentPage <= 4}
-      {#each Array.from({ length: 5 }, (_, i) => i + 1) as page}
-        <button on:click={() => handlePageChange(page)} class:selected={page === currentPage}>{page}</button>
-      {/each}
-      <span>...</span>
-      <button on:click={() => handlePageChange(totalPages)}>{totalPages}</button>
-    {:else if currentPage > totalPages - 4}
-      <button on:click={() => handlePageChange(1)}>1</button>
-      <span>...</span>
-      {#each Array.from({ length: 5 }, (_, i) => totalPages - 4 + i) as page}
-        <button on:click={() => handlePageChange(page)} class:selected={page === currentPage}>{page}</button>
-      {/each}
-    {:else}
-      <button on:click={() => handlePageChange(1)}>1</button>
-      <span>...</span>
-      {#each Array.from({ length: 3 }, (_, i) => currentPage - 1 + i) as page}
-        <button on:click={() => handlePageChange(page)} class:selected={page === currentPage}>{page}</button>
-      {/each}
-      <span>...</span>
-      <button on:click={() => handlePageChange(totalPages)}>{totalPages}</button>
-    {/if}
-  {/if}
-
-  {#if currentPage < totalPages}
-    <button on:click={() => handlePageChange(currentPage + 1)}>Next &gt;</button>
-  {/if}
-</div>
+<Pagination {currentPage} {totalPages} {handlePageChange} />
 
 <Footer />
 
-<style>
-  /* Custom CSS for styling */
-  .sort-options {
-    
-    margin-right: 20px;
-  }
-
-  .pagination {
-    margin-top: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .pagination button {
-    margin-right: 0.5rem;
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-  }
-
-  .pagination button:hover {
-    background-color: #0056b3;
-  }
-
-  .pagination button.selected {
-    font-weight: bold;
-    text-decoration: underline;
-    background-color: #0056b3;
-  }
-
-</style>
