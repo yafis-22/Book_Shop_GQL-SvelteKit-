@@ -1,0 +1,1338 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Book Lender - OpenAPI 3.0",
+    "description": "This is a Book Lender Webapp based on the OpenAPI 3.0 specification.\nEnpower your reading journey with our seamless online book lending\nsystem.\n\nSome useful links:\n- [The Book Lender repository](https://github.com/yafis-22/Book_Shop.git)\n- [The source API definition for the Book Lender](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "apiteam@swagger.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3002/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "books",
+      "description": "Everything about the books."
+    },
+    {
+      "name": "users",
+      "description": "Operations about user"
+    },
+    {
+      "name": "auth",
+      "description": "User/admin authenticated login."
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/books/lend/{id}": {
+      "post": {
+        "tags": [
+          "books"
+        ],
+        "summary": "Lend a book",
+        "description": "Lend a book to a user",
+        "operationId": "lendBook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the book to be lent",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Lend book details",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "bookId": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "bookId": "123"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Book lent successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Book lent successfully",
+                  "chargeDetails": {
+                    "data": {
+                      "id": "123",
+                      "title": "Lent Book Title",
+                      "description": "Lent book description.",
+                      "lendingPrice": 19.99,
+                      "quantity": 49,
+                      "author": "Author Name",
+                      "category": "Fiction",
+                      "imageSrc": "https://example.com/lent-book-cover.jpg"
+                    },
+                    "initialCharge": 19.99
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Book ID not provided or invalid"
+          },
+          "403": {
+            "description": "Forbidden - Admins are not allowed to lend books"
+          },
+          "404": {
+            "description": "Not Found - User or Book not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/books/return/{id}": {
+      "post": {
+        "tags": [
+          "books"
+        ],
+        "summary": "Return a lent book",
+        "description": "Return a book lent by the user",
+        "operationId": "returnBook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the book to be returned",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Return book details",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "bookId": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "bookId": "123"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Book returned successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Book returned successfully",
+                  "data": {
+                    "bookId": "123",
+                    "initialCharge": 19.99,
+                    "additionalCharge": 0,
+                    "totalCharge": 19.99,
+                    "days": 7
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Book ID not provided or invalid"
+          },
+          "403": {
+            "description": "Forbidden - Admins are not allowed to lend or return books"
+          },
+          "404": {
+            "description": "Not Found - User, Book, or Book not found in the user's lent books"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/books": {
+      "post": {
+        "tags": [
+          "books"
+        ],
+        "summary": "Add a new book",
+        "description": "Add a new book to the bookstore",
+        "operationId": "addBook",
+        "requestBody": {
+          "description": "New book details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Book added successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Book added successfully",
+                  "data": {
+                    "id": "123",
+                    "title": "New Book Title",
+                    "description": "A new book description.",
+                    "lendingPrice": 29.99,
+                    "quantity": 20,
+                    "author": "New Author",
+                    "category": "New Category",
+                    "imageSrc": "https://example.com/new-book-cover.jpg"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Please enter all required fields"
+          },
+          "409": {
+            "description": "Conflict - Book with the same title already exists"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "books"
+        ],
+        "summary": "Get a list of books",
+        "description": "Retrieve a list of books based on search criteria",
+        "operationId": "getBooks",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search term to filter books by title, description, author, or category",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of items per page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "sortField",
+            "in": "query",
+            "description": "Field to sort the books by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Sort order ('asc' or 'desc')",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Books retrieved successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Books retrieved successfully",
+                  "totalBooks": 100,
+                  "booksFetched": 12,
+                  "data": [
+                    {
+                      "id": "123",
+                      "title": "Book Title",
+                      "description": "Book description.",
+                      "lendingPrice": 19.99,
+                      "quantity": 50,
+                      "author": "Author Name",
+                      "category": "Fiction",
+                      "imageSrc": "https://example.com/book-cover.jpg"
+                    }
+                  ],
+                  "currentPage": 1,
+                  "totalPages": 9
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid page number"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/books/category/{category}": {
+      "get": {
+        "tags": [
+          "books"
+        ],
+        "summary": "Get books by category",
+        "description": "Retrieve books based on a specific category",
+        "operationId": "getBooksByCategory",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "path",
+            "required": true,
+            "description": "The category for which books should be retrieved",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of items per page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "sortField",
+            "in": "query",
+            "description": "Field to sort the books by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Sort order ('asc' or 'desc')",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Books retrieved successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Books in the category Fiction retrieved successfully",
+                  "totalBooks": 30,
+                  "booksFetched": 12,
+                  "books": [
+                    {
+                      "id": "123",
+                      "title": "Book Title",
+                      "description": "Book description.",
+                      "lendingPrice": 19.99,
+                      "quantity": 50,
+                      "author": "Author Name",
+                      "category": "Fiction",
+                      "imageSrc": "https://example.com/book-cover.jpg"
+                    }
+                  ],
+                  "currentPage": 1,
+                  "totalPages": 3
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid page number"
+          },
+          "404": {
+            "description": "No books found for the category"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/books/{id}": {
+      "get": {
+        "tags": [
+          "books"
+        ],
+        "summary": "Get book by ID",
+        "description": "Retrieve a book by its unique identifier",
+        "operationId": "getBookById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the book to be retrieved",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book retrieved successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "123",
+                  "title": "Book Title",
+                  "description": "Book description.",
+                  "lendingPrice": 19.99,
+                  "quantity": 50,
+                  "author": "Author Name",
+                  "category": "Fiction",
+                  "imageSrc": "https://example.com/book-cover.jpg"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Book not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "books"
+        ],
+        "summary": "Update an existing book",
+        "description": "Update an existing book by ID",
+        "operationId": "updateBook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the book to be updated",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existing book in the database",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Book updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Book updated successfully",
+                  "data": {
+                    "id": "123",
+                    "title": "Updated Title",
+                    "description": "Updated Description",
+                    "lendingPrice": 25.99,
+                    "quantity": 10,
+                    "author": "Updated Author",
+                    "category": "Fiction",
+                    "imageSrc": "https://example.com/image.jpg"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid ID supplied"
+          },
+          "404": {
+            "description": "Book not found"
+          },
+          "422": {
+            "description": "Validation exception"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "books"
+        ],
+        "summary": "Update an existing book",
+        "description": "Update an existing book by ID",
+        "operationId": "updateBook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the book to be updated",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existing book in the database",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Book"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Book updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Book updated successfully",
+                  "data": {
+                    "id": "123",
+                    "title": "Updated Title",
+                    "description": "Updated Description",
+                    "lendingPrice": 25.99,
+                    "quantity": 10,
+                    "author": "Updated Author",
+                    "category": "Fiction",
+                    "imageSrc": "https://example.com/image.jpg"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid ID supplied"
+          },
+          "404": {
+            "description": "Book not found"
+          },
+          "422": {
+            "description": "Validation exception"
+          }
+        }
+      }
+    },
+    "/books/{id}/restore": {
+      "patch": {
+        "tags": [
+          "books"
+        ],
+        "summary": "Restore a soft-deleted book",
+        "description": "Restore a soft-deleted book by ID",
+        "operationId": "bookAvailable",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the soft-deleted book to be restored",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book restored successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Book restored successfully",
+                  "data": {
+                    "id": "123",
+                    "title": "Restored Title",
+                    "description": "Restored Description",
+                    "lendingPrice": 29.99,
+                    "quantity": 5,
+                    "author": "Restored Author",
+                    "category": "Fiction",
+                    "imageSrc": "https://example.com/restored-image.jpg"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Book not found or permanently deleted"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "books"
+        ],
+        "summary": "Delete a book",
+        "description": "Delete a book from the bookstore by ID",
+        "operationId": "deleteBook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the book to be deleted",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book deleted successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Book deleted successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid book ID or missing ID in URL or request body"
+          },
+          "404": {
+            "description": "Book not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Register a new user or admin",
+        "description": "Register a new user or admin with the provided details",
+        "operationId": "registerUser",
+        "requestBody": {
+          "description": "User registration details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "New user is registered",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "New user is registered",
+                  "user": {
+                    "id": "123",
+                    "username": "JohnDoe",
+                    "password": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTI3LCJ1c2VybmFtZSI6ImppYiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzA4MDYzNDE1LCJleHAiOjE3MDgwNjcwMTV9.pLonmdenbgEOJqhp6juSQpxvtXqrMD6ORQtFZhHe7so",
+                    "email": "john.doe@example.com",
+                    "phoneNumber": "1234567890",
+                    "address": "123 Main Street, City",
+                    "role": "user"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid input or existing username/email"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get all users (Only can be done by the Admin)",
+        "description": "Get a list of all users with optional search, pagination, and sorting",
+        "operationId": "getAllUsers",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search term for username, email, or address",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number (default is 1)",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of users per page (default is 10)",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "sortField",
+            "in": "query",
+            "description": "Field to sort by (e.g., username, email, address)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Sort order (asc or desc)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users retrieved successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Users retrieved successfully",
+                  "totalUsers": 50,
+                  "usersFetched": 10,
+                  "data": [
+                    {
+                      "id": "1",
+                      "username": "JohnDoe",
+                      "password": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTI3LCJ1c2VybmFtZSI6ImppYiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzA4MDYzNDE1LCJleHAiOjE3MDgwNjcwMTV9.pLonmdenbgEOJqhp6juSQpxvtXqrMD6ORQtFZhHe7so",
+                      "email": "john.doe@example.com",
+                      "address": "123 Main Street, City",
+                      "role": "user",
+                      "createdAt": "2022-01-01T12:00:00Z",
+                      "updatedAt": "2022-01-01T12:30:00Z",
+                      "deletedAt": null
+                    },
+                    {
+                      "id": "2",
+                      "username": "JaneSmith",
+                      "email": "jane.smith@example.com",
+                      "address": "456 Oak Avenue, Town",
+                      "role": "user",
+                      "createdAt": "2022-01-02T10:00:00Z",
+                      "updatedAt": "2022-01-02T10:45:00Z",
+                      "deletedAt": null
+                    }
+                  ],
+                  "currentPage": 1,
+                  "totalPages": 5
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid page or pageSize"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get a user by ID (Only can be done by the Admin)",
+        "description": "Get detailed information about a user by ID",
+        "operationId": "getUserById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User retrieved successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "1",
+                  "username": "JohnDoe",
+                  "password": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTI3LCJ1c2VybmFtZSI6ImppYiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzA4MDYzNDE1LCJleHAiOjE3MDgwNjcwMTV9.pLonmdenbgEOJqhp6juSQpxvtXqrMD6ORQtFZhHe7so",
+                  "email": "john.doe@example.com",
+                  "address": "123 Main Street, City",
+                  "role": "user",
+                  "createdAt": "2022-01-01T12:00:00Z",
+                  "updatedAt": "2022-01-01T12:30:00Z",
+                  "deletedAt": null,
+                  "lentBooks": [
+                    {
+                      "id": "101",
+                      "title": "Book1",
+                      "author": "Author1",
+                      "category": "Fiction",
+                      "initialCharge": 19.99,
+                      "timestamp": "2022-01-02T08:00:00Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get user details",
+        "description": "Get details of the authenticated user. Admins cannot access this endpoint.",
+        "operationId": "userDetails",
+        "responses": {
+          "200": {
+            "description": "User details retrieved successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "User details",
+                  "data": {
+                    "id": "1",
+                    "username": "JohnDoe",
+                    "email": "john.doe@example.com",
+                    "phoneNumber": "1234567890",
+                    "lentBooks": [
+                      {
+                        "id": "101",
+                        "title": "Book 1",
+                        "author": "Author 1",
+                        "category": "Fiction",
+                        "initialCharge": 19.99,
+                        "additionalCharge": 0,
+                        "totalCharge": 19.99,
+                        "days": 7
+                      },
+                      {
+                        "id": "102",
+                        "title": "Book 2",
+                        "author": "Author 2",
+                        "category": "Non-Fiction",
+                        "initialCharge": 24.99,
+                        "additionalCharge": 15,
+                        "totalCharge": 39.99,
+                        "days": 12
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admins cannot access this endpoint",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Invalid User Token"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update user details",
+        "description": "Update details of the authenticated user. Admins cannot update details.",
+        "operationId": "updateUser",
+        "requestBody": {
+          "description": "User details to be updated",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User details updated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "User details updated successfully",
+                  "user": {
+                    "id": "1",
+                    "username": "JohnDoe",
+                    "email": "john.doe@example.com",
+                    "phoneNumber": "1234567890",
+                    "address": "123 Main Street, City",
+                    "role": "user",
+                    "createdAt": "2022-01-01T12:00:00Z",
+                    "updatedAt": "2022-01-01T13:00:00Z",
+                    "deletedAt": null
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid data or duplicate email/phone number",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Invalid email address"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admins cannot update details",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Invalid User Token"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete the authenticated user account",
+        "description": "Delete the account of the authenticated user. Admins cannot delete accounts.",
+        "operationId": "deleteUser",
+        "responses": {
+          "200": {
+            "description": "User deleted successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "User deleted successfully",
+                  "data": {
+                    "id": "1",
+                    "username": "JohnDoe",
+                    "email": "john.doe@example.com",
+                    "address": "123 Main Street, City",
+                    "role": "user",
+                    "createdAt": "2022-01-01T12:00:00Z",
+                    "updatedAt": "2022-01-01T13:00:00Z",
+                    "deletedAt": "2022-02-01T13:00:00Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - User has lent books and needs to return them first",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "You need to return all books before deleting your account",
+                  "data": [
+                    {
+                      "id": "101",
+                      "title": "Book1",
+                      "author": "Author1",
+                      "category": "Fiction",
+                      "initialCharge": 19.99,
+                      "timestamp": "2022-01-02T08:00:00Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Admins cannot delete accounts",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Invalid User Token"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/{id}/restore": {
+      "patch": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Activate a user by ID (Only can be done by the admin)",
+        "description": "Activate a soft-deleted user by ID. Only accessible by admin.",
+        "operationId": "activateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user to be activated",
+            "schema": {
+              "type": "string"
+            },
+            "example": "123"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User activated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "User restored successfully",
+                  "data": {
+                    "id": "123",
+                    "username": "JohnDoe",
+                    "email": "john.doe@example.com",
+                    "phoneNumber": "1234567890",
+                    "address": "123 Main St, City",
+                    "role": "user",
+                    "createdAt": "2022-01-01T12:00:00Z",
+                    "updatedAt": "2022-02-01T13:00:00Z",
+                    "deletedAt": null
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Only admin can activate users",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Invalid User Token"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - User not found or permanently deleted",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "User not found or permanently deleted"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Authenticate a user",
+        "description": "Authenticate a user by username and password.",
+        "operationId": "authLogin",
+        "requestBody": {
+          "description": "User credentials for authentication",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The username of the user",
+                    "example": "john_doe"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "description": "The password of the user",
+                    "example": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authentication successful",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Login successful as user",
+                  "userToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  "role": "user"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid username or password",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Invalid username or password"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Book": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the book"
+          },
+          "title": {
+            "type": "string",
+            "description": "The unique title of the book"
+          },
+          "description": {
+            "type": "string",
+            "description": "A brief description of the book"
+          },
+          "lendingPrice": {
+            "type": "number",
+            "format": "double",
+            "description": "The lending price of the book"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "The quantity of available copies"
+          },
+          "author": {
+            "type": "string",
+            "description": "The author of the book"
+          },
+          "category": {
+            "type": "string",
+            "description": "The category or genre of the book"
+          },
+          "imageSrc": {
+            "type": "string",
+            "format": "uri",
+            "description": "The URL of the book's cover image"
+          }
+        },
+        "example": {
+          "title": "Example Book",
+          "description": "A sample book description.",
+          "lendingPrice": 19.99,
+          "quantity": 50,
+          "author": "John Doe",
+          "category": "Fiction",
+          "imageSrc": "https://example.com/book-cover.jpg"
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "The unique username for the user"
+          },
+          "password": {
+            "type": "string",
+            "description": "The user's password"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "The user's email address"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "The user's phone number (10 digits)"
+          },
+          "address": {
+            "type": "string",
+            "description": "The user's address"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "admin"
+            ],
+            "description": "The role of the user (either 'user' or 'admin')"
+          }
+        },
+        "example": {
+          "username": "JohnDoe",
+          "password": "StrongPassword123!",
+          "email": "john.doe@example.com",
+          "phoneNumber": "1234567890",
+          "address": "123 Main Street, City",
+          "role": "user"
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
