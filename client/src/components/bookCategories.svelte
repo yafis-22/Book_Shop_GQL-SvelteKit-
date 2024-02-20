@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
   import BookCard from './bookCard.svelte';
   import Header from './header.svelte';
   import Footer from './footer.svelte';
@@ -21,6 +21,7 @@
         const data = await response.json();
         books = data.books;
         totalPages = data.totalPages || 1;
+        console.log("books", books)
       } else {
         console.error(`Error fetching books in category ${category}:`, response.statusText);
       }
@@ -39,6 +40,10 @@
   };
 
   onMount(() => {
+    fetchBooksByCategory();
+  });
+  
+  afterUpdate(() => {
     fetchBooksByCategory();
   });
 

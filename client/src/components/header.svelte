@@ -2,8 +2,7 @@
   import { Link, navigate } from "svelte-routing";
   import authStore from "../stores/authStore";
   import SearchBar from "./searchBar.svelte"
-  import "bootstrap/dist/css/bootstrap.min.css";
-  import "bootstrap-icons/font/bootstrap-icons.css";
+
   let expanded = false;
   let showCategories = false;
   $: userLoggedIn = $authStore.userLoggedIn;
@@ -23,6 +22,10 @@
   };
   const toggleCategories = () => {
     showCategories = !showCategories;
+  };
+
+  const closeCategories = () => {
+    showCategories = false;
   };
 
   const categories = [
@@ -55,7 +58,7 @@
         <li class="nav-item">
           <button class="nav-link dropdown-toggle" on:click={toggleCategories}>Categories</button>
           {#if showCategories}
-            <div class="categories-dropdown">
+            <div class="categories-dropdown" on:mouseleave={closeCategories}>
               {#each categories as category (category)}
               <Link to={`/books/category/${category}`} on:click={() => handleCategoryClick(category)} class="dropdown-item p-2">{category}</Link>
     {/each}
