@@ -2,20 +2,11 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Book Lender - OpenAPI 3.0",
-    "description": "This is a Book Lender Webapp based on the OpenAPI 3.0 specification.\nEnpower your reading journey with our seamless online book lending\nsystem.\n\nSome useful links:\n- [The Book Lender repository](https://github.com/yafis-22/Book_Shop.git)\n- [The source API definition for the Book Lender](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)",
-    "termsOfService": "http://swagger.io/terms/",
+    "description": "This is a Book Lender Webapp based on the OpenAPI 3.0 specification.\nEnpower your reading journey with our seamless online book lending\nsystem.\n\nSome useful links:\n- [The Book Lender repository](https://github.com/yafis-22/Book_Shop.git)\n- [The source API definition for the Book Lender app](https://github.com/yafis-22/Book_Shop/blob/main/openAPI_spec.json)",
     "contact": {
-      "email": "apiteam@swagger.io"
-    },
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      "email": "info@booklend.com"
     },
     "version": "1.0.0"
-  },
-  "externalDocs": {
-    "description": "Find out more about Swagger",
-    "url": "http://swagger.io"
   },
   "servers": [
     {
