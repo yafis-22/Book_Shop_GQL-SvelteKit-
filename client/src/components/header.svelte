@@ -77,7 +77,7 @@
           <i class="bi bi-person" on:click={handleIconClick}></i>
         {:else}
           <Link to="/login" class="btn btn-outline-dark" type="button">Login</Link>
-          <Link to="/register" class="btn btn-outline-dark" type="button">Register</Link>
+          <Link to="/users" class="btn btn-outline-dark" type="button">Register</Link>
         {/if}
       </div>
     </div>

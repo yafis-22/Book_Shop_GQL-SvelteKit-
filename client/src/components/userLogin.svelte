@@ -126,7 +126,7 @@
   </div>
   <hr />
   <div class="text-center">
-    <p class="account">Don't have an account? <Link to="/register" class="text-dark">Sign up</Link></p>
+    <p class="account">Don't have an account? <Link to="/users" class="text-dark">Sign up</Link></p>
 </div>
 
 </div>

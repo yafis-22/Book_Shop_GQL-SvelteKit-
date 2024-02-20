@@ -18,7 +18,7 @@
   <Route path="/login">
     <UserLogin />
   </Route>
-  <Route path="/register">
+  <Route path="/users">
     <UserRegistrationForm />
   </Route>
   <Route path="/books">
