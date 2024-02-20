@@ -39,10 +39,19 @@
     await fetchBooksByCategory();
   };
 
+  $: if (category) {
+    books = [];
+    currentPage = 1;
+    totalPages = 1;
+    sortField = '';
+    sortOrder = '';
+    fetchBooksByCategory();
+  }
+
   onMount(() => {
     fetchBooksByCategory();
   });
-  
+
   afterUpdate(() => {
     fetchBooksByCategory();
   });
