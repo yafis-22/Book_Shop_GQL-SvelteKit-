@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Book Lender - OpenAPI 3.0
+  title: Book Lender
   description: |-
     This is a Book Lender Webapp based on the OpenAPI 3.0 specification.
     Enpower your reading journey with our seamless online book lending
@@ -8,7 +8,7 @@ info:
     
     Some useful links:
     - [The Book Lender repository](https://github.com/yafis-22/Book_Shop.git)
-    - [The source API definition for the Book Lender app](https://github.com/yafis-22/Book_Shop/blob/main/openAPI_spec.json)
+    - [The API definition for the Book Lender app](https://github.com/yafis-22/Book_Shop/blob/main/server/openapi.yaml)
   contact:
     email: info@booklend.com
   version: 1.0.0
@@ -27,6 +27,8 @@ paths:
     post:
       tags:
         - books
+      security:
+        - bearerAuth: []
       summary: Lend a book
       description: Lend a book to a user
       operationId: lendBook
@@ -76,10 +78,13 @@ paths:
           description: Not Found - User or Book not found
         '500':
           description: Internal Server Error
+  
   /books/return/{id}:
     post:
       tags:
         - books
+      security:
+        - bearerAuth: []
       summary: Return a lent book
       description: Return a book lent by the user
       operationId: returnBook
@@ -138,10 +143,13 @@ paths:
           description: Not Found - User, Book, or Book not found in the   user's lent books
         '500':
           description: Internal Server Error
+  
   /books:
     post:
       tags:
         - books
+      security:
+        - bearerAuth: []
       summary: Add a new book
       description: Add a new book to the bookstore
       operationId: addBook
@@ -449,9 +457,12 @@ paths:
           description: Book not found
         '422':
           description: Validation exception
+    
     delete:
       tags:
         - books
+      security:
+        - bearerAuth: []
       summary: Delete a book
       description: Delete a book from the bookstore by ID
       operationId: deleteBook
@@ -484,6 +495,8 @@ paths:
     patch:
       tags:
         - books
+      security:
+        - bearerAuth: []
       summary: Restore a soft-deleted book
       description: Restore a soft-deleted book by ID
       operationId: bookAvailable
@@ -512,7 +525,6 @@ paths:
         '500':
           description: Internal Server Error
     
-
   /users:
     post:
       tags:
@@ -532,19 +544,15 @@ paths:
           description: New user is registered
           content:
             application/json:
-              example:
-                message: New user is registered
-                user:
-                  id: "149"
-                  username: "JohnDoe"
-                  password: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTI3LCJ1c2VybmFtZSI6ImppYiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzA4MDYzNDE1LCJleHAiOjE3MDgwNjcwMTV9.pLonmdenbgEOJqhp6juSQpxvtXqrMD6ORQtFZhHe7so"
-                  email: "john.doe@example.com"
-                  phoneNumber: "1234567890"
-                  address: "123 Main Street, City"
-                  role: "user"
-                  createdAt: "2022-01-02T10:00:00Z"
-                  updatedAt: "2022-01-02T10:45:00Z"
-                  deletedAt: null
+              schema:
+               type: object
+               properties:
+                 message:
+                   type: string
+                   description: A message indicating the success of creating new user.
+                   example: New user is registered
+                 user:
+                   $ref: '#/components/schemas/UserDetails'
         '400':
           description: Bad Request - Invalid input or existing username/email
         '500':
@@ -553,6 +561,8 @@ paths:
     get:
       tags:
         - users
+      security:
+        - bearerAuth: []
       summary: Get all users (Only can be done by the Admin)
       description: Get a list of all users with optional search, pagination, and sorting
       operationId: getAllUsers
@@ -590,31 +600,8 @@ paths:
           description: Users retrieved successfully
           content:
             application/json:
-              example:
-                message: Users retrieved successfully
-                totalUsers: 50
-                usersFetched: 10
-                data:
-                  - id: "1"
-                    username: "JohnDoe"
-                    password: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTI3LCJ1c2VybmFtZSI6ImppYiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzA4MDYzNDE1LCJleHAiOjE3MDgwNjcwMTV9.pLonmdenbgEOJqhp6juSQpxvtXqrMD6ORQtFZhHe7so"
-                    email: "john.doe@example.com"
-                    address: "123 Main Street, City"
-                    role: "user"
-                    createdAt: "2022-01-01T12:00:00Z"
-                    updatedAt: "2022-01-01T12:30:00Z"
-                    deletedAt: null
-                  - id: "2"
-                    username: "JaneSmith"
-                    email: "jane.smith@example.com"
-                    address: "456 Oak Avenue, Town"
-                    role: "user"
-                    createdAt: "2022-01-02T10:00:00Z"
-                    updatedAt: "2022-01-02T10:45:00Z"
-                    deletedAt: null
-                  # ... (more user objects)
-                currentPage: 1
-                totalPages: 5
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
         '400':
           description: Bad Request - Invalid page or pageSize
         '500':
@@ -624,6 +611,8 @@ paths:
     get:
       tags:
         - users
+      security:
+        - bearerAuth: []
       summary: Get a user by ID (Only can be done by the Admin)
       description: Get detailed information about a user by ID
       operationId: getUserById
@@ -639,23 +628,14 @@ paths:
           description: User retrieved successfully
           content:
             application/json:
-              example:
-                id: "9"
-                username: "JohnDoe"
-                password: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTI3LCJ1c2VybmFtZSI6ImppYiIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzA4MDYzNDE1LCJleHAiOjE3MDgwNjcwMTV9.pLonmdenbgEOJqhp6juSQpxvtXqrMD6ORQtFZhHe7so"
-                email: "john.doe@example.com"
-                address: "123 Main Street, City"
-                role: "user"
-                createdAt: "2022-01-01T12:00:00Z"
-                updatedAt: "2022-01-01T12:30:00Z"
-                deletedAt: null
-                lentBooks:
-                  - id: "101"
-                    title: "Book1"
-                    author: "Author1"
-                    category: "Fiction"
-                    initialCharge: 19.99
-                    timestamp: "2022-01-02T08:00:00Z"
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/UserDetails'
+                  - properties:
+                      lentBooks:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/LentBook'
         '404':
           description: User not found
         '500':
@@ -665,38 +645,79 @@ paths:
     get:
       tags:
         - users
+      security:
+        - bearerAuth: []
       summary: Get user details
-      description: Get details of the authenticated user. Admins cannot access this endpoint.
+      description: Get details of the authenticated user. Admins cannot   access this endpoint.
       operationId: userDetails
       responses:
         '200':
           description: User details retrieved successfully
           content:
             application/json:
-              example:
-                message: User details
-                data:
-                  id: "41"
-                  username: "JohnDoe"
-                  email: "john.doe@example.com"
-                  phoneNumber: "1234567890"
-                  lentBooks:
-                    - id: "101"
-                      title: "Book 1"
-                      author: "Author 1"
-                      category: "Fiction"
-                      initialCharge: 19.99
-                      additionalCharge: 0
-                      totalCharge: 19.99
-                      days: 7
-                    - id: "102"
-                      title: "Book 2"
-                      author: "Author 2"
-                      category: "Non-Fiction"
-                      initialCharge: 24.99
-                      additionalCharge: 15
-                      totalCharge: 39.99
-                      days: 12
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A message indicating the success of   the operation.
+                    example: User details
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the user.
+                        example: "41"
+                      username:
+                        type: string
+                        description: The username of the user.
+                        example: "JohnDoe"
+                      email:
+                        type: string
+                        description: The email address of the user.
+                        example: "john.doe@example.com"
+                      phoneNumber:
+                        type: string
+                        description: The phone number of the user.
+                        example: "1234567890"
+                      lentBooks:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the lent book.
+                              example: "101"
+                            title:
+                              type: string
+                              description: The title of the lent book.
+                              example: "Book 1"
+                            author:
+                              type: string
+                              description: The author of the lent book.
+                              example: "Author 1"
+                            category:
+                              type: string
+                              description: The category of the lent   book.
+                              example: "Fiction"
+                            initialCharge:
+                              type: number
+                              description: The initial charge for   lending the book.
+                              example: 19.99
+                            additionalCharge:
+                              type: number
+                              description: The additional charge for   the lent book.
+                              example: 0
+                            totalCharge:
+                              type: number
+                              description: The total charge for the   lent book.
+                              example: 19.99
+                            days:
+                              type: integer
+                              description: The number of days the book   has been lent.
+                              example: 7
         '403':
           description: Forbidden - Admins cannot access this endpoint
           content:
@@ -710,6 +731,8 @@ paths:
     put:
       tags:
         - users
+      security:
+        - bearerAuth: []
       summary: Update user details
       description: Update details of the authenticated user. Admins cannot update details.
       operationId: updateUser
@@ -725,18 +748,15 @@ paths:
           description: User details updated successfully
           content:
             application/json:
-              example:
-                message: User details updated successfully
-                user:
-                  id: "145"
-                  username: "JohnDoe"
-                  email: "john.doe@example.com"
-                  phoneNumber: "1234567890"
-                  address: "123 Main Street, City"
-                  role: "user"
-                  createdAt: "2022-01-01T12:00:00Z"
-                  updatedAt: "2022-01-01T13:00:00Z"
-                  deletedAt: null
+              schema:
+               type: object
+               properties:
+                 message:
+                   type: string
+                   description: A message indicating the success of the operation.
+                   example: User details
+                 data:
+                   $ref: '#/components/schemas/UserDetails'
         '400':
           description: Bad Request - Invalid data or duplicate email/phone number
           content:
@@ -756,6 +776,8 @@ paths:
     delete:
       tags:
         - users
+      security:
+        - bearerAuth: []
       summary: Delete the authenticated user account
       description: Delete the account of the authenticated user. Admins cannot delete accounts.
       operationId: deleteUser
@@ -764,30 +786,28 @@ paths:
           description: User deleted successfully
           content:
             application/json:
-              example:
-                message: User deleted successfully
-                data:
-                  id: "109"
-                  username: "JohnDoe"
-                  email: "john.doe@example.com"
-                  address: "123 Main Street, City"
-                  role: "user"
-                  createdAt: "2022-01-01T12:00:00Z"
-                  updatedAt: "2022-01-01T13:00:00Z"
-                  deletedAt: "2022-02-01T13:00:00Z"
+              schema:
+               type: object
+               properties:
+                 message:
+                   type: string
+                   description: A message indicating the success of the operation.
+                   example: User details
+                 data:
+                   $ref: '#/components/schemas/UserDetails'
         '400':
           description: Bad Request - User has lent books and needs to return them first
           content:
             application/json:
-              example:
-                message: You need to return all books before deleting your account
-                data:
-                  - id: "159"
-                    title: "Book1"
-                    author: "Author1"
-                    category: "Fiction"
-                    initialCharge: 19.99
-                    timestamp: "2022-01-02T08:00:00Z"
+              schema:
+               type: object
+               properties:
+                 message:
+                   type: string
+                   description: A message indicating the success of the operation.
+                   example: You need to return all books before deleting your account
+                 data:
+                   $ref: '#/components/schemas/LentBook'
         '403':
           description: Forbidden - Admins cannot delete accounts
           content:
@@ -803,6 +823,8 @@ paths:
     patch:
       tags:
         - users
+      security:
+        - bearerAuth: []
       summary: Activate a user by ID (Only can be done by the admin)
       description: Activate a soft-deleted user by ID. Only accessible by admin.
       operationId: activateUser
@@ -819,18 +841,15 @@ paths:
           description: User activated successfully
           content:
             application/json:
-              example:
-                message: User restored successfully
-                data:
-                  id: "13"
-                  username: "JohnDoe"
-                  email: "john.doe@example.com"
-                  phoneNumber: "1234567890"
-                  address: "123 Main St, City"
-                  role: "user"
-                  createdAt: "2022-01-01T12:00:00Z"
-                  updatedAt: "2022-02-01T13:00:00Z"
-                  deletedAt: null
+              schema:
+               type: object
+               properties:
+                 message:
+                   type: string
+                   description: A message indicating the success of the operation.
+                   example: User restored successfully
+                 data:
+                   $ref: '#/components/schemas/UserDetails'
         '403':
           description: Forbidden - Only admin can activate users
           content:
@@ -1000,16 +1019,21 @@ components:
       properties:
         username:
           type: string
+          pattern: '^[a-zA-Z0-9]+$'
+          minLength: 3
           description: The unique username for the user
         password:
           type: string
+          pattern: '^[^\s@]+@[^\s@]+\.[^\s@]+$'
+          minLength: 6
           description: The user's password
         email:
           type: string
           format: email
-          description: The user's email address
+          description: The user's unique email address
         phoneNumber:
           type: string
+          pattern: '^[0-9]{10}$'
           description: The user's phone number (10 digits)
         address:
           type: string
@@ -1025,6 +1049,112 @@ components:
         phoneNumber: "1234567890"
         address: "123 Main Street, City"
         role: "user"
+
+    UserDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the user.
+          example: "149"
+        username:
+          type: string
+          description: The username of the user.
+          example: "JohnDoe"
+        password:
+          type: string
+          description: The hashed password of the user.
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        email:
+          type: string
+          description: The email address of the user.
+          example: "john.doe@example.com"
+        phoneNumber:
+          type: string
+          description: The phone number of the user.
+          example: "1234567890"
+        address:
+          type: string
+          description: The address of the user.
+          example: "123 Main Street, City"
+        role:
+          type: string
+          description: The role of the user (e.g., "user").
+          example: "user"
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the user was created.
+          example: "2022-01-02T10:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the user was last updated.
+          example: "2022-01-02T10:45:00Z"
+        deletedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: The timestamp when the user was deleted (null if not deleted).
+          example: null
+    
+    UserListResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message indicating the status of the operation.
+          example: Users retrieved successfully
+        totalUsers:
+          type: integer
+          description: The total number of users available.
+          example: 1
+        usersFetched:
+          type: integer
+          description: The number of users fetched in the current response.
+          example: 1
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserDetails'
+          description: An array of user objects.
+        currentPage:
+          type: integer
+          description: The current page number.
+          example: 1
+        totalPages:
+          type: integer
+          description: The total number of pages based on the given pageSize.
+          example: 1
+    
+    LentBook:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the lent book.
+          example: "101"
+        title:
+          type: string
+          description: The title of the lent book.
+          example: "Book1"
+        author:
+          type: string
+          description: The author of the lent book.
+          example: "Author1"
+        category:
+          type: string
+          description: The category of the lent book.
+          example: "Fiction"
+        initialCharge:
+          type: number
+          description: The initial charge for lending the book.
+          example: 19.99
+        timestamp:
+          type: string
+          format: date-time
+          description: The timestamp when the book was lent.
+          example: "2022-01-02T08:00:00Z"
     
   securitySchemes:
     bearerAuth:

@@ -10,15 +10,14 @@ import * as OpenApiValidator from 'express-openapi-validator';
 
 const app = express();
 app.use(cors());
+
 app.use(
   OpenApiValidator.middleware({
     apiSpec: './openapi.yaml',
-    validateRequests: true, // (default)
-    validateResponses: true, // false by default
+    validateRequests: true, 
   }),
 );
-app.use((err, req, res, next) => {
-  // format error
+app.use((err, res) => {
   res.status(err.status || 500).json({
     message: err.message,
     errors: err.errors,
