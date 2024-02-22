@@ -66,10 +66,6 @@
 </div>
 
 <style>
-  .link {
-    color: inherit; /* Use the parent color */
-    text-decoration: none; /* Remove underline */
-  }
   .search-container {
     display: flex;
     align-items: center;
