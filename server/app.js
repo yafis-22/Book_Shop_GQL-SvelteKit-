@@ -6,9 +6,24 @@ import authRoutes from './routes/authLogin.js';
 import fs from 'fs';
 import sequelize from './db/sequelize.js';
 import cors from "cors";
+import * as OpenApiValidator from 'express-openapi-validator';
 
 const app = express();
 app.use(cors());
+app.use(
+  OpenApiValidator.middleware({
+    apiSpec: './openapi.yaml',
+    validateRequests: true, // (default)
+    validateResponses: true, // false by default
+  }),
+);
+app.use((err, req, res, next) => {
+  // format error
+  res.status(err.status || 500).json({
+    message: err.message,
+    errors: err.errors,
+  });
+});
 
 // Read the configuration from JSON file
 const configFile = 'config.json';
