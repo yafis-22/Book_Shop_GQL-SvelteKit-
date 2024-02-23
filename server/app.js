@@ -14,7 +14,6 @@ app.use(
   OpenApiValidator.middleware({
     apiSpec: './openapi.yaml',
     validateRequests: true, 
-    // validateResponses: true, 
   }),
 );
 app.use((err, req, res, next) => {

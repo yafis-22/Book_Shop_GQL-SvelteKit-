@@ -196,29 +196,34 @@ paths:
           description: Search term to filter books by title, description, author, or category
           schema:
             type: string
+          allowEmptyValue: true
         - name: page
           in: query
           description: Page number for pagination
           schema:
             type: integer
             minimum: 1
+          allowEmptyValue: true
         - name: pageSize
           in: query
           description: Number of items per page 
           schema:
             type: integer
             minimum: 1
+          allowEmptyValue: true
         - name: sortField
           in: query
           description: Field to sort the books by 
           schema:
             type: string
+          allowEmptyValue: true
         - name: sortOrder
           in: query
           description: Sort order ('asc' or 'desc')
           schema:
             type: string
-            enum: ['asc', 'desc']
+            enum: ['asc', 'desc', '']
+          allowEmptyValue: true
       responses:
         '200':
           description: Books retrieved successfully
@@ -271,23 +276,27 @@ paths:
           schema:
             type: integer
             minimum: 1
+          allowEmptyValue: true
         - name: pageSize
           in: query
           description: Number of items per page 
           schema:
             type: integer
             minimum: 1
+          allowEmptyValue: true
         - name: sortField
           in: query
           description: Field to sort the books by 
           schema:
             type: string
+          allowEmptyValue: true
         - name: sortOrder
           in: query
           description: Sort order ('asc' or 'desc')
           schema:
             type: string
-            enum: ['asc', 'desc']
+            enum: ['asc', 'desc', '']
+          allowEmptyValue: true
       responses:
         '200':
           description: Books retrieved successfully
@@ -349,6 +358,8 @@ paths:
     put:
       tags:
         - books
+      security:
+        - bearerAuth: []
       summary: Update an existing book
       description: Update an existing book by ID
       operationId: updateBook
@@ -391,6 +402,8 @@ paths:
     patch:
       tags:
         - books
+      security:
+        - bearerAuth: []
       summary: Update an existing book
       description: Update an existing book by ID
       operationId: updateBook
@@ -572,29 +585,34 @@ paths:
           description: Search term for username, email, or address
           schema:
             type: string
+          allowEmptyValue: true
         - name: page
           in: query
           description: Page number (default is 1)
           schema:
             type: integer
             minimum: 1
+          allowEmptyValue: true
         - name: pageSize
           in: query
           description: Number of users per page (default is 10)
           schema:
             type: integer
             minimum: 1
+          allowEmptyValue: true
         - name: sortField
           in: query
           description: Field to sort by (e.g., username, email, address)
           schema:
             type: string
+          allowEmptyValue: true
         - name: sortOrder
           in: query
           description: Sort order (asc or desc)
           schema:
             type: string
-            enum: ['asc', 'desc']
+            enum: ['asc', 'desc', '']
+          allowEmptyValue: true
       responses:
         '200':
           description: Users retrieved successfully
@@ -773,6 +791,53 @@ paths:
           description: Not Found - User not found
         '500':
           description: Internal Server Error
+    
+    patch:
+      tags:
+        - users
+      security:
+        - bearerAuth: []
+      summary: Update few user details
+      description: Update details of the authenticated user. Admins cannot update details.
+      operationId: updateUser
+      requestBody:
+        description: User details to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User details updated successfully
+          content:
+            application/json:
+              schema:
+               type: object
+               properties:
+                 message:
+                   type: string
+                   description: A message indicating the success of the operation.
+                   example: User details
+                 data:
+                   $ref: '#/components/schemas/UserDetails'
+        '400':
+          description: Bad Request - Invalid data or duplicate email/phone number
+          content:
+            application/json:
+              example:
+                message: Invalid email address
+        '403':
+          description: Forbidden - Admins cannot update details
+          content:
+            application/json:
+              example:
+                message: Invalid User Token
+        '404':
+          description: Not Found - User not found
+        '500':
+          description: Internal Server Error
+    
     delete:
       tags:
         - users
@@ -918,6 +983,54 @@ paths:
         '500':
           description: Internal Server Error
   
+  /admins:
+    get:
+      tags:
+        - admin
+      summary: Get all admin users
+      operationId: getAllAdminUsers
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Admin users retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminDetails'
+        '404':
+          description: Admin data not found
+        '500':
+          description: Internal Server Error
+
+  /admins/me:
+    get:
+      tags:
+        - admin
+      summary: Get details of the authenticated admin
+      operationId: getAuthenticatedAdminDetails
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Admin details retrieved successfully
+          content:
+            application/json:
+              schema:
+               type: object
+               properties:
+                 message:
+                   type: string
+                   description: A message indicating the success of the operation.
+                   example: Admin details
+                 data:
+                   $ref: '#/components/schemas/AdminDetails'
+        '403':
+          description: Forbidden - Invalid Admin Token
+        '404':
+          description: Admin not found
+        '500':
+          description: Internal Server Error
   
 components:
   schemas:
@@ -1155,6 +1268,54 @@ components:
           format: date-time
           description: The timestamp when the book was lent.
           example: "2022-01-02T08:00:00Z"
+    
+    AdminDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the admin.
+          example: "1"
+        username:
+          type: string
+          description: The username of the admin.
+          example: "Mikki"
+        password:
+          type: string
+          description: The hashed password of the admin.
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        email:
+          type: string
+          description: The email address of the user.
+          example: "mikki.doe@example.com"
+        phoneNumber:
+          type: string
+          description: The phone number of the admin.
+          example: "1234567899"
+        address:
+          type: string
+          description: The address of the admin.
+          example: "123 Main Street, City"
+        role:
+          type: string
+          description: The role of the user (e.g., "admin").
+          example: "admin"
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the admin was created.
+          example: "2022-01-02T10:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the admin was last updated.
+          example: "2022-01-02T10:45:00Z"
+        deletedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: The timestamp when the admin was deleted (null if not deleted).
+          example: null
     
   securitySchemes:
     bearerAuth:
