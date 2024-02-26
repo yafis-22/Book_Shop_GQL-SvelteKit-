@@ -19,22 +19,15 @@ const sortBooks = (books, sortField, sortOrder) => {
 
 export const getBooks = async (req, res) => {
   try {
-    const { search, page = 1, pageSize = 12, sortField, sortOrder } = req.query;
+    const { search, searchFields, page = 1, pageSize = 12, sortField, sortOrder } = req.query;
     const isAdmin = req.login && req.login.role === 'admin';
-    
+
     if (page <= 0) {
       return res.status(400).json({ message: 'Please enter a valid page number greater than 0.' });
     }
 
     // Build the where condition for search
-    const whereCondition = search ? {
-      [Op.or]: [
-        { title: { [Op.iLike]: `%${search}%` } },
-        { description: { [Op.iLike]: `%${search}%` } },
-        { author: { [Op.iLike]: `%${search}%` } },
-        { category: { [Op.iLike]: `%${search}%` } },
-      ],
-    } : {};
+    const whereCondition = search ? buildSearchCondition(search, searchFields) : {};
 
     let allBooks = await Book.findAll({
       where: whereCondition,
@@ -119,5 +112,20 @@ export const getBookById = async (req, res) => {
     console.error('Error reading book data:', err);
     res.status(500).send('Internal Server Error');
   }
+};
+
+// Helper function to build the search condition based on specified fields
+const buildSearchCondition = (searchValue, searchFields) => {
+  const fields = searchFields.split(',').map(field => field.trim());
+
+  if (fields.length === 0) {
+    return {}; // No specific fields provided, perform a general search
+  }
+
+  const orConditions = fields.map(field => ({
+    [field]: { [Op.iLike]: `%${searchValue}%` },
+  }));
+
+  return { [Op.or]: orConditions };
 };
 

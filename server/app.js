@@ -10,18 +10,18 @@ import * as OpenApiValidator from 'express-openapi-validator';
 
 const app = express();
 app.use(cors());
-app.use(
-  OpenApiValidator.middleware({
-    apiSpec: './openapi.yaml',
-    validateRequests: true, 
-  }),
-);
-app.use((err, req, res, next) => {
-  res.status(err.status || 500).json({
-    message: err.message,
-    errors: err.errors,
-  });
-});
+// app.use(
+//   OpenApiValidator.middleware({
+//     apiSpec: './openapi.yaml',
+//     validateRequests: true, 
+//   }),
+// );
+// app.use((err, req, res, next) => {
+//   res.status(err.status || 500).json({
+//     message: err.message,
+//     errors: err.errors,
+//   });
+// });
 
 // Read the configuration from JSON file
 const configFile = 'config.json';
