@@ -8,5 +8,6 @@ const initialState = {
 
 // Create a writable store
 const authStore = writable(initialState);
+export const searchResults = writable([]);
 
 export default authStore;

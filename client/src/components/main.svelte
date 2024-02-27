@@ -9,6 +9,7 @@
   import UserDashboard from "./userDashboard.svelte";
   import BookCategories from "./bookCategories.svelte";
   import Contact from "./contact.svelte";
+import SearchResults from "./searchResults.svelte";
 </script>
 
 <Router>
@@ -38,6 +39,9 @@
   </Route>
   <Route path="/contact">
     <Contact />
+  </Route>
+  <Route path="/q">
+    <SearchResults />
   </Route>
 </Router>
 

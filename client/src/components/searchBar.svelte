@@ -1,42 +1,56 @@
 <script>
   import { writable } from "svelte/store";
-  import { onMount } from "svelte";
-  import { Link } from "svelte-routing";
+  import { Link, navigate } from "svelte-routing";
+  import { searchResults } from "../stores/authStore";
 
   let searchQuery = "";
-  const searchResults = writable([]);
+  export let searchFields = "title"; // Default search fields
+  export let showSearchFields = false;
   const isResultsVisible = writable(false);
 
   const searchBooks = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3002/api/v1/books/?search=${searchQuery}`
+        `http://localhost:3002/api/v1/books/?search=${searchQuery}&searchFields=${searchFields}`,
       );
       const data = await response.json();
       searchResults.set(data.data);
-      isResultsVisible.set(true);
+
+      // Navigate to the search results page
+      navigate(`/q?search=${searchQuery}&searchFields=${searchFields}`);
     } catch (error) {
       console.error("Error searching books:", error);
     }
   };
 
-  const handleDocumentClick = (event) => {
-    const isClickedInsideSearchResults = event.target.closest(".search-results");
+  // const handleDocumentClick = (event) => {
+  //   const isClickedInsideSearchResults = event.target.closest(".search-results");
 
-    if (!isClickedInsideSearchResults) {
-      isResultsVisible.set(false);
-    }
-  };
+  //   if (!isClickedInsideSearchResults) {
+  //     isResultsVisible.set(false);
+  //   }
+  // };
 
-  onMount(() => {
-    document.addEventListener("click", handleDocumentClick);
+  // onMount(() => {
+  //   document.addEventListener("click", handleDocumentClick);
 
-    // Cleanup the event listener when the component is destroyed
-    return () => {
-      document.removeEventListener("click", handleDocumentClick);
-    };
-  });
+  //   // Cleanup the event listener when the component is destroyed
+  //   return () => {
+  //     document.removeEventListener("click", handleDocumentClick);
+  //   };
+  // });
 </script>
+
+{#if showSearchFields}
+  <div class="search-fields">
+    <label for="searchFields">Search by:</label>
+    <select bind:value={searchFields} id="searchFields">
+      <option value="author">Author</option>
+      <option value="title">Title</option>
+      <option value="category">Category</option>
+    </select>
+  </div>
+{/if}
 
 <div class="search-container">
   <input
