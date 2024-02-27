@@ -4,20 +4,21 @@
   import { searchResults } from "../stores/authStore";
 
   let searchQuery = "";
-  export let searchFields = "title"; // Default search fields
+  export let searchFields = "title,author"; // Default search fields
   export let showSearchFields = false;
   const isResultsVisible = writable(false);
 
   const searchBooks = async () => {
     try {
+      const encodedSearchFields = encodeURIComponent(searchFields);
       const response = await fetch(
-        `http://localhost:3002/api/v1/books/?search=${searchQuery}&searchFields=${searchFields}`,
+        `http://localhost:3002/api/v1/books/?search=${searchQuery}&searchFields=${encodedSearchFields}`,
       );
       const data = await response.json();
       searchResults.set(data.data);
 
       // Navigate to the search results page
-      navigate(`/q?search=${searchQuery}&searchFields=${searchFields}`);
+      navigate(`/q?search=${searchQuery}&searchFields=${encodedSearchFields}`);
     } catch (error) {
       console.error("Error searching books:", error);
     }
