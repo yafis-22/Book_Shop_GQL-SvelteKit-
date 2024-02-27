@@ -21,6 +21,8 @@ tags:
     description: Operations about user
   - name: auth
     description: User/admin authenticated login.
+  - name: admin
+    description: Operations about admin
 
 paths:
   /books/lend/{id}:
@@ -193,7 +195,13 @@ paths:
       parameters:
         - name: search
           in: query
-          description: Search term to filter books by title, description, author, or category
+          description: Search term to filter books by title, author, or category
+          schema:
+            type: string
+          allowEmptyValue: true
+        - name: searchFields
+          in: query
+          description: Search field to filter books by title, author, or category
           schema:
             type: string
           allowEmptyValue: true
