@@ -40,8 +40,9 @@
 {#if results.length === 0}
   <h3 class="mt-5 mb-5 p-5 text-center">No books found.</h3>
 {:else}
+<div class="row">
   {#each results as book (book.id)}
-    <div class="col-md-3">
+    <div class="col-md-4">
       <div class="card mb-3" style="width: 18rem; height: 400px;">
         <!-- Set a fixed height -->
         <Link to={`/books/${book.id}`} class="text-decoration-none">
@@ -76,6 +77,7 @@
       />
     </div>
   {/each}
+</div>
 {/if}
 {#if showModal}
   <!-- Bootstrap modal backdrop class for light background overlay -->
@@ -91,21 +93,21 @@
   }
 
   .card {
-    padding: 10px; /* Small padding */
+    padding: 10px; 
     margin: 20px;
     display: flex;
     flex-direction: column;
   }
 
   .image-container {
-    overflow: hidden; /* Hide any overflow if the image is larger */
-    height: 100%; /* Take up the full height of the container */
+    overflow: hidden; 
+    height: 100%; 
   }
 
   .card-img-top {
-    object-fit: fill; /* Ensure the whole image covers the container */
-    width: 100%; /* Ensure the image takes the full width of the container */
-    height: 100%; /* Ensure the image takes the full height of the container */
+    object-fit: fill; 
+    width: 100%; 
+    height: 100%;
   }
 
   .card-body {
