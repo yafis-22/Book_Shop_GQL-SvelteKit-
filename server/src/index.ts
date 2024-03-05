@@ -1,27 +1,31 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import { typeDefs } from './schema/test.js';
-import { resolvers } from './resolvers/testR.js';
+import { typeDefs } from './schema/books.js';
+import { resolvers, BookAPI } from './resolvers/getBooks.js';
 
+interface ContextValue {
+  dataSources: {
+    bookAPI: BookAPI;
+  };
+}
 
-export const books = [
-  {
-    title: 'The Awakening 2',
-    author: 'Kate Chopin',
-  },
-  {
-    title: 'City of Glass',
-    author: 'Paul Auster',
-  },
-];
-
-const server = new ApolloServer({
+const server = new ApolloServer<ContextValue>({
   typeDefs,
   resolvers,
 });
 
 
 const { url } = await startStandaloneServer(server, {
+  context: async () => {
+    const { cache } = server;
+   return {
+     // We create new instances of our data sources with each request,
+     // passing in our server's cache.
+     dataSources: {
+       bookAPI: new BookAPI(),
+     },
+   };
+ },
   listen: { port: 4000 },
 });
 
