@@ -4,7 +4,7 @@ export class BookAPI extends RESTDataSource {
   baseURL = 'http://localhost:3002/api/v1/'; // REST API base URL
 
   async getBooks({ search, searchFields, page, pageSize, sortField, sortOrder }) {
-    const data = await this.get('books', {
+    const response = await this.get('books', {
       params: {
         search,
         searchFields: searchFields?.join(','),
@@ -14,22 +14,19 @@ export class BookAPI extends RESTDataSource {
         sortOrder,
       }
     });
-    return data; 
+    return response; 
   }
 
   async getBooksByCategory({ category, page, pageSize, sortField, sortOrder }) {
-    const params = new URLSearchParams({
-      page: page?.toString(),
-      pageSize: pageSize?.toString(),
-      sortField,
-      sortOrder,
-    });
-
     const response = await this.get(`books/category/${category}`, {
-      params,
+      params: {
+        page: page?.toString(),
+        pageSize: pageSize?.toString(),
+        sortField,
+        sortOrder,
+      }
     });
-
-    return response;
+    return response; 
   }
 
   async getBookById({ id }) {
