@@ -14,7 +14,7 @@ export class BookAPI extends RESTDataSource {
         sortOrder,
       }
     });
-    return data; // Adjust based on your REST API response structure
+    return data; 
   }
 
   async getBooksByCategory({ category, page, pageSize, sortField, sortOrder }) {
