@@ -1,17 +1,17 @@
-import { RESTDataSource, RequestOptions } from '@apollo/datasource-rest';
+import { RESTDataSource } from '@apollo/datasource-rest';
 
 export class BookAPI extends RESTDataSource {
-baseURL = 'http://localhost:3002/api/v1/'; // REST API base URL
+  baseURL = 'http://localhost:3002/api/v1/'; // REST API base URL
 
   async getBooks({ search, searchFields, page, pageSize, sortField, sortOrder }) {
     const data = await this.get('books', {
       params: {
         search,
-      searchFields: searchFields?.join(','),
-      page: page?.toString(),
-      pageSize: pageSize?.toString(),
-      sortField,
-      sortOrder,
+        searchFields: searchFields?.join(','),
+        page: page?.toString(),
+        pageSize: pageSize?.toString(),
+        sortField,
+        sortOrder,
       }
     });
     return data; // Adjust based on your REST API response structure
