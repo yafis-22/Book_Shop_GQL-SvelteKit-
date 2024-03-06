@@ -4,48 +4,48 @@ export class BookAPI extends RESTDataSource {
         super(...arguments);
         this.baseURL = 'http://localhost:3002/api/v1/'; // REST API base URL
     }
-    async getBooks({ search, searchFields, page, pageSize, sortField, sortOrder }) {
+    async getBooks(args) {
         const response = await this.get('books', {
             params: {
-                search,
-                searchFields: searchFields?.join(','),
-                page: page?.toString(),
-                pageSize: pageSize?.toString(),
-                sortField,
-                sortOrder,
-            }
+                search: args.search,
+                searchFields: args.searchFields?.join(','),
+                page: args.page?.toString(),
+                pageSize: args.pageSize?.toString(),
+                sortField: args.sortField,
+                sortOrder: args.sortOrder,
+            },
         });
         return response;
     }
-    async getBooksByCategory({ category, page, pageSize, sortField, sortOrder }) {
-        const response = await this.get(`books/category/${category}`, {
+    async getBooksByCategory(args) {
+        const response = await this.get(`books/category/${args.category}`, {
             params: {
-                page: page?.toString(),
-                pageSize: pageSize?.toString(),
-                sortField,
-                sortOrder,
-            }
+                page: args.page?.toString(),
+                pageSize: args.pageSize?.toString(),
+                sortField: args.sortField,
+                sortOrder: args.sortOrder,
+            },
         });
         return response;
     }
-    async getBookById({ id }) {
-        const response = await this.get(`books/${id}`);
+    async getBookById(args) {
+        const response = await this.get(`books/${args.id}`);
         return response;
     }
-    async addBook({ title, description, lendingPrice, quantity, author, category, imageSrc }, token) {
+    async addBook(args, token) {
         // Ensure that the token is provided
         if (!token) {
             throw new Error('Admin token is required for this operation');
         }
         const response = await this.post('books', {
             body: {
-                title,
-                description,
-                lendingPrice,
-                quantity,
-                author,
-                category,
-                imageSrc
+                title: args.title,
+                description: args.description,
+                lendingPrice: args.lendingPrice,
+                quantity: args.quantity,
+                author: args.author,
+                category: args.category,
+                imageSrc: args.imageSrc,
             },
             headers: {
                 Authorization: `Bearer ${token}`,
