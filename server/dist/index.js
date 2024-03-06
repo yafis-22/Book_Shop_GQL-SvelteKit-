@@ -1,7 +1,7 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { typeDefs } from './schema/books.js';
-import { BookAPI } from './resolvers/getBooks.js';
+import { BookAPI } from './resolvers/booksResolvers.js';
 import { resolvers } from './resolvers/index.js';
 const server = new ApolloServer({
     typeDefs,
