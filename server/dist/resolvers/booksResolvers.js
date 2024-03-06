@@ -54,4 +54,14 @@ export class BookAPI extends RESTDataSource {
         });
         return response.data;
     }
+    async deleteBook(args, token) {
+        if (!token) {
+            throw new Error('Admin token is required for this operation');
+        }
+        const response = await this.delete(`books/${args.id}`, { headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            } });
+        return response;
+    }
 }

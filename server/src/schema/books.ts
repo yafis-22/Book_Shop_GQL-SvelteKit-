@@ -26,8 +26,14 @@ export const typeDefs = `#graphql
     totalPages: Int
   }
 
+  type DeleteBookResponse {
+    message: String!
+    data: Int
+  }
+
   type Mutation {
     addBook(input: AddBookInput!): Book
+    deleteBook(id: ID!): DeleteBookResponse!
   }
   
   input AddBookInput {

@@ -8,5 +8,6 @@ export const resolvers = {
         addBook: (_, { input }, { dataSources, token }) => {
             return dataSources.bookAPI.addBook(input, token);
         },
+        deleteBook: (_, args, { dataSources, token }) => dataSources.bookAPI.deleteBook(args, token),
     },
 };
