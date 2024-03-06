@@ -32,11 +32,27 @@ export class BookAPI extends RESTDataSource {
         const response = await this.get(`books/${id}`);
         return response;
     }
+    async addBook({ title, description, lendingPrice, quantity, author, category, imageSrc }, token) {
+        // Ensure that the token is provided
+        if (!token) {
+            throw new Error('Admin token is required for this operation');
+        }
+        const response = await this.post('books', {
+            body: {
+                title,
+                description,
+                lendingPrice,
+                quantity,
+                author,
+                category,
+                imageSrc
+            },
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log(response);
+        return response.data;
+    }
 }
-export const resolvers = {
-    Query: {
-        getBooks: (_, args, { dataSources }) => dataSources.bookAPI.getBooks(args),
-        getBooksByCategory: (_, args, { dataSources }) => dataSources.bookAPI.getBooksByCategory(args),
-        getBookById: (_, args, { dataSources }) => dataSources.bookAPI.getBookById(args),
-    },
-};

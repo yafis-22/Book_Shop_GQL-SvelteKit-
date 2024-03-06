@@ -5,9 +5,10 @@ export const typeDefs = `#graphql
     title: String!
     description: String!
     lendingPrice: Int!
+    quantity: Int!
     author: String!
     category: String!
-    imageSrc: String!
+    imageSrc: String
   }
   
   type Query {
@@ -23,5 +24,19 @@ export const typeDefs = `#graphql
     data: [Book]
     currentPage: Int
     totalPages: Int
+  }
+
+  type Mutation {
+    addBook(input: AddBookInput!): Book
+  }
+  
+  input AddBookInput {
+    title: String!
+    description: String!
+    lendingPrice: Float!
+    quantity: Int!
+    author: String!
+    category: String!
+    imageSrc: String
   }
 `;
