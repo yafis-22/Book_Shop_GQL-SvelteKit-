@@ -53,7 +53,6 @@ export class BookAPI extends RESTDataSource {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },}, );
-console.log(response)
     return response.data;
   }
   
