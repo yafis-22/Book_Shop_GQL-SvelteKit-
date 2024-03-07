@@ -69,4 +69,17 @@ export class UserAPI extends RESTDataSource {
         });
         return response;
     }
+    async updateUser(args, token) {
+        if (!token) {
+            throw new Error('User token is required for this operation');
+        }
+        const response = await this.put('users/me', {
+            body: args.input,
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        return response;
+    }
 }

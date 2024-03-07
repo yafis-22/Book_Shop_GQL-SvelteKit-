@@ -38,7 +38,7 @@ type User {
     totalPages: Int!
   }
 
-  type UserRegistrationResponse {
+  type UserResponse {
     message: String!
     user: User
   }
@@ -54,9 +54,10 @@ type User {
   }
 
   type Mutation {
-    registerUser(input: AddUserInput!): UserRegistrationResponse
+    registerUser(input: AddUserInput!): UserResponse
     deleteUser(id: ID!): CommonUserResponse!
     activateUser(id: ID!): CommonUserResponse!
+    updateUser(id: ID!, input: UpdateUserInput!): UserResponse!
   }
 
   input AddUserInput {
@@ -66,5 +67,12 @@ type User {
     phoneNumber: String!
     address: String!
     role: UserRole
+  }
+
+  input UpdateUserInput {
+    password: String!
+    email: String!
+    phoneNumber: String!
+    address: String!
   }
 `;

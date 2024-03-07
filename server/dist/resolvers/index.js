@@ -36,5 +36,8 @@ export const resolvers = {
         activateUser: (_, args, { dataSources, token }) => {
             return dataSources.userAPI.activateUser(args, token);
         },
+        updateUser: (_, args, { dataSources, token }) => {
+            return dataSources.userAPI.updateUser(args, token);
+        },
     },
 };
