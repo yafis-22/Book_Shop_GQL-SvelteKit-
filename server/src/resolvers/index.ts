@@ -14,5 +14,8 @@ export const resolvers = {
       restoreBook: (_, args, { dataSources, token }) => {
         return dataSources.bookAPI.restoreBook(args, token)
       },
+      updateBook: (_, args, { dataSources, token }) => {
+        return dataSources.bookAPI.updateBook(args, token)
+      },
     },
   };

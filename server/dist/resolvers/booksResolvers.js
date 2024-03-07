@@ -78,4 +78,17 @@ export class BookAPI extends RESTDataSource {
         });
         return response;
     }
+    async updateBook(args, token) {
+        if (!token) {
+            throw new Error('Admin token is required for this operation');
+        }
+        const response = await this.put(`books/${args.id}`, {
+            body: args.input,
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        return response;
+    }
 }

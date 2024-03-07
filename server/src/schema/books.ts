@@ -4,7 +4,7 @@ export const typeDefs = `#graphql
     id: ID!
     title: String!
     description: String!
-    lendingPrice: Int!
+    lendingPrice: Float!
     quantity: Int!
     author: String!
     category: String!
@@ -31,7 +31,7 @@ export const typeDefs = `#graphql
     data: Int
   }
 
-  type RestoreBookResponse {
+  type CommonBookResponse {
     message: String!
     data: Book
   }
@@ -39,7 +39,8 @@ export const typeDefs = `#graphql
   type Mutation {
     addBook(input: AddBookInput!): Book
     deleteBook(id: ID!): DeleteBookResponse!
-    restoreBook(id: ID!): RestoreBookResponse!
+    restoreBook(id: ID!): CommonBookResponse!
+    updateBook(id: ID!, input: AddBookInput!): CommonBookResponse!
   }
   
   input AddBookInput {
