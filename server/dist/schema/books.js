@@ -31,9 +31,15 @@ export const typeDefs = `#graphql
     data: Int
   }
 
+  type RestoreBookResponse {
+    message: String!
+    data: Book
+  }
+
   type Mutation {
     addBook(input: AddBookInput!): Book
     deleteBook(id: ID!): DeleteBookResponse!
+    restoreBook(id: ID!): RestoreBookResponse!
   }
   
   input AddBookInput {

@@ -90,4 +90,17 @@ export class BookAPI extends RESTDataSource {
     );
     return response;
   }
+
+  async restoreBook(args: { id: string }, token: string) {
+    if (!token) {
+      throw new Error('Admin token is required for this operation');
+    }
+    const response = await this.patch(`books/${args.id}/restore`, {
+      headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }}
+    );
+    return response;
+  }
 }
