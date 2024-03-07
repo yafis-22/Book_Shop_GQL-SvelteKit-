@@ -36,4 +36,13 @@ export class UserAPI extends RESTDataSource {
         });
         return response;
     }
+    async registerUser(args) {
+        const response = await this.post('users', {
+            body: args.input,
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        return response;
+    }
 }

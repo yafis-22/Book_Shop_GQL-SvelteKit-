@@ -14,6 +14,7 @@ export const resolvers = {
       }
     },
     Mutation: {
+      // For Books
       addBook: (_, { input }, { dataSources, token }) => {
         return dataSources.bookAPI.addBook(input, token)
       },
@@ -25,6 +26,11 @@ export const resolvers = {
       },
       updateBook: (_, args, { dataSources, token }) => {
         return dataSources.bookAPI.updateBook(args, token)
+      },
+
+      //For Users
+      registerUser: (_, args, { dataSources }) => {
+        return dataSources.userAPI.registerUser(args)
       },
     },
   };

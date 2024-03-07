@@ -38,8 +38,26 @@ type User {
     totalPages: Int!
   }
 
+  type UserRegistrationResponse {
+    message: String!
+    user: User
+  }
+
   type Query {
     getAllUsers(search: String, page: Int, pageSize: Int, sortField: String, sortOrder: String): UserList!
     getUserById(id: ID!): User
+  }
+
+  type Mutation {
+    registerUser(input: AddUserInput!): UserRegistrationResponse
+  }
+
+  input AddUserInput {
+    username: String!
+    password: String!
+    email: String!
+    phoneNumber: String!
+    address: String!
+    role: UserRole
   }
 `;
