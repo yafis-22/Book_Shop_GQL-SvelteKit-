@@ -43,6 +43,11 @@ type User {
     user: User
   }
 
+  type CommonUserResponse {
+    message: String!
+    data: User
+  }
+
   type Query {
     getAllUsers(search: String, page: Int, pageSize: Int, sortField: String, sortOrder: String): UserList!
     getUserById(id: ID!): User
@@ -50,6 +55,8 @@ type User {
 
   type Mutation {
     registerUser(input: AddUserInput!): UserRegistrationResponse
+    deleteUser(id: ID!): CommonUserResponse!
+    activateUser(id: ID!): CommonUserResponse!
   }
 
   input AddUserInput {

@@ -30,5 +30,11 @@ export const resolvers = {
         registerUser: (_, args, { dataSources }) => {
             return dataSources.userAPI.registerUser(args);
         },
+        deleteUser: (_, args, { dataSources, token }) => {
+            return dataSources.userAPI.deleteUser(args, token);
+        },
+        activateUser: (_, args, { dataSources, token }) => {
+            return dataSources.userAPI.activateUser(args, token);
+        },
     },
 };
