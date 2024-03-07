@@ -16,6 +16,7 @@ type User {
     title: String!
     author: String!
     category: String!
+    initialCharge: Float!
     LentBooks: [LentBook]
   }
 
@@ -51,6 +52,7 @@ type User {
   type Query {
     getAllUsers(search: String, page: Int, pageSize: Int, sortField: String, sortOrder: String): UserList!
     getUserById(id: ID!): User
+    userDetails(id: ID!): CommonUserResponse!
   }
 
   type Mutation {
