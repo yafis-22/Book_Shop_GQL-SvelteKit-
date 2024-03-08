@@ -42,5 +42,9 @@ export const resolvers = {
         updateUser: (_, args, { dataSources, token }) => {
             return dataSources.userAPI.updateUser(args, token);
         },
+        //For Login
+        authLogin: (_, args, { dataSources }) => {
+            return dataSources.userAPI.authLogin(args);
+        },
     },
 };

@@ -94,4 +94,14 @@ export class UserAPI extends RESTDataSource {
         });
         return response;
     }
+    async authLogin({ username, password }) {
+        const response = await this.post('login', {
+            body: { username, password },
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        console.log(response);
+        return response;
+    }
 }

@@ -49,6 +49,12 @@ type User {
     data: User
   }
 
+  type LoginResponse {
+    message: String!
+    userToken: String!
+    role: String!
+  }
+
   type Query {
     getAllUsers(search: String, page: Int, pageSize: Int, sortField: String, sortOrder: String): UserList!
     getUserById(id: ID!): User
@@ -60,6 +66,7 @@ type User {
     deleteUser(id: ID!): CommonUserResponse!
     activateUser(id: ID!): CommonUserResponse!
     updateUser(id: ID!, input: UpdateUserInput!): UserResponse!
+    authLogin(username: String!, password: String!): LoginResponse
   }
 
   input AddUserInput {
