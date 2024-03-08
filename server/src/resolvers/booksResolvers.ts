@@ -117,5 +117,31 @@ export class BookAPI extends RESTDataSource {
     });
     return response;
   }
+
+  async lendBook(args: { id: string }, token: string) {
+    if (!token) {
+      throw new Error('User token is required for this operation');
+    }
+    const response = await this.post(`books/lend/${args.id}`, {
+      headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }}
+    );
+    return response;
+  }
+
+  async returnBook(args: { id: string }, token: string) {
+    if (!token) {
+      throw new Error('User token is required for this operation');
+    }
+    const response = await this.post(`books/return/${args.id}`, {
+      headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }}
+    );
+    return response;
+  }
   
 }

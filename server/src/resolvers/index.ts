@@ -30,6 +30,12 @@ export const resolvers = {
       updateBook: (_, args, { dataSources, token }) => {
         return dataSources.bookAPI.updateBook(args, token)
       },
+      lendBook: (_, args, { dataSources, token }) => {
+        return dataSources.bookAPI.lendBook(args, token)
+      },
+      returnBook: (_, args, { dataSources, token }) => {
+        return dataSources.bookAPI.returnBook(args, token)
+      },
 
       //For Users
       registerUser: (_, args, { dataSources }) => {

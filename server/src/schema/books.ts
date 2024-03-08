@@ -36,11 +36,36 @@ export const typeDefs = `#graphql
     data: Book
   }
 
+  type ChargeDetails {
+    data: Book!
+    initialCharge: Float!
+  }
+  
+  type LendBookResponse {
+    message: String!
+    chargeDetails: ChargeDetails
+  }
+
+  type BookReturnDetails {
+    bookId: ID!
+    initialCharge: Float!
+    additionalCharge: Float!
+    totalCharge: Float!
+    days: Int!
+  }
+  
+  type ReturnBookResponse {
+    message: String!
+    data: BookReturnDetails
+  }
+
   type Mutation {
     addBook(input: AddBookInput!): Book
     deleteBook(id: ID!): DeleteBookResponse!
     restoreBook(id: ID!): CommonBookResponse!
     updateBook(id: ID!, input: AddBookInput!): CommonBookResponse!
+    lendBook(id: ID!): LendBookResponse!
+    returnBook(id: ID!): ReturnBookResponse!
   }
   
   input AddBookInput {
