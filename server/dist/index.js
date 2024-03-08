@@ -11,12 +11,13 @@ const server = new ApolloServer({
 });
 const { url } = await startStandaloneServer(server, {
     context: async ({ req }) => {
+        const { cache } = server;
         // Extract and verify admin token from headers
         const token = req.headers.authorization?.replace('Bearer ', '');
         return {
             dataSources: {
-                bookAPI: new BookAPI(),
-                userAPI: new UserAPI()
+                bookAPI: new BookAPI({ cache }),
+                userAPI: new UserAPI({ cache })
             },
             token,
         };
