@@ -51,7 +51,8 @@ type User {
 
   type LoginResponse {
     message: String!
-    userToken: String!
+    userToken: String
+    adminToken: String
     role: String!
   }
 

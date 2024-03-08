@@ -101,7 +101,6 @@ export class UserAPI extends RESTDataSource {
                 'Content-Type': 'application/json',
             }
         });
-        console.log(response);
         return response;
     }
 }
