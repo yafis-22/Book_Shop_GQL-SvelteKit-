@@ -1,6 +1,4 @@
 <script>
-  import "bootstrap/dist/css/bootstrap.min.css";
-  import "bootstrap-icons/font/bootstrap-icons.css";
   import authStore from "../stores/authStore";
   import { Link, navigate } from "svelte-routing";
   import Header from "./header.svelte";
@@ -16,45 +14,60 @@
 
   const loginUser = async () => {
     try {
-      const response = await fetch("http://localhost:3002/api/v1/login", {
+      const response = await fetch("http://localhost:4000/graphql", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          query: `
+            mutation LoginUser($username: String!, $password: String!) {
+              authLogin(username: $username, password: $password) {
+                message
+                userToken
+                adminToken
+                role
+              }
+            }
+          `,
+          variables: {
+            username: formData.username,
+            password: formData.password,
+          },
+        }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("User logged in successfully:", data);
+      const { data, errors } = await response.json();
+
+      if (errors) {
+        errorMessage = errors[0].message;
+      } else if (data.authLogin) {
+        if (!isAdmin && data.authLogin.role === "admin") {
+          errorMessage =
+            "You are an admin. Please tick 'Login as Admin' checkbox.";
+          return;
+        } else if (isAdmin && data.authLogin.role !== "admin") {
+          errorMessage =
+            "You are not an admin. Please untick 'Login as Admin' checkbox.";
+          return;
+        }
+
+        console.log("User logged in successfully:", data.authLogin);
 
         // Save token to local storage
-        localStorage.setItem("userToken", data.userToken || data.adminToken);
-        // Log the roles
-        console.log("Role:", data.role);
+        localStorage.setItem(
+          "userToken",
+          data.authLogin.userToken || data.authLogin.adminToken,
+        );
 
         // Update the auth store with the token and isAdmin information
         authStore.set({
-          userToken: data.userToken || data.adminToken,
-          isAdmin: data.role === "admin", // Check if the role is 'admin'
+          userToken: data.authLogin.userToken || data.authLogin.adminToken,
+          isAdmin: data.authLogin.role === "admin",
           userLoggedIn: true,
         });
-
         // Redirect to the appropriate dashboard
         navigate(isAdmin ? "/admins/me" : "/users/me");
-      } else {
-        const errorData = await response.json();
-        errorMessage = errorData.message || "Invalid username or password";
-
-        // Log the entire errorData object for inspection
-        console.log("Error data:", errorData);
-
-        // Check if the error is due to incorrect role
-        if (errorData.message === "Invalid username or password") {
-          errorMessage = `Invalid ${
-            isAdmin ? "admin" : "user"
-          } username or password`;
-        }
       }
     } catch (error) {
       console.error("Error logging in:", error);
@@ -62,6 +75,7 @@
     }
   };
 </script>
+
 <Header />
 <div class="container">
   <h2 class="mt-4">Sign In</h2>
@@ -126,11 +140,13 @@
   </div>
   <hr />
   <div class="text-center">
-    <p class="account">Don't have an account? <Link to="/users" class="text-dark">Sign up</Link></p>
-</div>
-
+    <p class="account">
+      Don't have an account? <Link to="/users" class="text-dark">Sign up</Link>
+    </p>
+  </div>
 </div>
 <Footer />
+
 <style>
   .container {
     max-width: 400px;
@@ -164,8 +180,8 @@
 
   .account {
     color: #555555;
-}
-a {
+  }
+  a {
     color: #555555;
-}
+  }
 </style>
