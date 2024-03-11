@@ -9,12 +9,9 @@ export const typeDefs = `#graphql
     author: String!
     category: String!
     imageSrc: String
-  }
-  
-  type Query {
-    getBooks(search: String, searchFields: [String], page: Int, pageSize: Int, sortField: String, sortOrder: String): BookResponse
-    getBooksByCategory(category: String, page: Int, pageSize: Int, sortField: String, sortOrder: String): BookResponse
-    getBookById(id: ID!): Book
+    createdAt: String!
+    updatedAt: String!
+    deletedAt: String
   }
 
   type BookResponse {
@@ -66,6 +63,12 @@ export const typeDefs = `#graphql
     updateBook(id: ID!, input: AddBookInput!): CommonBookResponse!
     lendBook(id: ID!): LendBookResponse!
     returnBook(id: ID!): ReturnBookResponse!
+  }
+
+  type Query {
+    getBooks(search: String, searchFields: [String], page: Int, pageSize: Int, sortField: String, sortOrder: String): BookResponse
+    getBooksByCategory(category: String, page: Int, pageSize: Int, sortField: String, sortOrder: String): BookResponse
+    getBookById(id: ID!): Book
   }
   
   input AddBookInput {

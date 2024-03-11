@@ -9,6 +9,9 @@ type User {
     address: String!
     role: UserRole!
     lentBooks: [UserBook]
+    createdAt: String!
+    updatedAt: String!
+    deletedAt: String
   }
 
   type UserBook {
