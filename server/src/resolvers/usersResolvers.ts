@@ -109,13 +109,19 @@ export class UserAPI extends RESTDataSource {
         return response;
       }
 
-    async authLogin ({ username, password }) {
-      const response = await this.post('login', {
-          body: {username, password},
-          headers: {
-          'Content-Type': 'application/json',
-        }}
-        );
-        return response ;
-    }
+    async authLogin({ username, password }) {
+  try {
+    const response = await this.post('login', {
+      body: { username, password },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response;
+  } catch (error) {
+    // If authentication fails, throw a specific error with a custom message
+    throw new Error('Invalid username or password');
+  }
+}
+
 }
