@@ -11,8 +11,8 @@ export const resolvers = {
         getUserById: (_, args, { dataSources, token }) => {
             return dataSources.userAPI.getUserById(args, token);
         },
-        userDetails: (_, args, { dataSources, token }) => {
-            return dataSources.userAPI.userDetails(args, token);
+        userDetails: (_, __, { dataSources, token }) => {
+            return dataSources.userAPI.userDetails(__, token);
         }
     },
     Mutation: {

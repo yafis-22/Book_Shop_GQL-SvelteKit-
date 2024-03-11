@@ -20,6 +20,9 @@ type User {
     author: String!
     category: String!
     initialCharge: Float!
+    additionalCharge: Float!
+    totalCharge: Float!
+    days: Float!
     LentBooks: [LentBook]
   }
 
@@ -62,7 +65,7 @@ type User {
   type Query {
     getAllUsers(search: String, page: Int, pageSize: Int, sortField: String, sortOrder: String): UserList!
     getUserById(id: ID!): User
-    userDetails(id: ID!): CommonUserResponse!
+    userDetails: CommonUserResponse!
   }
 
   type Mutation {
