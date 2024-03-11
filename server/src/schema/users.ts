@@ -70,7 +70,7 @@ type User {
 
   type Mutation {
     registerUser(input: AddUserInput!): UserResponse
-    deleteUser(id: ID!): CommonUserResponse!
+    deleteUser: CommonUserResponse!
     activateUser(id: ID!): CommonUserResponse!
     updateUser(id: ID!, input: UpdateUserInput!): UserResponse!
     authLogin(username: String!, password: String!): LoginResponse

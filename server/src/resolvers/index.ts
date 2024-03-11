@@ -41,8 +41,8 @@ export const resolvers = {
       registerUser: (_, args, { dataSources }) => {
         return dataSources.userAPI.registerUser(args)
       },
-      deleteUser: (_, args, { dataSources, token }) => {
-        return dataSources.userAPI.deleteUser(args, token)
+      deleteUser: (_, __, { dataSources, token }) => {
+        return dataSources.userAPI.deleteUser(__, token)
       },
       activateUser: (_, args, { dataSources, token }) => {
         return dataSources.userAPI.activateUser(args, token)
