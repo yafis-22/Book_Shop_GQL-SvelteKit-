@@ -21,19 +21,46 @@
 
   const fetchUserDetails = async () => {
     try {
-      const response = await fetch("http://localhost:3002/api/v1/users/me", {
-        method: "GET",
+      const response = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${$authStore.userToken}`,
         },
+        body: JSON.stringify({
+          query: `
+            query UserDetails {
+              userDetails {
+                message
+                data {
+                  id
+                  username
+                  email
+                  phoneNumber
+                  lentBooks {
+                    id
+                    initialCharge
+                    title
+                    category
+                    author
+                    additionalCharge
+                    totalCharge
+                    days
+                  }
+                }
+              }
+            }
+        `,
+        }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        user = data.data;
-        lentBooks = user.lentBooks || [];
+      const { data, errors } = await response.json();
+
+      if (errors) {
+        console.error("Error fetching user details:", errors);
       } else {
-        console.error("Error fetching user details:", response.statusText);
+        user = data.userDetails.data;
+        lentBooks = user.lentBooks || [];
       }
     } catch (error) {
       console.error("Error fetching user details:", error);
@@ -48,23 +75,28 @@
     );
 
     if (confirmDelete) {
-      // Check if the user has lended books
       if (lentBooks.length > 0) {
         alert("Clear your lended books before deleting your profile.");
       } else {
         try {
-          const response = await fetch(
-            "http://localhost:3002/api/v1/users/me",
-            {
-              method: "DELETE",
-              headers: {
-                Authorization: `Bearer ${$authStore.userToken}`,
-              },
+          const response = await fetch("http://localhost:4000/graphql", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${$authStore.userToken}`,
             },
-          );
+            body: JSON.stringify({
+              query: `
+                mutation DeleteProfile {
+                  deleteUser {
+                    message
+                  }
+                }
+              `,
+            }),
+          });
 
           if (response.ok) {
-            // Logout user and redirect to login
             authStore.set({ userToken: null, isAdmin: false });
             navigate("/login");
           } else {
