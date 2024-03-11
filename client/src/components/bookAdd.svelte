@@ -1,54 +1,76 @@
 <script>
-    import { get } from 'svelte/store';
-    import authStore from '../stores/authStore';
-  
-    let formData = {
-      title: '',
-      description: '',
-      lendingPrice: 0,
-      quantity: 0,
-      author: '',
-      category: '',
-      imageSrc: '',
-    };
-  
-    let errorMessage = '';
-  
-    const addBook = async () => {
-      try {
-        const response = await fetch('http://localhost:3002/api/v1/books', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${get(authStore).userToken}`,
+  import { get } from 'svelte/store';
+  import authStore from '../stores/authStore';
+
+  let formData = {
+    title: '',
+    description: '',
+    lendingPrice: 0,
+    quantity: 0,
+    author: '',
+    category: '',
+    imageSrc: '',
+  };
+
+  let errorMessage = '';
+
+  const addBook = async () => {
+    try {
+      const response = await fetch('http://localhost:4000/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${get(authStore).userToken}`,
+        },
+        body: JSON.stringify({
+          query: `
+            mutation AddBook($input: AddBookInput!) {
+              addBook(input: $input) {
+                id
+                title
+                description
+                lendingPrice
+                quantity
+                author
+                category
+                imageSrc
+                createdAt
+                updatedAt
+                deletedAt
+              }
+            }
+          `,
+          variables: {
+            input: formData,
           },
-          body: JSON.stringify(formData),
-        });
-  
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Book added successfully:', data);
-          // Optionally, you can reset the form or show a success message
-          formData = {
-            title: '',
-            description: '',
-            lendingPrice: 0,
-            quantity: 0,
-            author: '',
-            category: '',
-            imageSrc: '',
-          };
-          errorMessage = ''; // Reset error message
-        } else {
-          const errorData = await response.json();
-          errorMessage = errorData.message || 'Failed to add book';
-        }
-      } catch (error) {
-        console.error('Error adding book:', error);
-        errorMessage = 'Internal Server Error';
+        }),
+      });
+
+      const { data, errors } = await response.json();
+
+      if (errors) {
+        errorMessage = errors[0].extensions.response.body.message || 'Failed to add book';
+      } else {
+        console.log('Book added successfully:', data.addBook);
+        // Optionally, you can reset the form or show a success message
+        formData = {
+          title: '',
+          description: '',
+          lendingPrice: 0,
+          quantity: 0,
+          author: '',
+          category: '',
+          imageSrc: '',
+        };
+        errorMessage = ''; // Reset error message
       }
-    };
-  </script>
+    } catch (error) {
+      console.error('Error adding book:', error);
+      errorMessage = 'Internal Server Error';
+    }
+  };
+</script>
+
   
   <div class="container">
     <h2>Add New Book</h2>
