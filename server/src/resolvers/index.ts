@@ -2,7 +2,13 @@ export const resolvers = {
     Query: {
       // Query for Books
       getBooks: (_, args, { dataSources, token }) => dataSources.bookAPI.getBooks(args, token),
-      getBooksByCategory: (_, args, { dataSources, token }) => dataSources.bookAPI.getBooksByCategory(args, token),
+      getBooksByCategory: async (_, args, { dataSources, token }) => {
+        const result = await dataSources.bookAPI.getBooksByCategory(args, token);
+        return {
+          ...result,
+          data: result.books,
+        };
+      },
       getBookById: (_, args, { dataSources, token }) => dataSources.bookAPI.getBookById(args, token),
 
       //Query for Users
