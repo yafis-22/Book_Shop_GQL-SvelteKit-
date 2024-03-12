@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, setContext } from "svelte";
   import { navigate } from "svelte-routing";
   import authStore from "../stores/authStore";
   import BookTable from "./bookTable.svelte";
