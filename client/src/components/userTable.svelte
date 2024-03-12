@@ -24,25 +24,55 @@
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch(
-                `http://localhost:3002/api/v1/users?page=${currentPage}&pageSize=12&search=${searchQuery}&sortField=${sortField}&sortOrder=${sortOrder}`,
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${get(authStore).userToken}`,
-                    },
+            const response = await fetch("http://localhost:4000/graphql", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${get(authStore).userToken}`,
                 },
-            );
+                body: JSON.stringify({
+                    query: `
+            query GetUsers($page: Int, $pageSize: Int, $search: String, $sortField: String, $sortOrder: String) {
+              getAllUsers(page: $page, pageSize: $pageSize, search: $search, sortField: $sortField, sortOrder: $sortOrder) {
+                data {
+                  id
+                  username
+                  email
+                  phoneNumber
+                  address
+                  createdAt
+                  updatedAt
+                  deletedAt
+                }
+                totalPages
+              }
+            }
+          `,
+                    variables: {
+                        page: currentPage,
+                        pageSize: 12,
+                        search: searchQuery,
+                        sortField: sortField,
+                        sortOrder: sortOrder,
+                    },
+                }),
+            });
 
-            if (response.ok) {
-                const data = await response.json();
-                users = data.data;
-                totalPages = data.totalPages;
+            const { data, errors } = await response.json();
+
+            if (errors) {
+                console.error(
+                    "Error fetching users:",
+                    errors[0].extensions.response.body.message,
+                );
+            } else if (data && data.getAllUsers) {
+                users = data.getAllUsers.data || [];
+                totalPages = data.getAllUsers.totalPages;
             } else {
-                console.error("Error fetching users:", response.statusText);
+                console.error("Error fetching users: Invalid response format");
             }
         } catch (error) {
-            console.error("Error fetching users:", error);
+            console.error("Error fetching users:", error.message);
         }
     };
 
@@ -64,29 +94,54 @@
 
     const handleRestore = async (userId) => {
         try {
-            const response = await fetch(
-                `http://localhost:3002/api/v1/users/${userId}/restore`,
-                {
-                    method: "PATCH",
-                    headers: {
-                        Authorization: `Bearer ${get(authStore).userToken}`,
-                    },
+            const response = await fetch("http://localhost:4000/graphql", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${get(authStore).userToken}`,
                 },
-            );
+                body: JSON.stringify({
+                    query: `
+                       mutation ActivateUser($id: ID!) {
+                         activateUser(id: $id) {
+                           message
+                           data {
+                             id
+                             username
+                             phoneNumber
+                             email
+                             address
+                             password
+                             role
+                             createdAt
+                             updatedAt
+                             deletedAt
+                           }
+                         }
+                       }
+                       `,
+                    variables: {
+                        id: userId,
+                    },
+                }),
+            });
 
-            if (response.ok) {
-                const data = await response.json();
+            const { data, errors } = await response.json();
 
+            if (errors) {
+                console.error(
+                    `Error restoring user with ID ${userId}:`,
+                    errors[0],
+                );
+            } else {
                 fetchUsers();
                 successMessage = "User restored successfully";
                 setTimeout(() => {
                     successMessage = "";
                 }, 3000);
-            } else {
-                console.error("Error restoring User:", response.statusText);
             }
         } catch (error) {
-            console.error("Error restoring User:", error);
+            console.error(`Error restoring user with ID ${userId}:`, error);
         }
     };
 </script>
@@ -102,28 +157,42 @@
 
     <div class="mb-3 col-md-6 offset-md-3">
         <div class="input-group">
-        <input
-            type="text"
-            class="form-control"
-            bind:value={searchQuery}
-            placeholder="Search by username, address..."
-        />
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" on:click={handleSearch}>Search</button>
-          </div>
+            <input
+                type="text"
+                class="form-control"
+                bind:value={searchQuery}
+                placeholder="Search by username, address..."
+            />
+            <div class="input-group-append">
+                <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    on:click={handleSearch}>Search</button
+                >
+            </div>
         </div>
     </div>
 
     <div class="d-flex justify-content-end m-4">
         <label for="sortField">Sort by:</label>
-        <select class="custom-select mr-sm-2" bind:value={sortField} on:change={handleSort} id="sortField">
+        <select
+            class="custom-select mr-sm-2"
+            bind:value={sortField}
+            on:change={handleSort}
+            id="sortField"
+        >
             {#each sortOptions as option (option.field)}
                 <option value={option.field}>{option.label}</option>
             {/each}
         </select>
 
         <label for="sortOrder">Order:</label>
-        <select class="custom-select mr-sm-2" bind:value={sortOrder} on:change={handleSort} id="sortOrder">
+        <select
+            class="custom-select mr-sm-2"
+            bind:value={sortOrder}
+            on:change={handleSort}
+            id="sortOrder"
+        >
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
         </select>
@@ -134,13 +203,27 @@
             <thead>
                 <tr>
                     <th scope="col" on:click={() => handleSort("id")}>Id</th>
-                    <th scope="col" on:click={() => handleSort("username")}>Username</th>
-                    <th scope="col" on:click={() => handleSort("email")}>Email</th>
-                    <th scope="col" on:click={() => handleSort("phoneNumber")}>Phone Number</th>
-                    <th scope="col" on:click={() => handleSort("address")}>Address</th>
-                    <th scope="col" on:click={() => handleSort("createdAt")}>Created At</th>
-                    <th scope="col" on:click={() => handleSort("updatedAt")}>Updated At</th>
-                    <th scope="col" on:click={() => handleSort("deletedAt")}>Deleted At</th>
+                    <th scope="col" on:click={() => handleSort("username")}
+                        >Username</th
+                    >
+                    <th scope="col" on:click={() => handleSort("email")}
+                        >Email</th
+                    >
+                    <th scope="col" on:click={() => handleSort("phoneNumber")}
+                        >Phone Number</th
+                    >
+                    <th scope="col" on:click={() => handleSort("address")}
+                        >Address</th
+                    >
+                    <th scope="col" on:click={() => handleSort("createdAt")}
+                        >Created At</th
+                    >
+                    <th scope="col" on:click={() => handleSort("updatedAt")}
+                        >Updated At</th
+                    >
+                    <th scope="col" on:click={() => handleSort("deletedAt")}
+                        >Deleted At</th
+                    >
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -161,7 +244,8 @@
                                     type="button"
                                     class="btn btn-secondary btn-sm"
                                     on:click={() => handleRestore(User.id)}
-                                >Restore</button>
+                                    >Restore</button
+                                >
                             {/if}
                         </td>
                     </tr>
@@ -173,7 +257,9 @@
             <ul class="pagination justify-content-center">
                 {#if currentPage > 1}
                     <li class="page-item">
-                        <button class="page-link" on:click={() => handlePageChange(currentPage - 1)}
+                        <button
+                            class="page-link"
+                            on:click={() => handlePageChange(currentPage - 1)}
                             >&lt; Prev</button
                         >
                     </li>
@@ -185,7 +271,8 @@
                             <button
                                 class="page-link"
                                 on:click={() => handlePageChange(page)}
-                                class:selected={page === currentPage}>{page}</button
+                                class:selected={page === currentPage}
+                                >{page}</button
                             >
                         </li>
                     {/each}
@@ -195,7 +282,8 @@
                             <button
                                 class="page-link"
                                 on:click={() => handlePageChange(page)}
-                                class:selected={page === currentPage}>{page}</button
+                                class:selected={page === currentPage}
+                                >{page}</button
                             >
                         </li>
                     {/each}
@@ -203,13 +291,18 @@
                         <span class="page-link">...</span>
                     </li>
                     <li class="page-item">
-                        <button class="page-link" on:click={() => handlePageChange(totalPages)}
+                        <button
+                            class="page-link"
+                            on:click={() => handlePageChange(totalPages)}
                             >{totalPages}</button
                         >
                     </li>
                 {:else if currentPage > totalPages - 4}
                     <li class="page-item">
-                        <button class="page-link" on:click={() => handlePageChange(1)}>1</button>
+                        <button
+                            class="page-link"
+                            on:click={() => handlePageChange(1)}>1</button
+                        >
                     </li>
                     <li class="page-item">
                         <span class="page-link">...</span>
@@ -219,13 +312,17 @@
                             <button
                                 class="page-link"
                                 on:click={() => handlePageChange(page)}
-                                class:selected={page === currentPage}>{page}</button
+                                class:selected={page === currentPage}
+                                >{page}</button
                             >
                         </li>
                     {/each}
                 {:else}
                     <li class="page-item">
-                        <button class="page-link" on:click={() => handlePageChange(1)}>1</button>
+                        <button
+                            class="page-link"
+                            on:click={() => handlePageChange(1)}>1</button
+                        >
                     </li>
                     <li class="page-item">
                         <span class="page-link">...</span>
@@ -235,7 +332,8 @@
                             <button
                                 class="page-link"
                                 on:click={() => handlePageChange(page)}
-                                class:selected={page === currentPage}>{page}</button
+                                class:selected={page === currentPage}
+                                >{page}</button
                             >
                         </li>
                     {/each}
@@ -243,7 +341,9 @@
                         <span class="page-link">...</span>
                     </li>
                     <li class="page-item">
-                        <button class="page-link" on:click={() => handlePageChange(totalPages)}
+                        <button
+                            class="page-link"
+                            on:click={() => handlePageChange(totalPages)}
                             >{totalPages}</button
                         >
                     </li>
@@ -251,7 +351,9 @@
 
                 {#if currentPage < totalPages}
                     <li class="page-item">
-                        <button class="page-link" on:click={() => handlePageChange(currentPage + 1)}
+                        <button
+                            class="page-link"
+                            on:click={() => handlePageChange(currentPage + 1)}
                             >Next &gt;</button
                         >
                     </li>
@@ -265,19 +367,19 @@
 
 <style>
     .page-link {
-    color: black;
-  }
-  .alert {
-    margin-top: 20px;
-    border-radius: 4px;
-  }
+        color: black;
+    }
+    .alert {
+        margin-top: 20px;
+        border-radius: 4px;
+    }
 
-  .btn-sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-  }
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
 
-  .pagination {
-    margin-top: 1rem;
-  }
+    .pagination {
+        margin-top: 1rem;
+    }
 </style>
