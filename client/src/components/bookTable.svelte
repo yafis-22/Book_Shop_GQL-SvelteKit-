@@ -1,12 +1,12 @@
 <script>
   import { onMount } from "svelte";
   import { get } from "svelte/store";
-  import { navigate } from "svelte-routing";
   import authStore from "../stores/authStore";
   import BookUpdate from "./bookUpdate.svelte";
 
   let books = [];
   let searchQuery = "";
+  let searchFields = "title"
   let currentPage = 1;
   let totalPages = 1;
   let sortField = "";
@@ -30,32 +30,63 @@
 
   const fetchBooks = async () => {
   try {
-    const response = await fetch(
-      `http://localhost:3002/api/v1/books?page=${currentPage}&pageSize=12&search=${searchQuery}&sortField=${sortField}&sortOrder=${sortOrder}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${get(authStore).userToken}`,
-        },
+    const encodedSearchFields = encodeURIComponent(searchFields);
+    const response = await fetch("http://localhost:4000/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${get(authStore).userToken}`,
       },
-    );
+      body: JSON.stringify({
+        query: `
+          query GetBooks($page: Int, $pageSize: Int, $search: String, $searchFields: [String], $sortField: String, $sortOrder: String) {
+            getBooks(page: $page, pageSize: $pageSize, search: $search, searchFields: $searchFields, sortField: $sortField, sortOrder: $sortOrder) {
+              data {
+                id
+                title
+                description
+                lendingPrice
+                quantity
+                author
+                category
+                createdAt
+                updatedAt
+                deletedAt
+              }
+            }
+          }
+        `,
+        variables: {
+          page: currentPage,
+          pageSize: 12,
+          search: searchQuery,
+          searchFields: encodedSearchFields,
+          sortField: sortField,
+          sortOrder: sortOrder,
+        },
+      }),
+    });
 
-    if (response.ok) {
-      const data = await response.json();
-      books = data.data;
-      totalPages = data.totalPages;
+    const { data, errors } = await response.json();
+
+    if (errors) {
+      console.error("Error fetching books:", errors[0].extensions.response.body.message);
+    } else if (data && data.getBooks) { // Ensure that data and data.getBooks are defined
+      books = data.getBooks.data || [];
+      console.log(books);
+      totalPages = data.getBooks.totalPages;
     } else {
-      console.error("Error fetching books:", response.statusText);
+      console.error("Error fetching books: Invalid response format");
     }
   } catch (error) {
-    console.error("Error fetching books:", error);
+    console.error("Error fetching books:", error.message);
   }
 };
 
   onMount(fetchBooks);
 
   const handleSearch = () => {
-    currentPage = 1; // Reset to the first page when performing a new search
+    currentPage = 1;
     fetchBooks();
   };
 
@@ -70,24 +101,36 @@
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3002/api/v1/books/${id}`, {
-        method: "DELETE",
+      const response = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${get(authStore).userToken}`,
         },
+        body: JSON.stringify({
+          query: `
+            mutation DeleteBook($id: ID!) {
+              deleteBook(id: $id) {
+                message
+              }
+            }
+          `,
+          variables: {
+            id: id,
+          },
+        }),
       });
 
-      if (response.ok) {
-        fetchBooks(); // Refresh the book list after successful deletion
-        successMessage = "Book deleted successfully";
+      const { data, errors } = await response.json();
+
+      if (errors) {
+        console.error(`Error deleting book with ID ${id}:`, errors[0].message);
+      } else {
+        fetchBooks();
+        successMessage = data.deleteBook.message || "Book deleted successfully";
         setTimeout(() => {
           successMessage = "";
         }, 3000);
-      } else {
-        console.error(
-          `Error deleting book with ID ${id}:`,
-          response.statusText,
-        );
       }
     } catch (error) {
       console.error(`Error deleting book with ID ${id}:`, error);
@@ -100,7 +143,7 @@
   };
 
   const handleUpdateSuccess = () => {
-    fetchBooks(); // Refresh the book list after successful update
+    fetchBooks();
     successMessage = "Book updated successfully";
     updateFormVisible = false;
     setTimeout(() => {
@@ -114,32 +157,56 @@
 
   const handleRestore = async (bookId) => {
     try {
-      const response = await fetch(
-        `http://localhost:3002/api/v1/books/${bookId}/restore`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${get(authStore).userToken}`,
-          },
+      const response = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${get(authStore).userToken}`,
         },
-      );
+        body: JSON.stringify({
+          query: `
+            mutation RestoreBook($id: ID!) {
+              restoreBook(id: $id) {
+                message
+                data {
+                  id
+                  title
+                  quantity
+                  description
+                  category
+                  author
+                  lendingPrice
+                  imageSrc
+                  createdAt
+                  updatedAt
+                  deletedAt
+                }
+              }
+            }
+          `,
+          variables: {
+            id: bookId,
+          },
+        }),
+      });
 
-      if (response.ok) {
-        const data = await response.json();
+      const { data, errors } = await response.json();
 
+      if (errors) {
+        console.error("Error restoring book:", errors[0].message);
+      } else {
         fetchBooks();
-        successMessage = "Book restored successfully";
+        successMessage = data.restoreBook.message || "Book restored successfully";
         setTimeout(() => {
           successMessage = "";
         }, 3000);
-      } else {
-        console.error("Error restoring book:", response.statusText);
       }
     } catch (error) {
       console.error("Error restoring book:", error);
     }
   };
 </script>
+
 
 <div>
   <h2 class="mt-4 mb-4">All Books</h2>
@@ -164,7 +231,7 @@
           type="text"
           class="form-control"
           bind:value={searchQuery}
-          placeholder="Search by title, author, category..."
+          placeholder="Search by title, author..."
         />
         <div class="input-group-append">
           <button class="btn btn-outline-secondary" type="button" on:click={handleSearch}>Search</button>
