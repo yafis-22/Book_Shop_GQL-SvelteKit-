@@ -4,7 +4,13 @@ export class BookAPI extends RESTDataSource {
         super(...arguments);
         this.baseURL = 'http://localhost:3002/api/v1/'; // REST API base URL
     }
-    async getBooks(args) {
+    async getBooks(args, token) {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
         const response = await this.get('books', {
             params: {
                 search: args.search,
@@ -14,10 +20,17 @@ export class BookAPI extends RESTDataSource {
                 sortField: args.sortField,
                 sortOrder: args.sortOrder,
             },
+            headers,
         });
         return response;
     }
-    async getBooksByCategory(args) {
+    async getBooksByCategory(args, token) {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
         const response = await this.get(`books/category/${args.category}`, {
             params: {
                 page: args.page?.toString(),
@@ -25,11 +38,18 @@ export class BookAPI extends RESTDataSource {
                 sortField: args.sortField,
                 sortOrder: args.sortOrder,
             },
+            headers,
         });
         return response;
     }
-    async getBookById(args) {
-        const response = await this.get(`books/${args.id}`);
+    async getBookById(args, token) {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        const response = await this.get(`books/${args.id}`, { headers });
         return response;
     }
     async addBook(args, token) {

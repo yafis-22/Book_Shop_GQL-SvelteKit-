@@ -22,7 +22,15 @@ interface AddBookArgs {
 export class BookAPI extends RESTDataSource {
   baseURL = 'http://localhost:3002/api/v1/'; // REST API base URL
 
-  async getBooks(args: GetBooksArgs) {
+  async getBooks(args: GetBooksArgs, token?: string) {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const response = await this.get('books', {
       params: {
         search: args.search,
@@ -32,11 +40,21 @@ export class BookAPI extends RESTDataSource {
         sortField: args.sortField,
         sortOrder: args.sortOrder,
       },
+      headers,
     });
-    return response; 
+
+    return response;
   }
 
-  async getBooksByCategory(args: GetBooksArgs & { category: string }) {
+  async getBooksByCategory(args: GetBooksArgs & { category: string }, token?: string) {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const response = await this.get(`books/category/${args.category}`, {
       params: {
         page: args.page?.toString(),
@@ -44,14 +62,25 @@ export class BookAPI extends RESTDataSource {
         sortField: args.sortField,
         sortOrder: args.sortOrder,
       },
+      headers,
     });
-    return response; 
-  }
 
-  async getBookById(args: { id: string }) {
-    const response = await this.get(`books/${args.id}`);
     return response;
   }
+
+  async getBookById(args: { id: string }, token?: string) {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await this.get(`books/${args.id}`, { headers });
+    return response;
+  }
+
 
   async addBook(args: AddBookArgs, token: string) {
     // Ensure that the token is provided
@@ -84,9 +113,10 @@ export class BookAPI extends RESTDataSource {
     }
     const response = await this.delete(`books/${args.id}`, {
       headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    }}
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      }
+    }
     );
     return response;
   }
@@ -97,9 +127,10 @@ export class BookAPI extends RESTDataSource {
     }
     const response = await this.patch(`books/${args.id}/restore`, {
       headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    }}
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      }
+    }
     );
     return response;
   }
@@ -108,8 +139,8 @@ export class BookAPI extends RESTDataSource {
     if (!token) {
       throw new Error('Admin token is required for this operation');
     }
-    const response = await this.put(`books/${args.id}`,  {
-      body:args.input,
+    const response = await this.put(`books/${args.id}`, {
+      body: args.input,
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -124,9 +155,10 @@ export class BookAPI extends RESTDataSource {
     }
     const response = await this.post(`books/lend/${args.id}`, {
       headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    }}
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      }
+    }
     );
     return response;
   }
@@ -137,11 +169,12 @@ export class BookAPI extends RESTDataSource {
     }
     const response = await this.post(`books/return/${args.id}`, {
       headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    }}
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      }
+    }
     );
     return response;
   }
-  
+
 }

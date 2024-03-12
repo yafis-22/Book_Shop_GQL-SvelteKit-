@@ -1,9 +1,9 @@
 export const resolvers = {
     Query: {
       // Query for Books
-      getBooks: (_, args, { dataSources }) => dataSources.bookAPI.getBooks(args),
-      getBooksByCategory: (_, args, { dataSources }) => dataSources.bookAPI.getBooksByCategory(args),
-      getBookById: (_, args, { dataSources }) => dataSources.bookAPI.getBookById(args),
+      getBooks: (_, args, { dataSources, token }) => dataSources.bookAPI.getBooks(args, token),
+      getBooksByCategory: (_, args, { dataSources, token }) => dataSources.bookAPI.getBooksByCategory(args, token),
+      getBookById: (_, args, { dataSources, token }) => dataSources.bookAPI.getBookById(args, token),
 
       //Query for Users
       getAllUsers: (_, args, { dataSources, token }) => {
