@@ -53,6 +53,7 @@
                 updatedAt
                 deletedAt
               }
+              totalPages
             }
           }
         `,
