@@ -32,22 +32,22 @@
                 },
                 body: JSON.stringify({
                     query: `
-            query GetUsers($page: Int, $pageSize: Int, $search: String, $sortField: String, $sortOrder: String) {
-              getAllUsers(page: $page, pageSize: $pageSize, search: $search, sortField: $sortField, sortOrder: $sortOrder) {
-                data {
-                  id
-                  username
-                  email
-                  phoneNumber
-                  address
-                  createdAt
-                  updatedAt
-                  deletedAt
-                }
-                totalPages
-              }
-            }
-          `,
+                       query GetUsers($page: Int, $pageSize: Int, $search: String, $sortField: String, $sortOrder: String) {
+                         getAllUsers(page: $page, pageSize: $pageSize, search: $search, sortField: $sortField, sortOrder: $sortOrder) {
+                           data {
+                             id
+                             username
+                             email
+                             phoneNumber
+                             address
+                             createdAt
+                             updatedAt
+                             deletedAt
+                           }
+                           totalPages
+                         }
+                       }
+                     `,
                     variables: {
                         page: currentPage,
                         pageSize: 12,
