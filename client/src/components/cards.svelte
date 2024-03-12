@@ -7,10 +7,40 @@
   let books = writable([]);
 
   onMount(async () => {
-    // Fetch books from the backend
-    const response = await fetch("http://localhost:3002/api/v1/books");
-    const data = await response.json();
-    books.set(data.data.slice(0, 6)); // Get only the first 6 books
+    try {
+      const response = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+            query {
+              getBooks {
+                message
+                data {
+                  id
+                  title
+                  lendingPrice
+                  author
+                  imageSrc
+                }
+              }
+            }
+          `,
+        }),
+      });
+      const { data, errors } = await response.json();
+      if (errors) {
+        throw new Error(errors[0].message);
+      }
+      if (!data || !data.getBooks) {
+        throw new Error("Data format is incorrect");
+      }
+      books.set(data.getBooks.data.slice(0, 6)); // Get only the first 6 books
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    }
   });
 
   let showModal = false;
