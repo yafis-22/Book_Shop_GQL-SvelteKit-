@@ -1,47 +1,64 @@
-<!-- returnBook.svelte -->
 <script>
+    import { get } from "svelte/store";
     import authStore from "../stores/authStore";
-
+  
     export let book;
     export let showModal;
     export let onCloseModal;
     let returnSuccess = false;
-
+  
     const returnBook = async () => {
-        try {
-            const response = await fetch(
-                `http://localhost:3002/api/v1/books/return/${book.id}`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${$authStore.userToken}`,
-                    },
-                },
-            );
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log("Book returned successfully:", data);
-
-                // Display return success message
-                returnSuccess = true;
-
-                // Close the modal and trigger the onCloseModal callback after a delay
-                setTimeout(() => {
-                    returnSuccess = false;
-                    showModal = false;
-                    onCloseModal();
-                }, 2000); // Adjust the delay time as needed
-            } else {
-                const errorData = await response.json();
-                console.error("Error returning book:", errorData.message);
-            }
-        } catch (error) {
-            console.error("Error returning book:", error);
+      try {
+        const response = await fetch("http://localhost:4000/graphql", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${get(authStore).userToken}`,
+          },
+          body: JSON.stringify({
+            query: `
+              mutation ReturnBook($id: ID!) {
+                returnBook(id: $id) {
+                   message
+                   data {
+                     bookId
+                     initialCharge
+                     additionalCharge
+                     totalCharge
+                     days
+                   }
+                }
+              }
+            `,
+            variables: {
+              id: book.id,
+            },
+          }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Book returned successfully:", data);
+  
+          // Display return success message
+          returnSuccess = true;
+ 
+          // Close the modal and trigger the onCloseModal callback after a delay
+          setTimeout(() => {
+            returnSuccess = false;
+            showModal = false;
+            onCloseModal();
+          }, 2000); // Adjust the delay time as needed
+        } else {
+          const errorData = await response.json();
+          console.error("Error returning book:", errorData.errors[0].message);
         }
+      } catch (error) {
+        console.error("Error returning book:", error);
+      }
     };
-</script>
+  </script>
+  
 
 <div class="modal" style="display: {showModal ? 'block' : 'none'};">
     <div class="modal-dialog">
