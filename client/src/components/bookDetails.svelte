@@ -18,10 +18,40 @@
   const fetchBookDetails = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3002/api/v1/books/${bookId}`,
+        `http://localhost:4000/graphql`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: `
+              query GetBookDetails($bookId: ID!) {
+                getBookById(id: $bookId) {
+                  id
+                  title
+                  author
+                  category
+                  quantity
+                  lendingPrice
+                  imageSrc
+                }
+              }
+            `,
+            variables: {
+              bookId: bookId,
+            },
+          }),
+        },
       );
-      const data = await response.json();
-      return data || null;
+      const { data, errors } = await response.json();
+
+      if (response.ok && data && !errors) {
+        return data.getBookById || null;
+      } else {
+        console.error('Error fetching book details:', errors || 'Unknown error');
+        return null;
+      }
     } catch (error) {
       console.error("Error fetching book details:", error);
       return null;
@@ -46,6 +76,7 @@
     return url && url.startsWith("http");
   };
 </script>
+
 
 <Header />
 
