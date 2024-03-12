@@ -49,7 +49,6 @@
               author: updatedBook.author,
               category: updatedBook.category,
               imageSrc: updatedBook.imageSrc,
-              // Add other fields as needed
             },
           },
         }),
