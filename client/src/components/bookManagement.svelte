@@ -23,13 +23,46 @@
 
   const fetchBooks = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3002/api/v1/books?page=${currentPage}&pageSize=${itemsPerPage}&sortField=${sortField}&sortOrder=${sortOrder}`
-      );
-      const data = await response.json();
-      console.log('Fetched books:', data.data);
-      totalPages = data.totalPages || 1;
-      books.set(data.data || []);  // Set the value of the books store
+      const response = await fetch('http://localhost:4000/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `
+            query GetBooks($page: Int, $pageSize: Int, $sortField: String, $sortOrder: String) {
+              getBooks(page: $page, pageSize: $pageSize, sortField: $sortField, sortOrder: $sortOrder) {
+                message
+                data {
+                  id
+                  title
+                  author
+                  lendingPrice
+                  imageSrc
+                }
+                totalPages
+              }
+            }
+          `,
+          variables: {
+            page: currentPage,
+            pageSize: itemsPerPage,
+            sortField: sortField,
+            sortOrder: sortOrder,
+          },
+        }),
+      });
+
+      const { data, errors } = await response.json();
+
+      if (response.ok && data && !errors) {
+        console.log('Fetched books:', data.getBooks.data);
+        books.set(data.getBooks.data || []);  // Set the value of the books store
+        totalPages = data.getBooks.totalPages || 1;
+      } else {
+        console.error('Error fetching books:', errors || 'Unknown error');
+        books.set([]);  // Set an empty array in case of an error
+      }
     } catch (error) {
       console.error('Error fetching books:', error);
       books.set([]);  // Set an empty array in case of an error
