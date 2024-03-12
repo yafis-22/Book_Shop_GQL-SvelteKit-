@@ -1,55 +1,75 @@
 <script>
+    import { get } from "svelte/store";
     import authStore from "../stores/authStore";
-
+  
     export let book;
     export let showModal;
     export let onCloseModal;
     let lendSuccess = false;
-
+  
     const lendBook = async () => {
-        try {
-            const response = await fetch(
-                `http://localhost:3002/api/v1/books/lend/${book.id}`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${$authStore.userToken}`,
-                    },
-                },
-            );
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log("Book lent successfully:", data);
-
-                // Display lend success message
-                lendSuccess = true;
-
-                // Close the modal and trigger the onCloseModal callback after a delay
-                setTimeout(() => {
-                    lendSuccess = false;
-                    showModal = false;
-                    onCloseModal();
-                }, 2000); // Adjust the delay time as needed
-            } else {
-                const errorData = await response.json();
-
-                // Check for the specific error message indicating that the book is already lent
-                if (
-                    errorData.message ===
-                    "User has already lent a book with the same ID"
-                ) {
-                    alert("Book already lent");
-                } else {
-                    console.error("Error lending book:", errorData.message);
-                    alert("Please sign in to lend the book");
+      try {
+        const response = await fetch("http://localhost:4000/graphql", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${get(authStore).userToken}`,
+          },
+          body: JSON.stringify({
+            query: `
+              mutation LendBook($id: ID!) {
+                lendBook(id: $id) {
+                    message
+                    chargeDetails {
+                      data {
+                        id
+                        title
+                        description
+                        category
+                        author
+                      }
+                      initialCharge
+                    }
                 }
-            }
-        } catch (error) {
-            console.error("Error lending book:", error);
+              }
+            `,
+            variables: {
+              id: book.id,
+            },
+          }),
+        });
+  
+        const responseData = await response.json();
+
+      if (response.ok && !responseData.errors) {
+        console.log("Book lent successfully:", responseData.data);
+
+        // Display lend success message
+        lendSuccess = true;
+
+        // Close the modal and trigger the onCloseModal callback after a delay
+        setTimeout(() => {
+          lendSuccess = false;
+          showModal = false;
+          onCloseModal();
+        }, 2000); // Adjust the delay time as needed
+      } else {
+        console.error("Error lending book:", responseData.errors[0].extensions.response.body.message);
+
+        // Check for the specific error message indicating that the book is already lent
+        if (
+          responseData.errors[0].extensions.response.body.message ===
+          "User has already lent a book with the same ID"
+        ) {
+          alert("Book already lent");
+        } else {
+          alert("Please sign in to lend the book");
         }
-    };
+      }
+    } catch (error) {
+      console.error("Error lending book:", error);
+    }
+  };
 </script>
 
 <div class="modal" style="display: {showModal ? 'block' : 'none'};">
