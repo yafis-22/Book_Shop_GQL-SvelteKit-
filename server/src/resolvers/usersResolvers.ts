@@ -99,7 +99,7 @@ export class UserAPI extends RESTDataSource {
         if (!token) {
           throw new Error('User token is required for this operation');
         }
-        const response = await this.put('users/me',  {
+        const response = await this.patch('users/me',  {
           body:args.input,
           headers: {
             Authorization: `Bearer ${token}`,

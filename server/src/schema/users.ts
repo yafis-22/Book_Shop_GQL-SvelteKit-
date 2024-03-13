@@ -86,9 +86,9 @@ type User {
   }
 
   input UpdateUserInput {
-    password: String!
-    email: String!
-    phoneNumber: String!
-    address: String!
+    password: String
+    email: String
+    phoneNumber: String
+    address: String
   }
 `;
