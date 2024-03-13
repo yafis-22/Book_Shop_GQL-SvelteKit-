@@ -59,6 +59,19 @@ export class UserAPI extends RESTDataSource {
       return response;
     }
 
+    async adminDetails(_, token: string) {
+      if (!token) {
+          throw new Error('User token is required for this operation');
+        }
+    const response = await this.get('admins/me', {
+      headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }}
+    );
+    return response;
+  }
+
     async registerUser (args: { input: any }) {
         const response = await this.post('users', {
             body: args.input,

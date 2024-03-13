@@ -66,6 +66,7 @@ type User {
     getAllUsers(search: String, page: Int, pageSize: Int, sortField: String, sortOrder: String): UserList!
     getUserById(id: ID!): User
     userDetails: CommonUserResponse!
+    adminDetails: CommonUserResponse!
   }
 
   type Mutation {

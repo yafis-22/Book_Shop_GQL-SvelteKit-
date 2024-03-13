@@ -20,6 +20,9 @@ export const resolvers = {
       },
       userDetails: (_, __, { dataSources, token }) => {
         return dataSources.userAPI.userDetails(__, token)
+      },
+      adminDetails: (_, __, { dataSources, token }) => {
+        return dataSources.userAPI.adminDetails(__, token)
       }
     },
     Mutation: {
