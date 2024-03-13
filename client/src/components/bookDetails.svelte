@@ -33,6 +33,7 @@
                   author
                   category
                   quantity
+                  description
                   lendingPrice
                   imageSrc
                 }
