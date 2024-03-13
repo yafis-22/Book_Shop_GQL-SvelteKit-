@@ -72,7 +72,7 @@
 </script>
 
   
-  <div class="container card">
+  <div class="container">
     <h2>Add New Book</h2>
   
     {#if errorMessage}
@@ -80,7 +80,7 @@
         {errorMessage}
       </div>
     {/if}
-  
+  <div class="card">
     <form>
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
@@ -125,6 +125,7 @@
       <button type="button" class="btn btn-primary" on:click={addBook}>Add Book</button>
     </form>
   </div>
+  </div>
   
   <style>
     .container {
@@ -134,6 +135,7 @@
   
     form {
       margin-top: 20px;
+      padding: 20px;
     }
   
     .mb-3 {
