@@ -132,6 +132,10 @@
       max-width: 600px;
       background-color: #f5f5f5;
     }
+
+    input, textarea, select {
+      background-color: #f5f5f5;
+    }
   
     form {
       margin-top: 20px;

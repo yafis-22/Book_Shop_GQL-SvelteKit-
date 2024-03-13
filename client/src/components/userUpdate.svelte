@@ -143,7 +143,7 @@
       margin-top: 20px;
   }
 
-  input {
+  input, textarea {
       background-color: #F5F5F5;
   }
 

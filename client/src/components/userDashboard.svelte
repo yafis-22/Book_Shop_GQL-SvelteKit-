@@ -156,7 +156,7 @@
       <p>Email: {user.email}</p>
       <p>Phone Number: {user.phoneNumber}</p>
       <div class="d-flex">
-        <button class="btn btn-primary action-button" on:click={updateProfile}>
+        <button class="btn btn-success action-button" on:click={updateProfile}>
           Update Profile
         </button>
         <button class="btn btn-danger action-button" on:click={deleteProfile}>

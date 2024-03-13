@@ -138,6 +138,10 @@
     margin: auto;
   }
 
+  input, textarea, select {
+      background-color: #f5f5f5;
+    }
+
   .notification {
     margin-top: 20px;
   }
