@@ -18,23 +18,38 @@
     }
 
     try {
-      const response = await fetch('http://localhost:3002/api/v1/admins/me', {
-        method: 'GET',
+      const response = await fetch("http://localhost:4000/graphql", {
+        method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${$authStore.userToken}`,
         },
+        body: JSON.stringify({
+          query: `
+            query AdminDetails {
+              adminDetails {
+                message
+                data {
+                  id
+                  username
+                  email
+                  phoneNumber
+                }
+              }
+            }
+        `,
+        }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        user = data.data;
-        // Update user context for other components
-        setContext("user", user);
+      const { data, errors } = await response.json();
+
+      if (errors) {
+        console.error("Error fetching user details:", errors);
       } else {
-        console.error('Error fetching user details:', response.statusText);
+        user = data.adminDetails.data;
       }
     } catch (error) {
-      console.error('Error fetching user details:', error);
+      console.error("Error fetching user details:", error);
     }
   });
 
