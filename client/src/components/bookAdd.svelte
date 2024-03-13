@@ -72,7 +72,7 @@
 </script>
 
   
-  <div class="container">
+  <div class="container card">
     <h2>Add New Book</h2>
   
     {#if errorMessage}

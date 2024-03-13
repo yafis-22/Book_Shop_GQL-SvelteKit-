@@ -75,46 +75,75 @@
   };
 </script>
 
-<div class="update-form">
-  <h2>Update Book</h2>
-  {#if successMessage}
-    <div class="notification">
-      <p class="success-message">{successMessage}</p>
-    </div>
-  {/if}
-  <form on:submit|preventDefault={handleUpdateSubmit}>
-    <label for="title">Title:</label>
-    <input type="text" bind:value={updatedBook.title} />
+<div class="container">
+  <div class="update-form card p-4">
+    <h2 class="text-center mb-4">Update Book</h2>
+    {#if successMessage}
+      <div class="notification alert alert-success">
+        <p>{successMessage}</p>
+      </div>
+    {/if}
+    <form on:submit|preventDefault={handleUpdateSubmit}>
+      <div class="mb-3">
+        <label for="title" class="form-label">Title:</label>
+        <input type="text" class="form-control" bind:value={updatedBook.title} />
+      </div>
 
-    <label for="description">Description:</label>
-    <textarea bind:value={updatedBook.description}></textarea>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description:</label>
+        <textarea class="form-control" bind:value={updatedBook.description}></textarea>
+      </div>
 
-    <label for="quantity">Quantity:</label>
-    <input type="number" bind:value={updatedBook.quantity} />
+      <div class="mb-3">
+        <label for="quantity" class="form-label">Quantity:</label>
+        <input type="number" class="form-control" bind:value={updatedBook.quantity} />
+      </div>
 
-    <label for="author">Author:</label>
-    <input type="text" bind:value={updatedBook.author} />
+      <div class="mb-3">
+        <label for="author" class="form-label">Author:</label>
+        <input type="text" class="form-control" bind:value={updatedBook.author} />
+      </div>
 
-    <label for="category" class="form-label">Category</label>
-    <select
-      class="form-select"
-      id="category"
-      bind:value={updatedBook.category}
-      required
-    >
-      <option value="" disabled>Select a category</option>
-      {#each ["Romance", "Science", "Adventure", "Fantasy", "Friction", "History", "Literature", "Mystery"] as category}
-        <option value={category}>{category}</option>
-      {/each}
-    </select>
+      <div class="mb-3">
+        <label for="category" class="form-label">Category:</label>
+        <select class="form-select" bind:value={updatedBook.category} required>
+          <option value="" disabled>Select a category</option>
+          {#each ["Romance", "Science", "Adventure", "Fantasy", "Fiction", "History", "Literature", "Mystery"] as category}
+            <option value={category}>{category}</option>
+          {/each}
+        </select>
+      </div>
 
-    <label for="lendingPrice">Lending Price:</label>
-    <input type="number" bind:value={updatedBook.lendingPrice} />
+      <div class="mb-3">
+        <label for="lendingPrice" class="form-label">Lending Price:</label>
+        <input type="number" class="form-control" bind:value={updatedBook.lendingPrice} />
+      </div>
 
-    <label for="imageSrc">Image Source:</label>
-    <input type="text" bind:value={updatedBook.imageSrc} />
+      <div class="mb-3">
+        <label for="imageSrc" class="form-label">Image Source:</label>
+        <input type="text" class="form-control" bind:value={updatedBook.imageSrc} />
+      </div>
 
-    <button type="submit">Update</button>
-    <button type="button" on:click={handleUpdateCancel}>Cancel</button>
-  </form>
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Update</button>
+        <button type="button" on:click={handleUpdateCancel} class="btn btn-secondary">Cancel</button>
+      </div>
+    </form>
+  </div>
 </div>
+
+<style>
+  .update-form {
+    max-width: 400px;
+    margin: auto;
+  }
+
+  .notification {
+    margin-top: 20px;
+  }
+
+  .notification p {
+    padding: 10px;
+    border-radius: 4px;
+  }
+</style>
