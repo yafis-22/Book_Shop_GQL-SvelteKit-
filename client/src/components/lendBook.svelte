@@ -63,7 +63,7 @@
         ) {
           alert("Book already lent");
         } else {
-          alert("Please sign in to lend the book");
+          alert("Please sign in as user to lend the book");
         }
       }
     } catch (error) {
