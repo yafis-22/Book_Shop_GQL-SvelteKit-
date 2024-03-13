@@ -4,42 +4,50 @@
   import { searchResults } from "../stores/authStore";
 
   let searchQuery = "";
-  export let searchFields = "title,author"; // Default search fields
+  export let searchFields = "title"; // Default search fields
   export let showSearchFields = false;
   const isResultsVisible = writable(false);
 
   const searchBooks = async () => {
     try {
-      const encodedSearchFields = encodeURIComponent(searchFields);
-      const response = await fetch(
-        `http://localhost:3002/api/v1/books/?search=${searchQuery}&searchFields=${encodedSearchFields}`,
-      );
-      const data = await response.json();
-      searchResults.set(data.data);
-
-      // Navigate to the search results page
-      navigate(`/q?search=${searchQuery}&searchFields=${encodedSearchFields}`);
+      const response = await fetch(`http://localhost:4000/graphql`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+            query SearchBooks($search: String, $searchFields: [String]) {
+              getBooks(search: $search, searchFields: $searchFields) {
+                message
+                data {
+                  id
+                  imageSrc
+                  lendingPrice
+                  title
+                  author
+                }
+              }
+            }
+          `,
+          variables: {
+            search: searchQuery,
+            searchFields: searchFields,
+          },
+        }),
+      });
+      const { data, errors } = await response.json();
+      if (!errors) {
+        searchResults.set(data.getBooks.data);
+        // Navigate to the search results page
+        navigate(`/q?search=${searchQuery}&searchFields=${searchFields}`);
+      } else {
+        console.error("GraphQL error:", errors);
+      }
     } catch (error) {
       console.error("Error searching books:", error);
     }
   };
-
-  // const handleDocumentClick = (event) => {
-  //   const isClickedInsideSearchResults = event.target.closest(".search-results");
-
-  //   if (!isClickedInsideSearchResults) {
-  //     isResultsVisible.set(false);
-  //   }
-  // };
-
-  // onMount(() => {
-  //   document.addEventListener("click", handleDocumentClick);
-
-  //   // Cleanup the event listener when the component is destroyed
-  //   return () => {
-  //     document.removeEventListener("click", handleDocumentClick);
-  //   };
-  // });
 </script>
 
 {#if showSearchFields}
@@ -79,6 +87,7 @@
     </ul>
   {/if}
 </div>
+
 
 <style>
   .search-container {
