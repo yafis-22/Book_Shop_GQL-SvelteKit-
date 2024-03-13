@@ -3,6 +3,7 @@
   import { get } from "svelte/store";
   import authStore from "../stores/authStore";
   import BookUpdate from "./bookUpdate.svelte";
+  import Pagination from "./pagination.svelte";
 
   let books = [];
   let searchQuery = "";
@@ -311,95 +312,12 @@
         </tbody>
       </table>
 
-      <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          {#if currentPage > 1}
-            <li class="page-item">
-              <button class="page-link" on:click={() => handlePageChange(currentPage - 1)}
-                >&lt; Prev</button
-              >
-            </li>
-          {/if}
-
-          {#if totalPages <= 7}
-            {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-              <li class="page-item">
-                <button
-                  class="page-link"
-                  on:click={() => handlePageChange(page)}
-                  class:selected={page === currentPage}>{page}</button
-                >
-              </li>
-            {/each}
-          {:else if currentPage <= 4}
-            {#each Array.from({ length: 5 }, (_, i) => i + 1) as page}
-              <li class="page-item">
-                <button
-                  class="page-link"
-                  on:click={() => handlePageChange(page)}
-                  class:selected={page === currentPage}>{page}</button
-                >
-              </li>
-            {/each}
-            <li class="page-item">
-              <span class="page-link">...</span>
-            </li>
-            <li class="page-item">
-              <button class="page-link" on:click={() => handlePageChange(totalPages)}
-                >{totalPages}</button
-              >
-            </li>
-          {:else if currentPage > totalPages - 4}
-            <li class="page-item">
-              <button class="page-link" on:click={() => handlePageChange(1)}>1</button>
-            </li>
-            <li class="page-item">
-              <span class="page-link">...</span>
-            </li>
-            {#each Array.from({ length: 5 }, (_, i) => totalPages - 4 + i) as page}
-              <li class="page-item">
-                <button
-                  class="page-link"
-                  on:click={() => handlePageChange(page)}
-                  class:selected={page === currentPage}>{page}</button
-                >
-              </li>
-            {/each}
-          {:else}
-            <li class="page-item">
-              <button class="page-link" on:click={() => handlePageChange(1)}>1</button>
-            </li>
-            <li class="page-item">
-              <span class="page-link">...</span>
-            </li>
-            {#each Array.from({ length: 3 }, (_, i) => currentPage - 1 + i) as page}
-              <li class="page-item">
-                <button
-                  class="page-link"
-                  on:click={() => handlePageChange(page)}
-                  class:selected={page === currentPage}>{page}</button
-                >
-              </li>
-            {/each}
-            <li class="page-item">
-              <span class="page-link">...</span>
-            </li>
-            <li class="page-item">
-              <button class="page-link" on:click={() => handlePageChange(totalPages)}
-                >{totalPages}</button
-              >
-            </li>
-          {/if}
-
-          {#if currentPage < totalPages}
-            <li class="page-item">
-              <button class="page-link" on:click={() => handlePageChange(currentPage + 1)}
-                >Next &gt;</button
-              >
-            </li>
-          {/if}
-        </ul>
-      </nav>
+      <!-- pagination component -->
+      <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+        />
     {:else}
       <p>No books available.</p>
     {/if}
@@ -407,9 +325,6 @@
 </div>
 
 <style>
-  .page-link {
-    color: black;
-  }
   .alert {
     margin-top: 20px;
     border-radius: 4px;
@@ -420,7 +335,4 @@
     font-size: 0.875rem;
   }
 
-  .pagination {
-    margin-top: 1rem;
-  }
 </style>
